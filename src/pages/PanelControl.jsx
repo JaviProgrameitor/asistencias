@@ -13,9 +13,9 @@ import { getAuth, signOut } from "firebase/auth";
 
 import Principal from './Principal'
 import Administradores from './Administradores'
-// import Alumnos from './Alumnos'
-// import Asistencias from './Asistencias'
-// import Justificantes from './Justificantes'
+import Alumnos from './Alumnos'
+import Asistencias from './Asistencias'
+import Justificantes from './Justificantes'
 // import Reportes from './Reportes'
 
 import logo from '../assets/img/logo.png'
@@ -44,6 +44,24 @@ function PanelControl(props) {
       destino: `${url}/administradores`,
       icon: MdAdminPanelSettings,
       elemento: Administradores
+    },
+    {
+      titulo: 'Alumnos', 
+      destino: `${url}/alumnos`,
+      icon: BsFillPeopleFill,
+      elemento: Alumnos
+    },
+    {
+      titulo: 'Asistencias', 
+      destino: `${url}/asistencias`,
+      icon: BsFillCalendarCheckFill,
+      elemento: Asistencias
+    },
+    {
+      titulo: 'Justificantes', 
+      destino: `${url}/justificantes`,
+      icon: IoIosPaper,
+      elemento: Justificantes
     },
   ]
 
@@ -103,10 +121,10 @@ function PanelControl(props) {
               <Routes>
                 <Route path='/' element={<Principal admin={admin} />} />
                 <Route path='/administradores/*' element={<Administradores puestoAdmin={admin[0].puesto} />} />
-                {/* <Route path='/alumnos/*' element={<Alumnos puestoAdmin={admin[0].puesto} />} />
+                <Route path='/alumnos/*' element={<Alumnos puestoAdmin={admin[0].puesto} />} />
                 <Route path='/asistencias/*' element={<Asistencias />} />
                 <Route path='/justificantes/*' element={<Justificantes />} />
-                <Route path='/reportes/*' element={<Reportes />} /> */}
+                {/* <Route path='/reportes/*' element={<Reportes />} /> */}
               </Routes>
             </div>
           </section>
