@@ -16,7 +16,7 @@ import Administradores from './Administradores'
 import Alumnos from './Alumnos'
 import Asistencias from './Asistencias'
 import Justificantes from './Justificantes'
-// import Reportes from './Reportes'
+import Reportes from './Reportes'
 
 import logo from '../assets/img/logo.png'
 import portada from '../assets/img/portada.jpg'
@@ -63,6 +63,12 @@ function PanelControl(props) {
       icon: IoIosPaper,
       elemento: Justificantes
     },
+    {
+      titulo: 'Reportes', 
+      destino: `${url}/reportes`,
+      icon: GoGraph,
+      elemento: Reportes
+    }
   ]
 
   useEffect(() => {
@@ -124,7 +130,7 @@ function PanelControl(props) {
                 <Route path='/alumnos/*' element={<Alumnos puestoAdmin={admin[0].puesto} />} />
                 <Route path='/asistencias/*' element={<Asistencias />} />
                 <Route path='/justificantes/*' element={<Justificantes />} />
-                {/* <Route path='/reportes/*' element={<Reportes />} /> */}
+                <Route path='/reportes/*' element={<Reportes />} />
               </Routes>
             </div>
           </section>
