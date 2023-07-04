@@ -1,0 +1,31 @@
+.container-botones-usuario-justificantes {
+  display: flex;
+}
+
+.caja-links-usuario-justificantes {
+  width: calc(100% / 3);
+  text-align: center;
+
+  background-color: greenyellow;
+}
+
+.link-usuario-justificante {
+  display: block;
+  text-decoration: none;
+  color: black;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 500px) {
+  .container-botones-usuario-justificantes {
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 8px;
+  }
+
+  .caja-links-usuario-justificantes {
+    width: 100%;
+    padding: 8px 0;
+  }
+}

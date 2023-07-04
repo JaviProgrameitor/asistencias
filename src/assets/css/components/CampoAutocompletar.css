@@ -1,0 +1,28 @@
+.container-autocompletar {
+  margin-bottom: 20px;
+  border-radius: none;
+}
+
+.titulo-autocompletar {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.MuiAutocomplete-root {
+  width: auto;
+  background-color: white;
+}
+
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border-radius: none;
+  border-style: none;
+  border-width: none;
+  border-color: none;
+}
+
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border-radius: none;
+}

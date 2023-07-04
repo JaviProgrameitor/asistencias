@@ -1,0 +1,40 @@
+.foto-perfil__titulo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.foto-perfil__caja-alumno {
+  display: flex;
+  justify-content: center;
+}
+
+.foto-perfil__alumno {
+  width: 150px;
+  height: 150px;
+  border: 3px solid black;
+  border-radius: 50%;
+  background-color: black;
+  cursor: pointer;
+}
+
+
+.foto-alumno {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.imagen {
+  display: none;
+}
+
+.foto-explicacion .foto-perfil__alumno {
+  border-radius: 0;
+  width: 300px;
+  height: 300px;
+}
+
+.foto-explicacion .foto-alumno {
+  border-radius: 0;
+}

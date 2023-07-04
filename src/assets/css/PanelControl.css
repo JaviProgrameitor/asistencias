@@ -1,0 +1,131 @@
+.container-panel-control {
+  display: flex;
+}
+
+/* Aside */
+.container-panel-control__aside {
+  width: 20%;
+  height: 100vh;
+  padding: 20px 0;
+  background-color: #133210;
+
+  position: fixed;
+}
+
+.perfil-admin {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding-bottom: 25px;
+  border-bottom: 3px solid white;
+}
+
+.foto-perfil-admin {
+  width: 150px;
+  border-radius: 90%;
+  border: 3px solid white;
+}
+
+.info-admin {
+  margin: 0;
+}
+
+.perfil-admin__nombre {
+  margin-top: 5px;
+}
+
+.perfil-admin__apellido {
+  margin-top: 5px;
+}
+
+.panel-control__enlaces {
+  display: flex;
+  flex-direction: column;
+  padding-top: 25px;
+}
+
+.enlaces {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 15px 0;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.enlaces:hover {
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.29);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(9.9px);
+  -webkit-backdrop-filter: blur(9.9px);
+}
+
+.enlaces span {
+  font-size: 18px;
+}
+
+/* Central */
+.container-panel-control__central {
+  box-sizing: border-box;
+  width: 80%;
+  min-height: 100vh;
+  margin-left: 20%;
+  background-color: white;
+}
+
+.central-caja-superior {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 15px 15px;
+  background-color: #c0ffa7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.central-caja-superior__empresa {
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.empresa-logo {
+  height: 30px;
+}
+
+.empresa-titulo {
+  font-size: 25px;
+  font-family: 'Playfair Display', serif;
+}
+
+.central-caja-superior__cerrar-sesion {
+  display: flex;
+  align-items: center;
+}
+
+.cerrar-sesion {
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.logo-cerrar-sesion {
+  margin-right: 5px;
+}
+
+.central-contenido {
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(100% - 60px);
+  padding: 0 20px 20px;
+}

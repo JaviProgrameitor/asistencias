@@ -1,0 +1,40 @@
+.container-principal-perfil-alumno {
+  background-color: white;
+}
+
+.perfil-alumno__personal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contenedor-_foto-alumno {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.personal__fondo {
+  width: 100%;
+  height: 200px;
+  background-color: green;
+
+  display: flex;
+  justify-content: center;
+  margin-bottom: 100px;
+}
+
+.perfil-foto-alumno {
+  width: 250px;
+  border-radius: 50%;
+  border: 8px solid white;
+
+  transform: translateY(50%);
+}
+
+.perfil-alumno__centro-idiomas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

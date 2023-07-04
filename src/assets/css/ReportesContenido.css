@@ -1,0 +1,9 @@
+.graficas__campos {
+  display: flex;
+}
+
+.campos-grafica {
+  box-sizing: border-box;
+  width: 50%;
+  padding: 0 10px;
+}

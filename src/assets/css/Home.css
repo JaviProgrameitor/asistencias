@@ -1,0 +1,124 @@
+.contenedor-principal {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedor-home {
+  width: 70%;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.contenedor-formularios {
+  width: 100%;
+  display: flex;
+}
+
+.cajas {
+  width: 50%;
+  height: auto;
+}
+
+.contenedor-formularios__negocio {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  background: rgba(255, 255, 255, 0.53);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10.3px);
+  -webkit-backdrop-filter: blur(10.3px);
+  border: 1px solid rgba(255, 255, 255, 1);
+}
+
+.contenedor-formularios__negocio-titulo {
+  font-size: 55px;
+  transform:  translateY(-55px);
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+}
+
+.contenedor-formularios__negocio-eslogan {
+  font-size: 20px;
+  transform: translateY(-120px);
+  text-align: center;
+}
+
+.contenedor-formularios__negocio-informacion {
+  text-align: center;
+  transform: translateY(-150px);
+}
+
+.logo {
+  width: 180px;
+}
+
+.franja {
+  width: 80%;
+  transform: translateY(-140px);
+}
+
+.banderas {
+  width: 240px;
+  transform: translateY(-120px);
+}
+
+.portada {
+  width: 70%;
+  border-radius: 10px;
+  transform: translateY(-120px);
+}
+
+.boton-formulario-tipos {
+  width: 50%;
+  height: 35px;
+  outline: none;
+  cursor: pointer;
+  background-color: white;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  border-color: black;
+}
+
+@media (max-width: 750px) {
+  .contenedor-principal {
+    padding: 30px 0;
+  }
+
+  .contenedor-formularios {
+    flex-direction: column;
+  }
+
+  .cajas {
+    width: 100%;
+  }
+
+  .contenedor-formularios__negocio {
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 420px) {
+  .boton-formulario-tipos {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 310px) {
+  .boton-formulario-tipos {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 370px) {
+  .banderas {
+    width: 200px;
+  }
+}

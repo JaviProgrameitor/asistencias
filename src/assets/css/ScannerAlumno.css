@@ -1,0 +1,66 @@
+.container-principal-scanner-alumno {
+  min-height: 100vh;
+}
+
+.scanner-alumno-fondo {
+  box-sizing: border-box;
+  background: none;
+  background-color: #c0ffa7;
+  margin: 0;
+  padding: 8px;
+}
+
+.perfil-foto-scanner-alumno {
+  box-sizing: border-box;
+  width: 200px;
+  padding: 5px;
+  transform: translate(0);
+}
+
+.bienvenida__titulo {
+  text-align: center;
+  margin: 8px 0 0 0;
+  font-size: 38px;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.container__hora-entrada {
+  display: flex;
+  justify-content: center;
+}
+
+.container__hora-entrada .hora-entrada__texto {
+  font-size: 25px;
+}
+
+.puntual {
+  color: green;
+}
+
+.impuntual {
+  color: red;
+}
+
+.container-perfil-alumno__informacion {
+  display: flex;
+}
+
+.perfil-scaner-alumno__personal, .perfil-scaner-alumno__centro-idiomas {
+  width: 50%;
+}
+
+@media (max-width: 850px) {
+  .container-perfil-alumno__informacion {
+    flex-direction: column;
+  }
+
+  .perfil-scaner-alumno__personal, .perfil-scaner-alumno__centro-idiomas {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .bienvenida__titulo {
+    font-size: 32px;
+  }
+}

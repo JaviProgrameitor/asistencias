@@ -1,0 +1,37 @@
+.container-qr-code-en-linea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+  background-color: black;
+
+  padding: 20px 0 0 0;
+}
+
+.titulo-qr-en-linea {
+  color: white;
+  margin: 0;
+}
+
+.caja-qr-en-linea {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  margin-top: 100px;
+}
+
+.qr-en-linea {
+  width: 50%;
+}
+
+@media (max-width: 900px) {
+  .qr-en-linea {
+    width: 80%;
+  }
+}
+
+@media (max-width: 600px) {
+  .qr-en-linea {
+    width: 95%;
+  }
+}

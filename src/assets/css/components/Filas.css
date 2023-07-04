@@ -1,0 +1,49 @@
+.fila {
+  cursor: pointer;
+  -webkit-box-shadow: 1px 3px 22px -4px rgba(0,0,0,0.8);
+  -moz-box-shadow: 1px 3px 22px -4px rgba(0,0,0,0.8);
+  box-shadow: 1px 3px 22px -4px rgba(0,0,0,0.8);
+}
+
+.td-admin {
+  padding: 16px;
+}
+
+.ultima-td-admin {
+  display: flex;
+  align-items: center;
+}
+
+.elemento-par {
+  background-color: white;
+}
+
+.elemento-impar {
+  background-color: #c3f6c0;
+}
+
+.activo {
+  background-color: #133210;
+  color: white;
+}
+
+.icon-justificante {
+  cursor: pointer;
+}
+
+.icon-aceptar {
+  color: greenyellow;
+  font-size: 45px;
+}
+
+.icon-rechazar {
+  color: red;
+  font-size: 55px;
+}
+
+@media (max-width: 500px) {
+  .td-admin {
+    font-size: 10px;
+    padding: 5px 0;
+  }
+}

@@ -1,0 +1,25 @@
+.informacion-personal {
+  min-width: 250px;
+}
+
+.informacion-personal__indicador {
+  font-size: 30px;
+  margin: 0;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 600;
+}
+
+.informacion-personal__respuesta {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 20px;
+}
+
+@media (max-width: 500px) {
+  .informacion-personal__indicador {
+    font-size: 25px;
+  }
+
+  .informacion-personal__respuesta {
+    font-size: 15px;
+  }
+}

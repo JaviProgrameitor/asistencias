@@ -1,0 +1,43 @@
+.container-principal-usuario {
+  background-color: white;
+  padding: 0 20px;
+  min-height: 100vh;
+}
+
+.principal-usuario__botones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hamburger-react {
+  z-index: 5;
+}
+
+.navbar-usuario {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+}
+
+.list-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 20%;
+}
+
+.link-usuario {
+  text-decoration: none;
+  font-size: 30px;
+  color: white;
+}

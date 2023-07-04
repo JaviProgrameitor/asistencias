@@ -1,0 +1,36 @@
+.agregar-alumnos__formulario {
+  display: flex;
+  justify-content: center;
+}
+
+.formulario {
+  width: 50%;
+  box-shadow: 7px 7px 15px rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  padding: 24px 100px;
+  background-color: #c3f6c0;
+}
+
+.formulario__titulo {
+  font-size: 32px;
+  text-align: center;
+  font-family: 'Ubuntu', sans-serif;
+  margin: 0;
+}
+
+.formulario__subtitulo {
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 400;
+  font-size: 25px;
+}
+
+.agregar-idiomas__icon {
+  font-size: 40px;
+  cursor: pointer;
+}
+
+.idioma__icon-delete {
+  color: red;
+  font-size: 25px;
+  cursor: pointer;
+}
