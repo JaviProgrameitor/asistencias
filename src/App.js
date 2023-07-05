@@ -6,7 +6,7 @@ import Page404 from './pages/Page404'
 import PanelControl from './pages/PanelControl';
 import Usuario from './pages/Usuario';
 import ScannerAlumno from './pages/ScannerAlumno';
-// import ScannerEnLinea from './pages/ScannerEnLinea'
+import ScannerEnLinea from './pages/ScannerEnLinea'
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
@@ -35,7 +35,7 @@ function App() {
           <Route path='/' element={<Home setAdmin={setAdmin} admin={admin} setUsuario={setUsuario} usuario={usuario} infoScanner={infoScanner} setInfoScanner={setInfoScanner} scannerAlumno={scannerAlumno} setScannerAlumno={setScannerAlumno} />} />
           <Route path='/panel-control/*' element={<PanelControl admin={admin} setAdmin={setAdmin} />} />
           <Route path='/perfil-alumno/*' element={<Usuario datos={usuario} setUsuario={setUsuario} />} />
-          {/* <Route path='/scanner-en-linea' element={<ScannerEnLinea scannerAlumno={scannerAlumno} setScannerAlumno={setScannerAlumno} infoScanner={infoScanner} setInfoScanner={setInfoScanner} />} /> */}
+          <Route path='/scanner-en-linea' element={<ScannerEnLinea scannerAlumno={scannerAlumno} setScannerAlumno={setScannerAlumno} infoScanner={infoScanner} setInfoScanner={setInfoScanner} />} /> 
           <Route path='/scanner-alumno' element={<ScannerAlumno infoScanner={infoScanner} setInfoScanner={setInfoScanner} scannerAlumno={scannerAlumno} setScannerAlumno={setScannerAlumno} />}/>
           <Route path='*' element={<Page404 />}/>
         </Routes>

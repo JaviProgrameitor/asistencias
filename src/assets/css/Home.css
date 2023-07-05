@@ -102,6 +102,8 @@
 
   .contenedor-formularios__negocio {
     padding: 0 8px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 10px;
   }
 }
 

@@ -1,0 +1,96 @@
+#html5qr-code-full-region__dashboard_section_csr {
+  box-sizing: border-box;
+  padding: 0 7px 5px 7px;
+}
+
+#html5qr-code-full-region__dashboard_section_csr span {
+  margin: 0 5px !important;
+}
+
+#html5-qrcode-button-camera-permission {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 10px;
+  border-radius: 8px;
+  color: green;
+  text-decoration: none;
+  gap: 5px;
+  border: 2px solid green;
+  background-color: white;
+  cursor: pointer;
+
+  margin-bottom: 5px;
+}
+
+#html5-qrcode-button-camera-start {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 10px;
+  border-radius: 4px;
+  color: green;
+  text-decoration: none;
+  gap: 5px;
+  border: 2px solid green;
+  background-color: white;
+  cursor: pointer;
+}
+
+#html5-qrcode-button-camera-stop {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 10px;
+  border-radius: 8px;
+  color: green;
+  text-decoration: none;
+  gap: 5px;
+  border: 2px solid green;
+  background-color: white;
+  cursor: pointer;
+  margin: 0 5px !important;
+}
+
+#html5-qrcode-anchor-scan-type-change {
+  display: inline-block;
+  background: none;
+  background-color: #008f39;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 10px 10px;
+  text-decoration: none !important;
+  cursor: pointer;
+  margin: 8px 0;
+}
+
+#html5-qrcode-button-file-selection {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 10px;
+  border-radius: 8px;
+  color: green;
+  text-decoration: none;
+  gap: 5px;
+  border: 2px solid green;
+  background-color: white;
+  cursor: pointer;
+}
+
+#html5-qrcode-select-camera {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 3px;
+  border-radius: 8px;
+  color: green;
+  text-decoration: none;
+  gap: 5px;
+  border: 2px solid green;
+  background-color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 800px) {
+
+  #html5-qrcode-select-camera {
+    margin-bottom: 5px;
+  }
+}

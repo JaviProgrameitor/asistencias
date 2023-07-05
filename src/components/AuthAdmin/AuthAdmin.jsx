@@ -79,8 +79,14 @@ function AuthAdmin(props) {
         <button className='boton__azul' onClick={() => iniciar()} >Iniciar Sesión</button>
       </form>
       <div className='contenedor__centrado-separacion caja-enlace-scanner'>
-        <BsQrCodeScan className='scanner' onClick={() => setScanner(!scanner)}/>
-        <Link to={'/scanner-en-linea'}><BsQrCodeScan className='scanner' /></Link>
+        <div className='cajas-qr'>
+          <BsQrCodeScan className='scanner' onClick={() => setScanner(!scanner)}/>
+          <span className='span-qr'>Presencial</span>
+        </div>
+        <div className='cajas-qr'>
+          <Link to={'/scanner-en-linea'}><BsQrCodeScan className='scanner' /></Link>
+          <span className='span-qr'>En Línea</span>
+        </div>
       </div>
     </div>
   )
