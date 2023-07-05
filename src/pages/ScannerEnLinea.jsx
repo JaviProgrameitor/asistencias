@@ -1,7 +1,8 @@
 import '../assets/css/ScannerEnLinea.css'
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
+import { FaArrowCircleLeft } from 'react-icons/fa'
 
 import { initializeApp } from "firebase/app";
 import { collection, onSnapshot, getFirestore  } from "firebase/firestore";
@@ -17,13 +18,10 @@ function ScannerEnLinea(props) {
   
   const [alumnos, setAlumnos] = useState([])
 
-  console.log(infoScanner)
-
   const navigate = useNavigate()
 
   function onNewScanResult(decodedText, decodedResult) {
     setInfoScanner(decodedText)
-    console.log(decodedResult)
 };
 
   function scanearAlumno() {
@@ -48,6 +46,9 @@ function ScannerEnLinea(props) {
 
   return (
     <div className='container-qr-code-en-linea'>
+      <div className='contenedor__todo-principio'>
+        <Link to={'/'}><FaArrowCircleLeft className='flecha-regresar__blanco icon-40' /></Link>
+      </div>
       <h2 className='titulos-2 titulo-qr-en-linea'>Escanea el Codigo QR</h2>
       <div className='caja-qr-en-linea'>
         <div className='qr-en-linea'>

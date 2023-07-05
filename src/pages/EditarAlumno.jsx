@@ -29,6 +29,7 @@ function EditarAlumno(props) {
     apellido, 
     numeroTelefono,
     codigoPostal,
+    pais,
     estado,
     municipio,
     colonia,
@@ -60,6 +61,7 @@ function EditarAlumno(props) {
   const [ numeroTelefonoAlumno, setNumeroTelefonoAlumno ] = useState(numeroTelefono)
   const [ nivelAcademicoAlumno, setNivelAcademicoAlumno ] = useState(nivelAcademico)
   const [ codigoPostalAlumno, setCodigoPostalAlumno ] = useState(codigoPostal)
+  const [ paisAlumno, setPaisAlumno ] = useState(pais)
   const [ estadoAlumno, setEstadoAlumno ] = useState(estado)
   const [ municipioAlumno, setMunicipioAlumno ] = useState(municipio)
   const [ coloniaAlumno, setColoniaAlumno ] = useState(colonia)
@@ -260,6 +262,7 @@ function EditarAlumno(props) {
     const numeroTelefono = numeroTelefonoAlumno
     const nivelAcademico = nivelAcademicoAlumno
     const codigoPostal = codigoPostalAlumno
+    const pais = paisAlumno
     const estado = estadoAlumno
     const municipio = municipioAlumno
     const colonia = coloniaAlumno
@@ -283,6 +286,7 @@ function EditarAlumno(props) {
       numeroTelefono, 
       nivelAcademico,
       codigoPostal,
+      pais,
       estado,
       municipio,
       colonia,
@@ -374,19 +378,23 @@ function EditarAlumno(props) {
               cambiarValor={setCodigoPostalAlumno}
               valor={codigoPostalAlumno}
             />
-            <CampoAutocompletar
+            <Campo 
+              titulo='País'
+              placeholder='Ingresa el país de donde vive el alumno'
+              cambiarValor={setPaisAlumno}
+              valor={paisAlumno}
+            />
+            <Campo 
               titulo='Estado'
               placeholder='Ingresa el estado de donde vive el alumno'
-              opciones={opcionesEstados}
+              cambiarValor={setEstadoAlumno}
               valor={estadoAlumno}
-              cambiarValor={asignarValor}
             />
-            <CampoAutocompletar
+            <Campo 
               titulo='Municipio/Alcaldía'
               placeholder='Ingresa el municipio de donde vive el alumno'
-              opciones={controlarValor()}
-              valor={municipioAlumno}
               cambiarValor={setMunicipioAlumno}
+              valor={municipioAlumno}
             />
             <Campo
               titulo='Colonia'

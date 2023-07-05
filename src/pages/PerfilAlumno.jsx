@@ -13,6 +13,7 @@ function PerfilAlumno(props) {
     apellido, 
     numeroTelefono,
     codigoPostal,
+    pais,
     estado,
     municipio,
     colonia,
@@ -54,6 +55,10 @@ function PerfilAlumno(props) {
     {
       titulo: 'Codigo Postal',
       valor: codigoPostal
+    },
+    {
+      titulo: 'País',
+      valor: pais
     },
     {
       titulo: 'Estado',

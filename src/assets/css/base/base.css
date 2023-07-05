@@ -121,6 +121,10 @@
   color: black;
 }
 
+.flecha-regresar__blanco {
+  color: white;
+}
+
 /* Estilos modal */
 .container-modal__fondo-oscuro {
   width: 100%;

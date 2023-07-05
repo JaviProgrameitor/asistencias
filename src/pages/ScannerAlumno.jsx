@@ -1,11 +1,13 @@
 import '../assets/css/PerfilAlumno.css'
 import '../assets/css/ScannerAlumno.css'
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom"
 
 import Indicadores from '../components/Indicadores/Indicadores';
 import IndicadoresMultiples from '../components/IndicadoresMultiples/IndicadoresMultiples';
+
+import emailjs from '@emailjs/browser';
 
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore  } from "firebase/firestore";
@@ -67,6 +69,37 @@ function ScannerAlumno(props) {
   //   setInfoScanner('')
   //   navigate('/')
   // }, 8000);
+
+  const datosMensaje = {
+    to_name: nombreAlumno,
+    from_name: 'javimar_06@hotmail.com',
+    message: 'Gracias por llegar temprano'
+  }
+
+  let numeroConteo = 8
+
+  let conteo = setInterval(() => {
+    numeroConteo = numeroConteo - 1
+    console.log(numeroConteo)
+
+    document.querySelector('.loading-bar').textContent = numeroConteo
+
+    if(numeroConteo == 0) {
+      clearInterval(conteo)
+      enviarMensaje()
+      setInfoScanner('')
+      navigate('/')
+    }
+  }, 1000);
+
+  function enviarMensaje() {
+    emailjs.send('service_s03txqx', 'template_tje7ak6', datosMensaje, 'EjqKxLfA5pfR3G7aa')
+      .then((result) => {
+          console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+  }
 
   function bienvenida() {
     if(genero === 'Hombre') return 'Bienvenido Querido Alumno'
@@ -276,6 +309,13 @@ function ScannerAlumno(props) {
       <div className='container-perfil-alumno'>
         <div className='personal__fondo scanner-alumno-fondo'>
           <img className='perfil-foto-alumno perfil-foto-scanner-alumno' src={foto} alt="Foto de Perfil del Alumno" />
+        </div>
+        <div className="container-loading-bar">
+          <div className='caja-loading-bar'>
+            <div className="loading-bar">
+              8
+            </div>
+          </div>
         </div>
         <div className='container-bienvenida'>
           <h2 className='bienvenida__titulo'>{bienvenida()}</h2>
