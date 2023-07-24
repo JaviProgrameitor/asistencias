@@ -15,6 +15,11 @@ function TablaJustificantes(props) {
   const [ fotoPrueba, setFotoPrueba ] = useState(false)
   const [ mostrarFotoPrueba, setMostrarFotoPrueba ] = useState(false)
 
+  function ToggleMostrarPrueba(mostrar) {
+    document.querySelector('body').classList.toggle('body__pantalla-negra')
+    setMostrarFotoPrueba(mostrar)
+  }
+
   return (
     <div className='container-tabla-justificantes'>
       <h3 className='tabla-justificantes__titulo'>Justificantes en Espera</h3>
@@ -24,7 +29,7 @@ function TablaJustificantes(props) {
         </Link>
         {
           fotoPrueba ? 
-            <button className='boton__blanco' onClick={() => setMostrarFotoPrueba(true)}>Ver Prueba</button>
+            <button className='boton__blanco' onClick={() => ToggleMostrarPrueba(true)}>Ver Prueba</button>
             
           : <></>
         }
@@ -36,6 +41,7 @@ function TablaJustificantes(props) {
                 <th colSpan='1'>Nombre</th>
                 <th colSpan='1'>Apellido</th>
                 <th colSpan='1'>Clave de Estudiante</th>
+                <th colSpan='1'>Hora de Emisión</th>
                 <th colSpan='1'>Fecha de Emisión</th>
                 <th colSpan='1'>Fecha a Justificar</th>
                 <th colSpan='1'>Motivo</th>
@@ -61,7 +67,7 @@ function TablaJustificantes(props) {
       {
         mostrarFotoPrueba ? <div className='container-foto-prueba'>
         <div className='caja-foto-prueba'>
-          <TiDelete className='foto-prueba__icon' onClick={() => setMostrarFotoPrueba(false)} />
+          <TiDelete className='foto-prueba__icon' onClick={() => ToggleMostrarPrueba(false)} />
           <ImageZoom src={fotoPrueba} width='100%' zoom='250' alt='Foto de la prueba del justificante' />
         </div>
       </div> 

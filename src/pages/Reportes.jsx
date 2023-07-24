@@ -30,7 +30,7 @@ function Reportes() {
         <h3 className='titulos-1'>Reportes</h3>
       </div>
       <Routes>
-        <Route path='/' element={<ReportesContenido flechaRegresar={false} asistencias={asistenciasEntrada} />} />
+        <Route path='/' element={<ReportesContenido flechaRegresar={false} asistencias={asistenciasEntrada.filter(asis => asis.entradaSalidaAsistencia == 'Entrada')} />} />
       </Routes>
     </div>
   )

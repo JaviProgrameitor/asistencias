@@ -14,18 +14,20 @@ import firebaseConfig from '../firebase';
 function Asistencias() {
   const [ asistenciasEntrada, setAsistenciasEntrada ] = useState([])
   const [ alumnos, setAlumnos ] = useState([])
-  const [ fechaActual, setFechaActual ] = useState()
+  const [ añoActual, setAñoActual ] = useState(new Date().getFullYear())
+  const [ mesActual, setMesActual ] = useState(new Date().getMonth())
+  const [ fechaActual, setFechaActual ] = useState(new Date().getDate())
   const [ claveAlumno, setClaveAlumno ] = useState()
   const [ idAlumno, setIdAlumno ] = useState(false)
+  const [ nombreAlumno, setNombreAlumno ] = useState(false)
 
   const app = initializeApp(firebaseConfig)
   const db = getFirestore(app);
 
-  const date = new Date()
-
   function actualizarDatos(datos) {
     setClaveAlumno(datos.claveEstudiante)
     setIdAlumno(datos.id)
+    setNombreAlumno(`${datos.nombre} ${datos.apellido}`)
   }
 
   //Todo: Función para leer los datos de la base de datos
@@ -46,20 +48,45 @@ function Asistencias() {
       [db]
   )
 
-  useEffect(() => {
-    setFechaActual(date.getDate())
-  },[fechaActual])
-
   return (
     <div className='container-justificantes'>
       <div className='contenedor__titulos-1'>
         <h3 className='titulos-1'>Asistencias</h3>
       </div>
       <Routes>
-        <Route path='/' element={<TablaAsistencias asistenciasEntrada={asistenciasEntrada.filter(asis => asis.fechaAsistenciaEntrada === fechaActual)} fechaActual={fechaActual} />} />
-        <Route path='/alumnos' element={<TablaAsistenciasAlumnos idAlumno={idAlumno} actualizarDatos={actualizarDatos} alumnos={alumnos} Asistencias={asistenciasEntrada} />} />
-        <Route path='/alumnos/asistencias-personales' element={<AsistenciasPersonales asistenciasEntrada={asistenciasEntrada.filter(asis => asis.claveEstudianteAsistenciaEntrada === claveAlumno)} />} />
-        <Route path='/alumnos/graficas-asistencias-personales' element={<ReportesContenido flechaRegresar={true} asistencias={asistenciasEntrada.filter(asis => asis.claveEstudianteAsistenciaEntrada === claveAlumno)}  />} />
+        <Route 
+          path='/' 
+          element={<TablaAsistencias 
+            asistenciasEntrada={asistenciasEntrada.filter(asis => asis.añoAsistenciaEntrada == añoActual && asis.mesAsistenciaEntrada == mesActual && asis.fechaAsistenciaEntrada === fechaActual && asis)} 
+            fechaActual={fechaActual} 
+          />} 
+        />
+        <Route 
+          path='/alumnos' 
+          element={<TablaAsistenciasAlumnos 
+            idAlumno={idAlumno} 
+            actualizarDatos={actualizarDatos} 
+            alumnos={alumnos} 
+            Asistencias={asistenciasEntrada} 
+          />}
+        />
+        <Route 
+          path='/alumnos/asistencias-personales' 
+          element={<AsistenciasPersonales 
+            asistenciasEntrada={asistenciasEntrada.filter(asis => asis.claveEstudianteAsistenciaEntrada === claveAlumno)} 
+          />} 
+        />
+        <Route 
+          path='/alumnos/graficas-asistencias-personales' 
+          element={<ReportesContenido 
+            setClaveAlumno={setClaveAlumno} 
+            setIdAlumno={setIdAlumno} 
+            setNombreAlumno={setNombreAlumno} 
+            nombreAlumno={nombreAlumno} 
+            flechaRegresar={true} 
+            asistencias={asistenciasEntrada.filter(asis => asis.claveEstudianteAsistenciaEntrada === claveAlumno && asis.entradaSalidaAsistencia == 'Entrada')} 
+          />} 
+        />
       </Routes>
     </div>
   )

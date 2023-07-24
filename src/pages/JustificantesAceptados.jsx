@@ -32,6 +32,7 @@ function JustificantesAceptados(props) {
                 <th colSpan='1'>Nombre</th>
                 <th colSpan='1'>Apellido</th>
                 <th colSpan='1'>Clave de Estudiante</th>
+                <th colSpan='1'>Hora de Emisión</th>
                 <th colSpan='1'>Fecha de Emisión</th>
                 <th colSpan='1'>Fecha a Justificar</th>
                 <th colSpan='1'>Motivo</th>

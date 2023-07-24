@@ -19,7 +19,7 @@ import { Toaster, toast } from 'sonner'
 import { v4 as uuid } from 'uuid';
 
 function CrearJustificante(props) {
-  const { nombre, apellido, numeroTelefono, claveEstudiante,
+  const { nombre, apellido, numeroTelefono, claveEstudiante, correo
   } = props.datos[0]
 
   const app = initializeApp(firebaseConfig)
@@ -54,7 +54,8 @@ function CrearJustificante(props) {
     const minutos = date.getMinutes()//Saber los minutos
 
     const identificadorAleatorio = uuid()
-    const metadata = {contentType: 'image/png'};
+    let metadata = {contentType: fotoPrueba.type}
+
     const storageRef = ref(st, `justificantes/${identificadorAleatorio}`)
     await uploadBytesResumable(storageRef, fotoPrueba, metadata)
 
@@ -62,12 +63,14 @@ function CrearJustificante(props) {
     const apellidoJustificante = apellidoAlumno
     const claveEstudianteJustificante = claveEstudianteAlumno
     const numeroTelefonoJustificante = numeroTelefonoAlumno
+    const correoJustificante = correo
     let fechaEmisionJustificante;
     const horaEmisionJustificante = `${hora}:${minutos}`
     const fechaJustificante = fechaJustificar
     const motivoJustificante = motivo
     const explicacionJustificante = explicacion
     const fotoJustificante = await getDownloadURL(storageRef)
+    const idFotoJustificante = identificadorAleatorio
 
     if((mes + 1) < 10) fechaEmisionJustificante = `${año}-0${mes + 1}-${fecha}`
     else if((mes + 1) >= 10) fechaEmisionJustificante = `${año}-${mes + 1}-${fecha}`
@@ -82,7 +85,9 @@ function CrearJustificante(props) {
       fechaJustificante,
       motivoJustificante,
       explicacionJustificante,
-      fotoJustificante
+      fotoJustificante,
+      correoJustificante,
+      idFotoJustificante
     }
 
     const collectionRef = collection(db, 'justificantesEnEspera')
@@ -132,7 +137,7 @@ function CrearJustificante(props) {
             setFoto={setFotoApoyo}
             required={true}
           />
-          <button className='boton__azul'>Enviar</button>
+          <button className='boton__azul contenedor__margin-top'>Enviar</button>
         </form>
       </div>
     </div>

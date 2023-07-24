@@ -9,7 +9,7 @@ import CampoAutocompletar from '../components/CampoAutocompletar/CampoAutocomple
 import CampoNumero from "../components/CampoNumero/CampoNumero";
 
 function ReportesContenido(props) {
-  const { asistencias, flechaRegresar } = props
+  const { asistencias, flechaRegresar, nombreAlumno } = props
 
   const [ añoPorMes, setAñoPorMes ] = useState(new Date().getFullYear())
   const [ asistenciasTotalesMes, setAsistenciasTotalesMes ] = useState([])
@@ -26,10 +26,21 @@ function ReportesContenido(props) {
   const [ mesSegundoPorClase, setMesSegundoPorClase ] = useState("")
   const [ numeroMesSegundoPorClase, setNumeroMesSegundoPorClase ] = useState()
   const [ asistenciasSegundoClases, setAsistenciasSegundoClases ] = useState([])
+
+  const [ añoPorclaseEnLinea, setAñoPorClaseEnLinea ] = useState(new Date().getFullYear())
+  const [ mesPorClaseEnLinea, setMesPorClaseEnLinea ] = useState(calcularMesPorNumero(new Date().getMonth()))
+  const [ numeroMesPorClaseEnLinea, setNumeroMesPorClaseEnLinea ] = useState(calcularNumeroPorMes(mesPorClaseEnLinea))
+  const [ asistenciasClasesEnLinea, setAsistenciasClasesEnLInea ] = useState([])
+
+  const [ añoSegundoPorclaseEnLinea, setAñoSegundoPorClaseEnLinea ] = useState(new Date().getFullYear())
+  const [ mesSegundoPorClaseEnLinea, setMesSegundoPorClaseEnLinea ] = useState('')
+  const [ numeroMesSegundoPorClaseEnLinea, setNumeroMesSegundoPorClaseEnLinea ] = useState()
+  const [ asistenciasSegundoClasesEnLinea, setAsistenciasSegundoClasesEnLInea ] = useState([])
   
   let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
   let clases = ["MatuLuMiVi200320", "VesLuMi500700", "MatuMaJu1130130", "VesMaJu500700", "Saba100400"]
+  let clasesEnLinea = ['NocLuMaMiJu740915']
 
   function valorMes(valor) {
     setMesPorClase(valor)
@@ -41,6 +52,18 @@ function ReportesContenido(props) {
     setMesSegundoPorClase(valor)
 
     setNumeroMesSegundoPorClase(calcularNumeroPorMes(valor))
+  }
+
+  function valorMesEnLinea(valor) {
+    setMesPorClaseEnLinea(valor)
+
+    setNumeroMesPorClaseEnLinea(calcularNumeroPorMes(valor))
+  }
+
+  function valorMesSegundoEnLinea(valor) {
+    setMesSegundoPorClaseEnLinea(valor)
+
+    setNumeroMesSegundoPorClaseEnLinea(calcularNumeroPorMes(valor))
   }
 
   function calcularNumeroPorMes(valor) {
@@ -110,31 +133,51 @@ function ReportesContenido(props) {
   }
 
   function asistenciasPorClase() {
-    const MatuLuMiVi200320 = asistencias.filter((a) => a.claveHorario == 'MatuLuMiVi200320' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase )
-    const VesLuMi500700 = asistencias.filter((a) => a.claveHorario == 'VesLuMi500700' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase)
-    const MatuMaJu1130130 = asistencias.filter((a) => a.claveHorario == 'MatuMaJu1130130' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase)
-    const VesMaJu500700 = asistencias.filter((a) => a.claveHorario == 'VesMaJu500700' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase)
-    const Saba100400 = asistencias.filter((a) => a.claveHorario == 'Saba100400' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase)
+    const MatuLuMiVi200320 = asistencias.filter((a) => a.claveHorario == 'MatuLuMiVi200320' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase && a.modalidadClase == 'Presencial')
+    const VesLuMi500700 = asistencias.filter((a) => a.claveHorario == 'VesLuMi500700' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase && a.modalidadClase == 'Presencial')
+    const MatuMaJu1130130 = asistencias.filter((a) => a.claveHorario == 'MatuMaJu1130130' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase && a.modalidadClase == 'Presencial')
+    const VesMaJu500700 = asistencias.filter((a) => a.claveHorario == 'VesMaJu500700' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase && a.modalidadClase == 'Presencial')
+    const Saba100400 = asistencias.filter((a) => a.claveHorario == 'Saba100400' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase && a.modalidadClase == 'Presencial')
 
     const nuevosDatos = [MatuLuMiVi200320.length, VesLuMi500700.length, MatuMaJu1130130.length, VesMaJu500700.length, Saba100400.length]
     setAsistenciasClases(nuevosDatos)
   }
 
   function asistenciasSegundoPorClase() {
-    const MatuLuMiVi200320 = asistencias.filter((a) => a.claveHorario == 'MatuLuMiVi200320' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase )
-    const VesLuMi500700 = asistencias.filter((a) => a.claveHorario == 'VesLuMi500700' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase)
-    const MatuMaJu1130130 = asistencias.filter((a) => a.claveHorario == 'MatuMaJu1130130' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase)
-    const VesMaJu500700 = asistencias.filter((a) => a.claveHorario == 'VesMaJu500700' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase)
-    const Saba100400 = asistencias.filter((a) => a.claveHorario == 'Saba100400' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase)
+    const MatuLuMiVi200320 = asistencias.filter((a) => a.claveHorario == 'MatuLuMiVi200320' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase && a.modalidadClase == 'Presencial')
+    const VesLuMi500700 = asistencias.filter((a) => a.claveHorario == 'VesLuMi500700' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase && a.modalidadClase == 'Presencial')
+    const MatuMaJu1130130 = asistencias.filter((a) => a.claveHorario == 'MatuMaJu1130130' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase && a.modalidadClase == 'Presencial')
+    const VesMaJu500700 = asistencias.filter((a) => a.claveHorario == 'VesMaJu500700' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase && a.modalidadClase == 'Presencial')
+    const Saba100400 = asistencias.filter((a) => a.claveHorario == 'Saba100400' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase && a.modalidadClase == 'Presencial')
 
     const nuevosDatos = [MatuLuMiVi200320.length, VesLuMi500700.length, MatuMaJu1130130.length, VesMaJu500700.length, Saba100400.length]
     setAsistenciasSegundoClases(nuevosDatos)
   }
 
+  function asistenciasPorClaseEnLinea() {
+    const NocLuMaMiJu740915 = asistencias.filter((a) => a.claveHorario == 'NocLuMaMiJu740915' && a.mesAsistenciaEntrada == numeroMesPorClaseEnLinea && a.añoAsistenciaEntrada == añoPorclaseEnLinea && a.modalidadClase == 'En linea')
+
+    const nuevosDatos = [NocLuMaMiJu740915.length]
+    setAsistenciasClasesEnLInea(nuevosDatos)
+  }
+
+  function asistenciasSegundoPorClaseEnLinea() {
+    const NocLuMaMiJu740915 = asistencias.filter((a) => a.claveHorario == 'NocLuMaMiJu740915' && a.mesAsistenciaEntrada == numeroMesSegundoPorClaseEnLinea && a.añoAsistenciaEntrada == añoSegundoPorclaseEnLinea && a.modalidadClase == 'En linea')
+
+    const nuevosDatos = [NocLuMaMiJu740915.length]
+    setAsistenciasClasesEnLInea(nuevosDatos)
+  }
+
+  //Todo: Total de asistencias por mes
   useEffect(() => {
     asistenciasPorMes()
   }, [añoPorMes])
 
+  useEffect(() => {
+    asistenciasSegundoPorMes()
+  }, [añoSegundoPorMes])
+
+  //Todo: Asistencias presenciales por clase numero 1 de la fecha numero 1
   useEffect(() => {
     asistenciasPorClase()
   },[mesPorClase])
@@ -143,10 +186,7 @@ function ReportesContenido(props) {
     asistenciasPorClase()
   },[añoPorClase])
 
-  useEffect(() => {
-    asistenciasSegundoPorMes()
-  }, [añoSegundoPorMes])
-
+  //Todo: Asistencias presenciales por clase numero 1 de la fecha numero 2
   useEffect(() => {
     asistenciasSegundoPorClase()
   },[mesSegundoPorClase])
@@ -155,6 +195,24 @@ function ReportesContenido(props) {
     asistenciasSegundoPorClase()
   },[añoSegundoPorClase])
 
+  //Todo: Asistencias en linea por clase numero 1 de la fecha numero 1
+  useEffect(() => {
+    asistenciasPorClaseEnLinea()
+  },[mesPorClaseEnLinea])
+
+  useEffect(() => {
+    asistenciasPorClaseEnLinea()
+  },[añoPorclaseEnLinea])
+
+  //Todo: Asistencias en linea por clase numero 1 de la fecha numero 2
+  useEffect(() => {
+    asistenciasSegundoPorClaseEnLinea()
+  },[mesSegundoPorClaseEnLinea])
+
+  useEffect(() => {
+    asistenciasSegundoPorClaseEnLinea()
+  },[añoSegundoPorclaseEnLinea])
+
   return ( 
     <div className='container-reportes'>
       {
@@ -162,6 +220,9 @@ function ReportesContenido(props) {
           <Link to={'/panel-control/asistencias/alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
           </div>
         : <></>
+      }
+      {
+        nombreAlumno ? <h2 className="titulos-2 titulos__verde-oscuro">Asistencias de {nombreAlumno}</h2> : <></>
       }
       <div className='primera-grafica'>
         <h3 className='titulos-2'>Total de Asistencias Por Mes</h3>
@@ -240,6 +301,53 @@ function ReportesContenido(props) {
           segundosDatos={asistenciasSegundoClases}
           labelPrimeroDatos={`Asistencias ${mesPorClase} ${añoPorClase}`}
           labelSegundosDatos={`Asistencias ${mesSegundoPorClase} ${añoSegundoPorClase}`}
+        />
+      </div>
+      <div className='segunda-grafica'>
+        <h3 className='titulos-2'>Asistencias En Línea Por Clase</h3>
+        <div className='graficas__campos'>
+          <div className='campos-grafica'>
+            <h4 className='titulos-3'>Primera Fecha</h4>
+            <div>
+              <CampoAutocompletar
+                titulo='Mes del Año'
+                placeholder='Selecciona el mes del año'
+                opciones={meses}
+                valor={mesPorClaseEnLinea}
+                cambiarValor={valorMesEnLinea}
+              />
+              <CampoNumero
+                titulo='Selecciona el mes del año'
+                valor={añoPorclaseEnLinea}
+                cambiarValor={setAñoPorClaseEnLinea}
+              />
+            </div>
+          </div>
+          <div className='campos-grafica'>
+            <h4 className='titulos-3'>Segunda Fecha</h4>
+            <div>
+              <CampoAutocompletar
+                titulo='Mes del Año'
+                placeholder='Selecciona el mes del año'
+                opciones={meses}
+                valor={mesSegundoPorClaseEnLinea}
+                cambiarValor={valorMesSegundoEnLinea}
+              />
+              <CampoNumero
+                titulo='Selecciona el mes del año'
+                valor={añoSegundoPorclaseEnLinea}
+                cambiarValor={setAñoSegundoPorClaseEnLinea}
+              />
+            </div>
+          </div>
+        </div>
+        <GraficoLinea 
+          titulo='Asistencias Por Clase' 
+          nombresDatos={clasesEnLinea} 
+          primerosDatos={asistenciasClasesEnLinea}
+          segundosDatos={asistenciasSegundoClasesEnLinea}
+          labelPrimeroDatos={`Asistencias ${mesPorClaseEnLinea} ${añoPorclaseEnLinea}`}
+          labelSegundosDatos={`Asistencias ${mesSegundoPorClaseEnLinea} ${añoSegundoPorclaseEnLinea}`}
         />
       </div>
     </div>

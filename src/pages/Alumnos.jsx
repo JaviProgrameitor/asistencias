@@ -16,9 +16,13 @@ function Alumnos(props) {
   const app = initializeApp(firebaseConfig)
   const db = getFirestore(app);
 
-  const [perfilAlumno, setPerfilAlumno] = useState()
-  const [idAlumno, setIdAlumno] = useState(false)
-  const [alumnos, setAlumnos] = useState([])
+  const [ perfilAlumno, setPerfilAlumno ] = useState()
+  const [ idAlumno, setIdAlumno ] = useState(false)
+  const [ alumnos, setAlumnos ] = useState([])
+  const [ asistenciasEntrada, setAsistenciasEntrada ] = useState([])
+  const [ justificantesEnEspera, setJustificantesEnEspera ] = useState([])
+  const [ justificantesAceptados, setJustificantesAceptados ] = useState([])
+  const [ justificantesRechazados, setJustificantesRechazados ] = useState([])
 
   function actualizarDatos(datos) {
     setPerfilAlumno(datos)
@@ -34,16 +38,87 @@ function Alumnos(props) {
       [db]
   )
 
+  //Todo: Función para leer los datos de la base de datos
+  useEffect(
+    () => 
+    onSnapshot(collection(db, 'asistenciasEntrada'),(snapshot) => 
+    setAsistenciasEntrada(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+    ),
+    [db]
+  )
+
+  //Todo: Función para leer los datos de la base de datos
+  useEffect(
+    () => 
+      onSnapshot(collection(db, 'justificantesEnEspera'),(snapshot) => 
+        setJustificantesEnEspera(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+      ),
+      [db]
+  )
+
+  //Todo: Función para leer los datos de la base de datos
+  useEffect(
+    () => 
+      onSnapshot(collection(db, 'justificantesAceptados'),(snapshot) => 
+      setJustificantesAceptados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+      ),
+      [db]
+  )
+
+  //Todo: Función para leer los datos de la base de datos
+  useEffect(
+    () => 
+      onSnapshot(collection(db, 'justificantesRechazados'),(snapshot) => 
+      setJustificantesRechazados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+      ),
+      [db]
+  )
+
   return (
     <div className="container-alumnos">
       <div className="contenedor__titulos-1">
         <h3 className="titulos-1">Alumnos</h3>
       </div>
       <Routes>
-        <Route path='/' element={<TablaAlumnos puestoAdmin={puestoAdmin} perfilAlumno={perfilAlumno} actualizarDatos={actualizarDatos} alumnos={alumnos} idAlumno={idAlumno} setIdAlumno={setIdAlumno} />} />
-        <Route path='/agregar-alumno' element={<AgregarAlumno alumnos={alumnos} />} />
-        <Route path='/editar-alumno' element={<EditarAlumno idAlumno={idAlumno} datos={perfilAlumno} />} />
-        <Route path='/perfil/:identificador' element={<PerfilAlumno idAlumno={idAlumno} datos={perfilAlumno} />} />
+        <Route 
+          path='/' 
+          element={<TablaAlumnos 
+            puestoAdmin={puestoAdmin} 
+            perfilAlumno={perfilAlumno} 
+            actualizarDatos={actualizarDatos} 
+            alumnos={alumnos} 
+            idAlumno={idAlumno} 
+            setIdAlumno={setIdAlumno} 
+            asistenciasEntrada={asistenciasEntrada}
+            justificantesAceptados={justificantesAceptados}
+            justificantesEnEspera={justificantesEnEspera}
+            justificantesRechazados={justificantesRechazados}
+          />} 
+        />
+        <Route 
+          path='/agregar-alumno' 
+          element={<AgregarAlumno 
+            alumnos={alumnos} 
+          />} 
+        />
+        <Route 
+          path='/editar-alumno' 
+          element={<EditarAlumno 
+            idAlumno={idAlumno} 
+            datos={perfilAlumno} 
+            asistenciasEntrada={asistenciasEntrada}
+            justificantesAceptados={justificantesAceptados}
+            justificantesEnEspera={justificantesEnEspera}
+            justificantesRechazados={justificantesRechazados}
+          />} 
+        />
+        <Route 
+          path='/perfil/:identificador' 
+          element={<PerfilAlumno 
+            idAlumno={idAlumno} 
+            datos={perfilAlumno} 
+          />} 
+        />
       </Routes>
     </div>
   )

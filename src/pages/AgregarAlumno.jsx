@@ -51,6 +51,11 @@ function AgregarAlumno(props) {
   const [ coloniaAlumno, setColoniaAlumno ] = useState('')
   const [ calleAlumno, setCalleAlumno ] = useState('')
   const [ numeroExteriorAlumno, setNumeroExteriorAlumno ] = useState('')
+  const [ fotoActaNacimiento, setFotoActaNacimiento ] = useState('')
+  const [ fotoIne, setFotoIne ] = useState('')
+  const [ fotoCurp, setFotoCurp ] = useState('')
+  const [ fotoComprobantePagoInicial, setFotoComprobantePagoInicial ] = useState('')
+
   const [ claveEstudianteAlumno, setClaveEstudianteAlumno ] = useState('')
   const [ idiomaAprendizajeAlumno, setIdiomaAprendizajeAlumno ] = useState([''])
   const [ nivelIdiomaAlumno, setNivelIdiomaAlumno ] = useState([''])
@@ -59,6 +64,10 @@ function AgregarAlumno(props) {
   const [ fechaPagoAlumno, setFechaPagoAlumno ] = useState([''])
 
   const [ fotoApoyo, setFotoApoyo ] = useState(false)
+  const [ fotoApoyoActaNacimiento, setFotoApoyoActaNacimiento ] = useState(false)
+  const [ fotoApoyoIne, setFotoApoyoIne ] = useState(false)
+  const [ fotoApoyoCurp, setFotoApoyoCurp ] = useState(false)
+  const [ fotoApoyoComprobantePagoInicial, setFotoApoyoComprobantePagoInicial ] = useState(false)
 
 
   const opcionesNivelesAcademicos = [
@@ -76,7 +85,8 @@ function AgregarAlumno(props) {
 
   const opcionesModalidades = [
     'Presencial',
-    'En linea'
+    'En linea',
+    'Mixto'
   ]
 
   const opcionesNiveles = [
@@ -146,17 +156,47 @@ function AgregarAlumno(props) {
 
     if(alumnosIns.length <= 0) {
       const identificadorAleatorio = uuid()
-      const metadata = {contentType: 'image/png'};
+      const identificadorAleatorio2 = uuid()
+      const identificadorAleatorio3 = uuid()
+      const identificadorAleatorio4 = uuid()
+      const identificadorAleatorio5 = uuid()
+
+      const metadata = {contentType: fotoPerfilAlumno.type};
       const storageRef = ref(st, `alumnos/${identificadorAleatorio}`)
       await uploadBytesResumable(storageRef, fotoPerfilAlumno, metadata)
+
+      const metadataActa = {contentType: fotoActaNacimiento.type};
+      const storageRefActa = ref(st, `documentos/${identificadorAleatorio2}`)
+      await uploadBytesResumable(storageRefActa, fotoActaNacimiento, metadataActa)
+
+      const metadataIne = {contentType: fotoIne.type};
+      const storageRefIne = ref(st, `documentos/${identificadorAleatorio3}`)
+      await uploadBytesResumable(storageRefIne, fotoIne, metadataIne)
+
+      const metadataCurp = {contentType: fotoCurp.type};
+      const storageRefCurp = ref(st, `documentos/${identificadorAleatorio4}`)
+      await uploadBytesResumable(storageRefCurp, fotoCurp, metadataCurp)
+
+      const metadataComPagoIni = {contentType: fotoComprobantePagoInicial.type};
+      const storageRefComPagoIni = ref(st, `documentos/${identificadorAleatorio5}`)
+      await uploadBytesResumable(storageRefComPagoIni, fotoComprobantePagoInicial, metadataComPagoIni)
   
       const foto = await getDownloadURL(storageRef)
+      const actaNacimiento = await getDownloadURL(storageRefActa)
+      const ine = await getDownloadURL(storageRefIne)
+      const curp = await getDownloadURL(storageRefCurp)
+      const comprobantePagoInicial = await getDownloadURL(storageRefComPagoIni)
       const idFoto = identificadorAleatorio;
+      const idActaNacimiento = identificadorAleatorio2
+      const idIne = identificadorAleatorio3
+      const idCurp = identificadorAleatorio4
+      const idComprobantePagoInicial = identificadorAleatorio5
       const nombre = nombreAlumno
       const apellido = apellidoAlumno
       const fechaNacimiento = fechaNacimientoAlumno
       const genero = generoAlumno
       const correo = correoAlumno
+      const contrasena = contrasenaAlumno
       const numeroTelefono = numeroTelefonoAlumno
       const nivelAcademico = nivelAcademicoAlumno
       const codigoPostal = codigoPostalAlumno
@@ -175,12 +215,21 @@ function AgregarAlumno(props) {
   
       const datos = {
         foto,
+        actaNacimiento,
+        ine,
+        curp,
+        comprobantePagoInicial,
         idFoto,
+        idActaNacimiento,
+        idIne,
+        idCurp,
+        idComprobantePagoInicial,
         nombre, 
         apellido, 
         fechaNacimiento, 
         genero,
         correo, 
+        contrasena,
         numeroTelefono, 
         nivelAcademico,
         codigoPostal,
@@ -229,6 +278,7 @@ function AgregarAlumno(props) {
               foto={fotoApoyo}
               setFoto={setFotoApoyo}
               required={true}
+              classInput='imagen__foto-perfil'
             />
             <Campo 
               titulo='Nombre' 
@@ -320,6 +370,50 @@ function AgregarAlumno(props) {
               placeholder='Ingresa el número exterior de donde vive el alumno'
               valor={numeroExteriorAlumno}
               cambiarValor={setNumeroExteriorAlumno}
+            />
+            <FotoAlumno 
+              titulo='Acta de Nacimiento'
+              className='foto-cuadrada'
+              valor={fotoActaNacimiento}
+              cambiarValor={setFotoActaNacimiento}
+              tipo={false}
+              foto={fotoApoyoActaNacimiento}
+              setFoto={setFotoApoyoActaNacimiento}
+              required={false}
+              classInput='imagen__acta-nacimiento'
+            />
+            <FotoAlumno 
+              titulo='Instituto Nacional Electoral (INE)'
+              className='foto-cuadrada'
+              valor={fotoIne}
+              cambiarValor={setFotoIne}
+              tipo={false}
+              foto={fotoApoyoIne}
+              setFoto={setFotoApoyoIne}
+              required={false}
+              classInput='imagen__ine'
+            />
+            <FotoAlumno 
+              titulo='Curp'
+              className='foto-cuadrada'
+              valor={fotoCurp}
+              cambiarValor={setFotoCurp}
+              tipo={false}
+              foto={fotoApoyoCurp}
+              setFoto={setFotoApoyoCurp}
+              required={false}
+              classInput='imagen__curp'
+            />
+            <FotoAlumno 
+              titulo='Comprobante del Pago Inicial'
+              className='foto-cuadrada'
+              valor={fotoComprobantePagoInicial}
+              cambiarValor={setFotoComprobantePagoInicial}
+              tipo={false}
+              foto={fotoApoyoComprobantePagoInicial}
+              setFoto={setFotoApoyoComprobantePagoInicial}
+              required={false}
+              classInput='imagen__comprobante-pago-inicial'
             />
             <h4 className='formulario__subtitulo'>Información del Centro de Idiomas</h4>
             <Campo

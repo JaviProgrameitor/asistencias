@@ -10,6 +10,7 @@ import { Link, useResolvedPath } from "react-router-dom"
 
 import { doc, deleteDoc, getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
+import { getStorage, ref, deleteObject } from 'firebase/storage'
 import firebaseConfig from '../firebase';
 
 import FilasAlumnos from '../components/FilasAlumnos/FilasAlumnos'
@@ -19,19 +20,89 @@ import TextField from '@mui/material/TextField';
 import { Toaster, toast } from 'sonner'
 
 function TablaAlumnos(props) {
-  const { alumnos, idAlumno, setIdAlumno, actualizarDatos, puestoAdmin, perfilAlumno } = props
+  const { 
+      alumnos, 
+      idAlumno, 
+      setIdAlumno, 
+      actualizarDatos, 
+      puestoAdmin, 
+      perfilAlumno, 
+      asistenciasEntrada, 
+      justificantesAceptados, 
+      justificantesEnEspera, 
+      justificantesRechazados 
+    } = props
   const [ filtrarAlumnos, setFiltrarAlumnos ] = useState(false)
   const [ modalEliminarAlumno, setModalEliminarAlumno ] = useState(false)
 
   const app = initializeApp(firebaseConfig)
   const db = getFirestore(app);
+  const st = getStorage(app);
 
   const url = useResolvedPath("").pathname
 
   //Todo: Función para eliminar alumnos de la base de datos
-  async function eliminarAlumnos(id) {
-    const docRef = doc(db, 'alumnos', id)
+  async function eliminarAlumnos(alumno) {
+    const asistenciasAlumno = asistenciasEntrada.filter((asis) => asis.claveEstudianteAsistenciaEntrada == alumno.claveEstudiante)
+    const justificantesEnEsperaAlumno = justificantesEnEspera.filter(justi => justi.claveEstudianteJustificante == alumno.claveEstudiante)
+    const justificantesAceptadosAlumno = justificantesAceptados.filter(justi => justi.claveEstudianteJustificante == alumno.claveEstudiante)
+    const justificantesRechazadosAlumno = justificantesRechazados.filter(justi => justi.claveEstudianteJustificante == alumno.claveEstudiante)
+
+    if(asistenciasAlumno.length > 0) {
+      for(let i = 0; i < asistenciasAlumno.length; i++) {
+        const docRef = doc(db, 'asistenciasEntrada', asistenciasAlumno[i].id)
+        await deleteDoc(docRef)
+      }
+    }
+
+    if(justificantesEnEsperaAlumno.length > 0) {
+      for(let i = 0; i < justificantesEnEsperaAlumno.length; i++) {
+        const docRef = doc(db, 'justificantesEnEspera', justificantesEnEsperaAlumno[i].id)
+        await deleteDoc(docRef)
+  
+        const desertRef = ref(st, `justificantes/${justificantesEnEsperaAlumno[i].idFotoJustificante}`);
+        await deleteObject(desertRef)
+      }
+    }
+
+    if(justificantesAceptadosAlumno.length > 0) {
+      for(let i = 0; i < justificantesAceptadosAlumno.length; i++) {
+        const docRef = doc(db, 'justificantesAceptados', justificantesAceptadosAlumno[i].id)
+        await deleteDoc(docRef)
+  
+        const desertRef = ref(st, `justificantes/${justificantesAceptadosAlumno[i].idFotoJustificante}`);
+        await deleteObject(desertRef)
+      }
+    }
+
+    if(justificantesRechazadosAlumno.length > 0) {
+      for(let i = 0; i < justificantesRechazadosAlumno.length; i++) {
+        const docRef = doc(db, 'justificantesRechazados', justificantesRechazadosAlumno[i].id)
+        await deleteDoc(docRef)
+  
+        const desertRef = ref(st, `justificantes/${justificantesRechazadosAlumno[i].idFotoJustificante}`);
+        await deleteObject(desertRef)
+      }
+    }
+
+    const desertRef = ref(st, `alumnos/${alumno.idFoto}`);
+    await deleteObject(desertRef)
+
+    const desertRef2 = ref(st, `documentos/${alumno.idActaNacimiento}`);
+    await deleteObject(desertRef2)
+
+    const desertRef3 = ref(st, `documentos/${alumno.idIne}`);
+    await deleteObject(desertRef3)
+
+    const desertRef4 = ref(st, `documentos/${alumno.idCurp}`);
+    await deleteObject(desertRef4)
+
+    const desertRef5 = ref(st, `documentos/${alumno.idComprobantePagoInicial}`);
+    await deleteObject(desertRef5)
+
+    const docRef = doc(db, 'alumnos', alumno.id)
     await deleteDoc(docRef)
+    toast.success('El Alumno ha sido eliminado con exito')
     setIdAlumno(false)
   }
 
@@ -146,7 +217,7 @@ function TablaAlumnos(props) {
               <button className='boton__verde-oscuro' onClick={() => setModalEliminarAlumno(false)}>Cancelar Eliminación</button>
               <button className='boton__blanco' 
                 onClick={() => {
-                  eliminarAlumnos(idAlumno)
+                  eliminarAlumnos(perfilAlumno)
                   setModalEliminarAlumno(false)
                 }}>Eliminar Alumno
               </button>

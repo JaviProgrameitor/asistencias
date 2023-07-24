@@ -1,0 +1,58 @@
+.boton-descargas {
+  position: relative;
+  width: 150px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: 1px solid #17795E;
+  background-color: #209978;
+  overflow: hidden;
+}
+
+.boton-descargas, .boton-descargas__icon, .boton-descargas__text {
+  transition: all 0.3s;
+}
+
+.boton-descargas .boton-descargas__text {
+  transform: translateX(22px);
+  color: #fff;
+  font-weight: 600;
+}
+
+.boton-descargas .boton-descargas__icon {
+  position: absolute;
+  transform: translateX(109px);
+  height: 100%;
+  width: 39px;
+  background-color: #17795E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boton-descargas .svg {
+  width: 20px;
+  fill: #fff;
+}
+
+.boton-descargas:hover {
+  background: #17795E;
+}
+
+.boton-descargas:hover .boton-descargas__text {
+  color: transparent;
+}
+
+.boton-descargas:hover .boton-descargas__icon {
+  width: 148px;
+  transform: translateX(0);
+}
+
+.boton-descargas:active .boton-descargas__icon {
+  background-color: #146c54;
+}
+
+.boton-descargas:active {
+  border: 1px solid #146c54;
+}

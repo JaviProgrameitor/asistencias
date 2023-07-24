@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 function FilasAsistenciasEntrada(props) {
   const { posicion } = props
   const { nombreAsistenciaEntrada, apellidoAsistenciaEntrada, claveEstudianteAsistenciaEntrada, fechaCompletaAsistenciaEntrada,
-    horaAsistenciaEntrada, diaAsistenciaEntrada, horaClase, tipoHorario, diasHorarios, horaHorario, puntualidadClase } = props.datos
+    horaAsistenciaEntrada, diaAsistenciaEntrada, horaClase, tipoHorario, diasHorarios, horaHorario, puntualidadClase, modalidadClase, entradaSalidaAsistencia } = props.datos
   const [tipo, setTipo] = useState()
   const [activo, setActivo] = useState()
 
@@ -15,6 +15,7 @@ function FilasAsistenciasEntrada(props) {
 
   return (
     <tr className={`fila fila-administrador ${tipo} ${activo}`}>
+      <td className='td-admin'>{entradaSalidaAsistencia}</td>
       <td className='td-admin'>{nombreAsistenciaEntrada}</td>
       <td className='td-admin'>{apellidoAsistenciaEntrada}</td>
       <td className='td-admin'>{claveEstudianteAsistenciaEntrada}</td>
@@ -28,7 +29,9 @@ function FilasAsistenciasEntrada(props) {
         <span>{diasHorarios}</span><br />
         <span>{horaHorario}</span>
       </td>
+      <td className='td-admin'>{modalidadClase}</td>
     </tr>
+
   )
 }
 

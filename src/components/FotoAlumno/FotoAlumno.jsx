@@ -3,28 +3,29 @@ import '../../assets/css/components/FotoAlumno.css'
 import { Toaster, toast } from 'sonner'
 
 function FotoAlumno(props) {
-  const { className, titulo, valor, cambiarValor, tipo, foto, setFoto, required } = props
+  const { className, titulo, valor, cambiarValor, tipo, foto, setFoto, required, classInput } = props
 
   function clickFoto() {
-    const file = document.querySelector(".imagen")
+    const file = document.querySelector(`.${classInput}`)
     file.click()
   }
 
   function elegirFoto(e) {
     const fotos = e.target.files;
-    let supportedImages = ["image/png"];
+    let supportedImages = ["image/png", "image/jpeg", "image/jpg"];
 
-    const reader = new FileReader();
+    if(fotos.length > 0) {
+      const reader = new FileReader();
 
-    if(supportedImages.indexOf(fotos[0].type) !== -1) {
-      createPreview(fotos[0]);
-      reader.readAsDataURL(fotos[0]);
+      if(supportedImages.indexOf(fotos[0].type) !== -1) {
+        createPreview(fotos[0]);
+        reader.readAsDataURL(fotos[0]);
+      }
+
+      else {      
+        toast.error('Archivo no valido')
+      }
     }
-
-    else {      
-      toast.error('Archivo no valido')
-    }
-
   }
   
   function createPreview(file) {
@@ -54,7 +55,7 @@ function FotoAlumno(props) {
           }
         </div>
       </div>
-        <input className="imagen" type="file" name="images[]" required={required} onChange={elegirFoto} />
+        <input className={`imagen ${classInput}`} type="file" name="images[]" required={required} onChange={elegirFoto} />
     </div>
   );
 }

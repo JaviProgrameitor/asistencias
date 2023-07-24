@@ -20,12 +20,14 @@ function TablaAsistencias(props) {
         <table className='tabla-alumnos'>
           <thead className='tabla-cabecera'>
               <tr>
+                <th colSpan='1'>Entrada o Salida</th>
                 <th colSpan='1'>Nombre</th>
                 <th colSpan='1'>Apellido</th>
                 <th colSpan='1'>Clave de Estudiante</th>
                 <th colSpan='1'>Fecha de Asistencia</th>
-                <th colSpan='1'>Hora de Asistencia</th>
+                <th colSpan='1'>Hora</th>
                 <th colSpan='1'>Horario</th>
+                <th colSpan='1'>Modalidad</th>
               </tr>
           </thead>
           <tbody className="tabla-cuerpo">

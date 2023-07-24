@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^13.5.0",
     "chart.js": "^4.3.0",
     "emailjs": "^4.0.2",
+    "file-saver": "^2.0.5",
     "firebase": "^9.23.0",
     "hamburger-react": "^2.5.0",
     "html5-qrcode": "^2.3.8",

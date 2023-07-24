@@ -22,9 +22,18 @@ import firebaseConfig from '../firebase';
 import { Toaster, toast } from 'sonner'
 
 function EditarAlumno(props) {
-  const { idAlumno } = props
-  const { foto, 
-    idFoto, 
+  const { idAlumno, asistenciasEntrada, justificantesAceptados, justificantesEnEspera, justificantesRechazados  } = props
+  const { 
+    foto,
+    actaNacimiento,
+    ine,
+    curp,
+    comprobantePagoInicial, 
+    idFoto,
+    idActaNacimiento,
+    idIne,
+    idCurp,
+    idComprobantePagoInicial,
     nombre, 
     apellido, 
     numeroTelefono,
@@ -43,6 +52,7 @@ function EditarAlumno(props) {
     fechaNacimiento,
     genero, 
     correo, 
+    contrasena,
     nivelAcademico, 
     nivelIdioma, 
     fechaIngreso 
@@ -58,6 +68,7 @@ function EditarAlumno(props) {
   const [ fechaNacimientoAlumno, setFechaNacimientoAlumno ] = useState(fechaNacimiento)
   const [ generoAlumno, setGeneroAlumno ] = useState(genero)
   const [ correoAlumno, setCorreoAlumno ] = useState(correo)
+  const [ contrasenaAlumno, setContrasenaAlumno ] = useState(contrasena)
   const [ numeroTelefonoAlumno, setNumeroTelefonoAlumno ] = useState(numeroTelefono)
   const [ nivelAcademicoAlumno, setNivelAcademicoAlumno ] = useState(nivelAcademico)
   const [ codigoPostalAlumno, setCodigoPostalAlumno ] = useState(codigoPostal)
@@ -67,6 +78,11 @@ function EditarAlumno(props) {
   const [ coloniaAlumno, setColoniaAlumno ] = useState(colonia)
   const [ calleAlumno, setCalleAlumno ] = useState(calle)
   const [ numeroExteriorAlumno, setNumeroExteriorAlumno ] = useState(numeroExterior)
+  const [ fotoActaNacimiento, setFotoActaNacimiento ] = useState(actaNacimiento)
+  const [ fotoIne, setFotoIne ] = useState(ine)
+  const [ fotoCurp, setFotoCurp ] = useState(curp)
+  const [ fotoComprobantePagoInicial, setFotoComprobantePagoInicial ] = useState(comprobantePagoInicial)
+
   const [ claveEstudianteAlumno, setClaveEstudianteAlumno ] = useState(claveEstudiante)
   const [ idiomaAprendizajeAlumno, setIdiomaAprendizajeAlumno ] = useState(idiomaAprendizaje)
   const [ nivelIdiomaAlumno, setNivelIdiomaAlumno ] = useState(nivelIdioma)
@@ -74,8 +90,19 @@ function EditarAlumno(props) {
   const [ fechaIngresoAlumno, setFechaIngresoAlumno ] = useState(fechaIngreso)
   const [ fechaPagoAlumno, setFechaPagoAlumno ] = useState(fechaPago)
 
-  const [ fotoApoyo, setFotoApoyo ] = useState(false)
   const [ idFotoAlumno, setIdFotoAlumno ] = useState(idFoto)
+  const [ idFotoActaNacimiento, setIdFotoActaNacimiento ] = useState(idActaNacimiento)
+  const [ idFotoIne, setIdFotoIne ] = useState(idIne)
+  const [ idFotoCurp, setIdFotoCurp ] = useState(idCurp)
+  const [ idFotoComprobantePagoInicial, setIdFotoComprobantePagoInicial ] = useState(idComprobantePagoInicial)
+
+  const [ fotoApoyo, setFotoApoyo ] = useState(false)
+  const [ fotoApoyoActaNacimiento, setFotoApoyoActaNacimiento ] = useState(false)
+  const [ fotoApoyoIne, setFotoApoyoIne ] = useState(false)
+  const [ fotoApoyoCurp, setFotoApoyoCurp ] = useState(false)
+  const [ fotoApoyoComprobantePagoInicial, setFotoApoyoComprobantePagoInicial ] = useState(false)
+
+  const [ claveEstudianteNoEditable, setClaveEstudianteNoEditable ] = useState(claveEstudiante)
 
   const opcionesNivelesAcademicos = [
     'Primaria',
@@ -237,11 +264,29 @@ function EditarAlumno(props) {
     let foto;
     let idFoto;
 
+    let actaNacimiento;
+    let idActaNacimiento;
+
+    let ine;
+    let idIne;
+
+    let curp;
+    let idCurp;
+
+    let comprobantePagoInicial;
+    let idComprobantePagoInicial;
+
+    const asistenciasAlumno = asistenciasEntrada.filter((asis) => asis.claveEstudianteAsistenciaEntrada == claveEstudianteNoEditable)
+    const justificantesEnEsperaAlumno = justificantesEnEspera.filter(justi => justi.claveEstudianteJustificante == claveEstudianteNoEditable)
+    const justificantesAceptadosAlumno = justificantesAceptados.filter(justi => justi.claveEstudianteJustificante == claveEstudianteNoEditable)
+    const justificantesRechazadosAlumno = justificantesRechazados.filter(justi => justi.claveEstudianteJustificante == claveEstudianteNoEditable)
+
+    //Todo: Foto perfil alumno
     if(fotoApoyo) {
       const desertRef = ref(st, `alumnos/${idFotoAlumno}`);
       await deleteObject(desertRef)
 
-      const metadata = {contentType: 'image/png'};
+      const metadata = {contentType: fotoPerfilAlumno.type};
       const storageRef = ref(st, `alumnos/${idFotoAlumno}`)
       await uploadBytesResumable(storageRef, fotoPerfilAlumno, metadata)
   
@@ -254,11 +299,258 @@ function EditarAlumno(props) {
       idFoto = idFotoAlumno
     }
 
+    //Todo: Foto de la acta de nacimiento
+    if(fotoApoyoActaNacimiento) {
+      const desertRef = ref(st, `documentos/${idFotoActaNacimiento}`);
+      await deleteObject(desertRef)
+
+      const metadataActa = {contentType: fotoActaNacimiento.type};
+      const storageRefActa = ref(st, `documentos/${idFotoActaNacimiento}`)
+      await uploadBytesResumable(storageRefActa, fotoActaNacimiento, metadataActa)
+
+      actaNacimiento = await getDownloadURL(storageRefActa)
+      idActaNacimiento = idFotoActaNacimiento
+    }
+
+    else if(fotoApoyoActaNacimiento === false) {
+      actaNacimiento = fotoActaNacimiento
+      idActaNacimiento = idFotoActaNacimiento
+    }
+
+    //Todo: Foto de el ine
+    if(fotoApoyoIne) {
+      const desertRef = ref(st, `documentos/${idFotoIne}`);
+      await deleteObject(desertRef)
+
+      const metadataActa = {contentType: fotoIne.type};
+      const storageRefActa = ref(st, `documentos/${idFotoIne}`)
+      await uploadBytesResumable(storageRefActa, fotoIne, metadataActa)
+
+      ine = await getDownloadURL(storageRefActa)
+      idIne = idFotoIne
+    }
+
+    else if(fotoApoyoIne === false) {
+      ine = fotoIne
+      idIne = idFotoIne
+    }
+
+    //Todo: Foto de la curp
+    if(fotoApoyoCurp) {
+      const desertRef = ref(st, `documentos/${idFotoCurp}`);
+      await deleteObject(desertRef)
+
+      const metadataActa = {contentType: fotoCurp.type};
+      const storageRefActa = ref(st, `documentos/${idFotoCurp}`)
+      await uploadBytesResumable(storageRefActa, fotoCurp, metadataActa)
+
+      curp = await getDownloadURL(storageRefActa)
+      idCurp = idFotoCurp
+    }
+
+    else if(fotoApoyoCurp === false) {
+      curp = fotoCurp
+      idCurp = idFotoCurp
+    }
+
+    //Todo: Foto de el comprobante de pago inicial
+    if(fotoApoyoComprobantePagoInicial) {
+      const desertRef = ref(st, `documentos/${idFotoComprobantePagoInicial}`);
+      await deleteObject(desertRef)
+
+      const metadataActa = {contentType: fotoComprobantePagoInicial.type};
+      const storageRefActa = ref(st, `documentos/${idFotoComprobantePagoInicial}`)
+      await uploadBytesResumable(storageRefActa, fotoComprobantePagoInicial, metadataActa)
+
+      comprobantePagoInicial = await getDownloadURL(storageRefActa)
+      idComprobantePagoInicial = idFotoComprobantePagoInicial
+    }
+
+    else if(fotoApoyoComprobantePagoInicial === false) {
+      comprobantePagoInicial = fotoComprobantePagoInicial
+      idComprobantePagoInicial = idFotoComprobantePagoInicial
+    }
+
+    //Todo: Editar el nombre, apellido y clave de estudiante de las asistencias del alumno
+    for(let i = 0; i < asistenciasAlumno.length; i++) {
+      let {
+        nombreAsistenciaEntrada, 
+        apellidoAsistenciaEntrada,
+        claveEstudianteAsistenciaEntrada,
+        fechaCompletaAsistenciaEntrada,
+        horaAsistenciaEntrada,
+        diaAsistenciaEntrada,
+        fechaAsistenciaEntrada,
+        mesAsistenciaEntrada,
+        añoAsistenciaEntrada,
+        horaClase,
+        tipoHorario,
+        diasHorarios,
+        horaHorario,
+        claveHorario,
+        puntualidadClase,
+        modalidadClase,
+        entradaSalidaAsistencia,
+        id
+      } = asistenciasAlumno[i]
+
+      nombreAsistenciaEntrada = nombreAlumno
+      apellidoAsistenciaEntrada = apellidoAlumno
+      claveEstudianteAsistenciaEntrada = claveEstudianteAlumno
+
+      const datos = {
+        nombreAsistenciaEntrada, 
+        apellidoAsistenciaEntrada,
+        claveEstudianteAsistenciaEntrada,
+        fechaCompletaAsistenciaEntrada,
+        horaAsistenciaEntrada,
+        diaAsistenciaEntrada,
+        fechaAsistenciaEntrada,
+        mesAsistenciaEntrada,
+        añoAsistenciaEntrada,
+        horaClase,
+        tipoHorario,
+        diasHorarios,
+        horaHorario,
+        claveHorario,
+        puntualidadClase,
+        modalidadClase,
+        entradaSalidaAsistencia
+      }
+
+      const docRef = doc(db, 'asistenciasEntrada', id)
+      await setDoc(docRef, datos)
+    }
+
+    //Todo: Editar el nombre, apellido y clave de estudiante de los justificantes en espera del alumno
+    for(let i = 0; i < justificantesEnEsperaAlumno.length; i++) {
+      let {
+        nombreJustificante, 
+        apellidoJustificante,
+        claveEstudianteJustificante,
+        numeroTelefonoJustificante,
+        fechaEmisionJustificante,
+        horaEmisionJustificante,
+        fechaJustificante,
+        motivoJustificante,
+        explicacionJustificante,
+        fotoJustificante,
+        correoJustificante,
+        idFotoJustificante,
+        id
+      } = justificantesEnEsperaAlumno[i]
+
+      nombreJustificante = nombreAlumno
+      apellidoJustificante = apellidoAlumno
+      claveEstudianteJustificante = claveEstudianteAlumno
+
+      const datos = {
+        nombreJustificante, 
+        apellidoJustificante,
+        claveEstudianteJustificante,
+        numeroTelefonoJustificante,
+        fechaEmisionJustificante,
+        horaEmisionJustificante,
+        fechaJustificante,
+        motivoJustificante,
+        explicacionJustificante,
+        fotoJustificante,
+        correoJustificante,
+        idFotoJustificante,
+      }
+
+      const docRef = doc(db, 'justificantesEnEspera', id)
+      await setDoc(docRef, datos)
+    }
+
+    //Todo: Editar el nombre, apellido y clave de estudiante de los justificantes aceptados del alumno
+    for(let i = 0; i < justificantesAceptadosAlumno.length; i++) {
+      let {
+        nombreJustificante, 
+        apellidoJustificante,
+        claveEstudianteJustificante,
+        numeroTelefonoJustificante,
+        fechaEmisionJustificante,
+        horaEmisionJustificante,
+        fechaJustificante,
+        motivoJustificante,
+        explicacionJustificante,
+        fotoJustificante,
+        correoJustificante,
+        idFotoJustificante,
+        id
+      } = justificantesAceptadosAlumno[i]
+
+      nombreJustificante = nombreAlumno
+      apellidoJustificante = apellidoAlumno
+      claveEstudianteJustificante = claveEstudianteAlumno
+
+      const datos = {
+        nombreJustificante, 
+        apellidoJustificante,
+        claveEstudianteJustificante,
+        numeroTelefonoJustificante,
+        fechaEmisionJustificante,
+        horaEmisionJustificante,
+        fechaJustificante,
+        motivoJustificante,
+        explicacionJustificante,
+        fotoJustificante,
+        correoJustificante,
+        idFotoJustificante,
+      }
+
+      const docRef = doc(db, 'justificantesAceptados', id)
+      await setDoc(docRef, datos)
+    }
+
+    //Todo: Editar el nombre, apellido y clave de estudiante de los justificantes rechazados del alumno
+    for(let i = 0; i < justificantesRechazadosAlumno.length; i++) {
+      let {
+        nombreJustificante, 
+        apellidoJustificante,
+        claveEstudianteJustificante,
+        numeroTelefonoJustificante,
+        fechaEmisionJustificante,
+        horaEmisionJustificante,
+        fechaJustificante,
+        motivoJustificante,
+        explicacionJustificante,
+        fotoJustificante,
+        correoJustificante,
+        idFotoJustificante,
+        id
+      } = justificantesRechazadosAlumno[i]
+
+      nombreJustificante = nombreAlumno
+      apellidoJustificante = apellidoAlumno
+      claveEstudianteJustificante = claveEstudianteAlumno
+
+      const datos = {
+        nombreJustificante, 
+        apellidoJustificante,
+        claveEstudianteJustificante,
+        numeroTelefonoJustificante,
+        fechaEmisionJustificante,
+        horaEmisionJustificante,
+        fechaJustificante,
+        motivoJustificante,
+        explicacionJustificante,
+        fotoJustificante,
+        correoJustificante,
+        idFotoJustificante,
+      }
+
+      const docRef = doc(db, 'justificantesRechazados', id)
+      await setDoc(docRef, datos)
+    }
+
     const nombre = nombreAlumno
     const apellido = apellidoAlumno
     const fechaNacimiento = fechaNacimientoAlumno
     const genero = generoAlumno
     const correo = correoAlumno
+    const contrasena = contrasenaAlumno
     const numeroTelefono = numeroTelefonoAlumno
     const nivelAcademico = nivelAcademicoAlumno
     const codigoPostal = codigoPostalAlumno
@@ -268,6 +560,7 @@ function EditarAlumno(props) {
     const colonia = coloniaAlumno
     const calle = calleAlumno
     const numeroExterior = numeroExteriorAlumno
+    
     const claveEstudiante = claveEstudianteAlumno
     const idiomaAprendizaje = idiomaAprendizajeAlumno
     const nivelIdioma = nivelIdiomaAlumno
@@ -278,11 +571,20 @@ function EditarAlumno(props) {
     const datos = {
       foto,
       idFoto,
+      actaNacimiento,
+      idActaNacimiento,
+      ine,
+      idIne,
+      curp,
+      idCurp,
+      comprobantePagoInicial,
+      idComprobantePagoInicial,
       nombre, 
       apellido, 
       fechaNacimiento,
       genero, 
       correo, 
+      contrasena,
       numeroTelefono, 
       nivelAcademico,
       codigoPostal,
@@ -301,7 +603,7 @@ function EditarAlumno(props) {
     }
 
     const docRef = doc(db, 'alumnos', idAlumno)
-    setDoc(docRef, datos)
+    await setDoc(docRef, datos)
     toast.success('El Alumno ha sido editado con exito')
   }
 
@@ -413,6 +715,50 @@ function EditarAlumno(props) {
               placeholder='Ingresa el número exterior de donde vive el alumno'
               valor={numeroExteriorAlumno}
               cambiarValor={setNumeroExteriorAlumno}
+            />
+            <FotoAlumno 
+              titulo='Acta de Nacimiento'
+              className='foto-cuadrada'
+              valor={fotoActaNacimiento}
+              cambiarValor={setFotoActaNacimiento}
+              tipo={true}
+              foto={fotoApoyoActaNacimiento}
+              setFoto={setFotoApoyoActaNacimiento}
+              required={false}
+              classInput='imagen__acta-nacimiento'
+            />
+            <FotoAlumno 
+              titulo='Instituto Nacional Electoral (INE)'
+              className='foto-cuadrada'
+              valor={fotoIne}
+              cambiarValor={setFotoIne}
+              tipo={true}
+              foto={fotoApoyoIne}
+              setFoto={setFotoApoyoIne}
+              required={false}
+              classInput='imagen__ine'
+            />
+            <FotoAlumno 
+              titulo='Curp'
+              className='foto-cuadrada'
+              valor={fotoCurp}
+              cambiarValor={setFotoCurp}
+              tipo={true}
+              foto={fotoApoyoCurp}
+              setFoto={setFotoApoyoCurp}
+              required={false}
+              classInput='imagen__curp'
+            />
+            <FotoAlumno 
+              titulo='Comprobante del Pago Inicial'
+              className='foto-cuadrada'
+              valor={fotoComprobantePagoInicial}
+              cambiarValor={setFotoComprobantePagoInicial}
+              tipo={true}
+              foto={fotoApoyoComprobantePagoInicial}
+              setFoto={setFotoApoyoComprobantePagoInicial}
+              required={false}
+              classInput='imagen__comprobante-pago-inicial'
             />
             <h4 className='formulario__subtitulo'>Información del Centro de Idiomas</h4>
             <Campo

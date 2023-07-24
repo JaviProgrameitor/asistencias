@@ -37,7 +37,9 @@
 }
 
 .lcOxyP {
-  width: 65% !important;
+  min-width: 30% !important;
+  max-width: 65% !important;
+  max-height: 80%;
 }
 
 .foto-prueba__icon {

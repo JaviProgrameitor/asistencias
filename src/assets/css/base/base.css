@@ -1,3 +1,8 @@
+/* Estilos body */
+.body__pantalla-negra {
+  overflow: hidden;
+}
+
 /* Estilos de los títulos */
 .titulos-1 {
   display: inline;
@@ -18,6 +23,18 @@
   text-align: center;
   font-size: 25px;
   font-family: 'Fredoka', sans-serif;
+}
+
+.titulos__blanco {
+  color: white;
+}
+
+.titulos__verde-oscuro {
+  color: green;
+}
+
+.titulos__sin-margen {
+  margin: 0;
 }
 
 /* Estilos de los contenedores */
@@ -49,6 +66,20 @@
 .contenedor__centro-separacion {
   display: flex;
   justify-content: space-around;
+}
+
+.contenedor__columna-centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contenedor__margin-ambos {
+  margin: 24px 0;
+}
+
+.contenedor__margin-top {
+  margin-top: 24px;
 }
 
 /* Estilos de los botones */

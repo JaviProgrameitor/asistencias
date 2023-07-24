@@ -1,3 +1,7 @@
+.lista-opciones {
+  margin: 24px 0;
+}
+
 .lista-opciones label {
   font-family: 'Montserrat', sans-serif;
   font-size: 18px;

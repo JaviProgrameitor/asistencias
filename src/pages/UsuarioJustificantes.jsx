@@ -17,16 +17,21 @@ function UsuarioJustificantes(props) {
 
   const url = useResolvedPath("").pathname
 
+  function ToggleMostrarPrueba(mostrar) {
+    document.querySelector('body').classList.toggle('body__pantalla-negra')
+    setMostrarFotoPrueba(mostrar)
+  }
+
   return (
     <div>
       <h3 className='titulos-1'>Justificantes</h3>
-      <div className='contenedor__todo-final'>
-        <Link to={`/perfil-alumno/crear-justificante`} className='boton__verde-oscuro' >
+      <div className='contenedor__todo-final contenedor__margin-ambos'>
+        <Link to={`/perfil-alumno/crear-justificante`} className='boton__verde-oscuro'>
           <span className='agregar-alumnos__texto'>Crear Justificante</span>
         </Link>
         {
           fotoPrueba ? 
-            <button className='boton__blanco' onClick={() => setMostrarFotoPrueba(true)}>Ver Prueba</button>
+            <button className='boton__blanco' onClick={() => ToggleMostrarPrueba(true)}>Ver Prueba</button>
             
           : <></>
         }
@@ -45,7 +50,7 @@ function UsuarioJustificantes(props) {
       {
         mostrarFotoPrueba ? <div className='container-foto-prueba'>
           <div className='caja-foto-prueba'>
-            <TiDelete className='foto-prueba__icon' onClick={() => setMostrarFotoPrueba(false)} />
+            <TiDelete className='foto-prueba__icon' onClick={() => ToggleMostrarPrueba(false)} />
             <img className='foto-prueba' src={fotoPrueba} alt="Foto prueba del justificante" />
           </div>
           </div> 
@@ -55,15 +60,27 @@ function UsuarioJustificantes(props) {
         <Routes>
           <Route
             path='/' 
-            element={<UsuarioJustificantesEnEspera fotoPrueba={fotoPrueba} setFotoPrueba={setFotoPrueba} datos={justificantesEnEspera} />} 
+            element={<UsuarioJustificantesEnEspera 
+                fotoPrueba={fotoPrueba} 
+                setFotoPrueba={setFotoPrueba} 
+                datos={justificantesEnEspera} 
+              />} 
           />
           <Route
             path='/justificantes-aceptados' 
-            element={<UsuarioJustificantesAceptados fotoPrueba={fotoPrueba} setFotoPrueba={setFotoPrueba} datos={justificantesAceptados} />} 
+            element={<UsuarioJustificantesAceptados 
+                fotoPrueba={fotoPrueba} 
+                setFotoPrueba={setFotoPrueba} 
+                datos={justificantesAceptados} 
+              />} 
           />
           <Route
             path='/justificantes-rechazados' 
-            element={<UsuarioJustificantesRechazados fotoPrueba={fotoPrueba} setFotoPrueba={setFotoPrueba} datos={justificantesRechazados} />} 
+            element={<UsuarioJustificantesRechazados 
+                fotoPrueba={fotoPrueba} 
+                setFotoPrueba={setFotoPrueba} 
+                datos={justificantesRechazados} 
+              />} 
           />
         </Routes>
       </div>

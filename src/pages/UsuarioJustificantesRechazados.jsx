@@ -10,6 +10,7 @@ function UsuarioJustificantesRechazados(props) {
 
   return (
     <div>
+      <h3 className='titulos-2'>Justificantes Rechazados</h3>
       <div className='container-tabla'>
         <table className='tabla-alumnos'>
           <thead className='tabla-cabecera'>

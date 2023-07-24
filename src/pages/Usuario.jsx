@@ -15,10 +15,10 @@ import PerfilUsuario from "./PerfilUsuario"
 import UsuarioJustificantes from './UsuarioJustificantes';
 import UsuarioAsistencias from './UsuarioAsistencias';
 import CrearJustificante from './CrearJustificante';
+import Page404 from './Page404';
 
 function Usuario(props) {
   const { datos, setUsuario } = props
-  const { claveEstudiante } = props.datos[0]
 
   const auth = getAuth()
   const app = initializeApp(firebaseConfig)
@@ -77,6 +77,7 @@ function Usuario(props) {
   )
 
   return (
+    datos ? 
     <div className='container-principal-usuario'>
       <div className='principal-usuario__botones'>
         <Twirl className='boton-navbar-usuario' toggled={isOpen} toggle={setOpen} color='#316327' />
@@ -107,9 +108,9 @@ function Usuario(props) {
           path='/usuario-justificantes/*' 
           element={<UsuarioJustificantes 
             datos={datos} 
-            justificantesEnEspera={justificantesEnEspera.filter(justi => justi.claveEstudianteJustificante === claveEstudiante)}
-            justificantesAceptados={justificantesAceptados.filter(justi => justi.claveEstudianteJustificante === claveEstudiante)}
-            justificantesRechazados={justificantesRechazados.filter(justi => justi.claveEstudianteJustificante === claveEstudiante)}
+            justificantesEnEspera={justificantesEnEspera.filter(justi => justi.claveEstudianteJustificante === datos[0].claveEstudiante)}
+            justificantesAceptados={justificantesAceptados.filter(justi => justi.claveEstudianteJustificante === datos[0].claveEstudiante)}
+            justificantesRechazados={justificantesRechazados.filter(justi => justi.claveEstudianteJustificante === datos[0].claveEstudiante)}
           />} 
         />
         <Route 
@@ -119,6 +120,7 @@ function Usuario(props) {
         <Route path='/crear-justificante' element={<CrearJustificante datos={datos} />} />
       </Routes>
     </div>
+  : <Page404 />
   )
 }
 

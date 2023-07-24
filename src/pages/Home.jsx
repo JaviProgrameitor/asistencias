@@ -10,7 +10,7 @@ import banderas from '../assets/img/banderas.png'
 import franja from '../assets/img/franja.png'
 
 const Home = (props) => {
-  const { setAdmin, admin, setUsuario, usuario, infoScanner, setInfoScanner, scannerAlumno, setScannerAlumno } = props
+  const { setAdmin, admin, setUsuario, usuario, infoScanner, setInfoScanner, scannerAlumno, setScannerAlumno, setScannerTipo } = props
   const [tipoFormulario, setTipoFormulario] = useState(true)
   const [ scanner, setScanner ] = useState(false)
 
@@ -37,7 +37,7 @@ const Home = (props) => {
         </main>
       </article>
       {
-        scanner ? <Scanner scanner={scanner} setScanner={setScanner} infoScanner={infoScanner} setInfoScanner={setInfoScanner} scannerAlumno={scannerAlumno} setScannerAlumno={setScannerAlumno} /> : <></>
+        scanner ? <Scanner setScannerTipo={setScannerTipo} scanner={scanner} setScanner={setScanner} infoScanner={infoScanner} setInfoScanner={setInfoScanner} scannerAlumno={scannerAlumno} setScannerAlumno={setScannerAlumno} /> : <></>
       }
     </section>
   )
