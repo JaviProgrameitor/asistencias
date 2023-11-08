@@ -22,9 +22,22 @@
   background-color: #c3f6c0;
 }
 
-.activo {
-  background-color: #133210;
+.cerca-pago {
+  background-color: #ff8000;
+}
+
+.dia-pago {
+  background-color: #d28bfb;
+}
+
+.deudas {
+  background-color: black;
   color: white;
+}
+
+.activo {
+  background-color: #133210 !important;
+  color: white !important;
 }
 
 .icon-justificante {

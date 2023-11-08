@@ -4,34 +4,36 @@ import { FaArrowCircleLeft } from 'react-icons/fa'
 import FilasAsistenciasEntrada from "../components/FilasAsistenciasEntrada/FilasAsistenciasEntrada"
 
 function AsistenciasPersonales(props) {
-  const { asistenciasEntrada } = props
+  const { asistenciasEntrada, nombreAlumno } = props
 
   return (
     <div>
       <div className='contenedor__todo-principio'>
-        <Link to={'/panel-control/asistencias/alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
+        <Link to={'/sistema-asistencias/panel-control/asistencias/alumnos'}>
+          <FaArrowCircleLeft className='flecha-regresar icon-40' />
+        </Link>
       </div>
-      <h3 className='titulos-2'>Asistencias del día de hoy</h3>
-      <div className='container-tabla'>
-        <table className='tabla-alumnos'>
-          <thead className='tabla-cabecera'>
+      <h3 className='titulos-2'>Asistencias de {nombreAlumno}</h3>
+      <div className='contenedor__tabla-scroll tamaño-tabla__400'>
+        <table className='tabla'>
+          <thead className='tabla-cabecera tabla-cabecera__tabla-scroll'>
               <tr>
-                <th colSpan='1'>Nombre</th>
-                <th colSpan='1'>Apellido</th>
-                <th colSpan='1'>Clave de Estudiante</th>
+                <th colSpan='1'>Entrada o Salida</th>
                 <th colSpan='1'>Fecha de Asistencia</th>
-                <th colSpan='1'>Hora de Asistencia</th>
+                <th colSpan='1'>Hora</th>
                 <th colSpan='1'>Horario</th>
+                <th colSpan='1'>Modalidad</th>
               </tr>
           </thead>
           <tbody className="tabla-cuerpo">
             {
-              asistenciasEntrada ? asistenciasEntrada.map((asis, index) => <FilasAsistenciasEntrada 
-              datos={asis} 
-              key={index}
-              posicion={index}
-            />) 
-            : <></>
+              asistenciasEntrada.map((asis, index) => 
+                <FilasAsistenciasEntrada 
+                  datos={asis} 
+                  key={index}
+                  posicion={index}
+                />
+              )
             }
           </tbody>
         </table>

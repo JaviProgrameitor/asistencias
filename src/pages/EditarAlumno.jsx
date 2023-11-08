@@ -22,7 +22,7 @@ import firebaseConfig from '../firebase';
 import { Toaster, toast } from 'sonner'
 
 function EditarAlumno(props) {
-  const { idAlumno, asistenciasEntrada, justificantesAceptados, justificantesEnEspera, justificantesRechazados  } = props
+  const { idAlumno, asistenciasEntrada, justificantesAceptados, justificantesEnEspera, justificantesRechazados, pagosMensualidades } = props
   const { 
     foto,
     actaNacimiento,
@@ -50,7 +50,6 @@ function EditarAlumno(props) {
     fechaPago, 
     id, 
     fechaNacimiento,
-    genero, 
     correo, 
     contrasena,
     nivelAcademico, 
@@ -66,7 +65,6 @@ function EditarAlumno(props) {
   const [ nombreAlumno, setNombreAlumno ] = useState(nombre)
   const [ apellidoAlumno, setApellidoAlumno ] = useState(apellido)
   const [ fechaNacimientoAlumno, setFechaNacimientoAlumno ] = useState(fechaNacimiento)
-  const [ generoAlumno, setGeneroAlumno ] = useState(genero)
   const [ correoAlumno, setCorreoAlumno ] = useState(correo)
   const [ contrasenaAlumno, setContrasenaAlumno ] = useState(contrasena)
   const [ numeroTelefonoAlumno, setNumeroTelefonoAlumno ] = useState(numeroTelefono)
@@ -101,8 +99,6 @@ function EditarAlumno(props) {
   const [ fotoApoyoIne, setFotoApoyoIne ] = useState(false)
   const [ fotoApoyoCurp, setFotoApoyoCurp ] = useState(false)
   const [ fotoApoyoComprobantePagoInicial, setFotoApoyoComprobantePagoInicial ] = useState(false)
-
-  const [ claveEstudianteNoEditable, setClaveEstudianteNoEditable ] = useState(claveEstudiante)
 
   const opcionesNivelesAcademicos = [
     'Primaria',
@@ -205,12 +201,6 @@ function EditarAlumno(props) {
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
   ]
 
-  const opcionesGenero = [
-    'Hombre',
-    'Mujer'
-  ]
-
-
   function controlarValor() {
     if(opcionesMunicipios[estadoAlumno] !== undefined) return opcionesMunicipios[estadoAlumno]
     else return ['']
@@ -275,11 +265,6 @@ function EditarAlumno(props) {
 
     let comprobantePagoInicial;
     let idComprobantePagoInicial;
-
-    const asistenciasAlumno = asistenciasEntrada.filter((asis) => asis.claveEstudianteAsistenciaEntrada == claveEstudianteNoEditable)
-    const justificantesEnEsperaAlumno = justificantesEnEspera.filter(justi => justi.claveEstudianteJustificante == claveEstudianteNoEditable)
-    const justificantesAceptadosAlumno = justificantesAceptados.filter(justi => justi.claveEstudianteJustificante == claveEstudianteNoEditable)
-    const justificantesRechazadosAlumno = justificantesRechazados.filter(justi => justi.claveEstudianteJustificante == claveEstudianteNoEditable)
 
     //Todo: Foto perfil alumno
     if(fotoApoyo) {
@@ -372,7 +357,7 @@ function EditarAlumno(props) {
     }
 
     //Todo: Editar el nombre, apellido y clave de estudiante de las asistencias del alumno
-    for(let i = 0; i < asistenciasAlumno.length; i++) {
+    for(let i = 0; i < asistenciasEntrada.length; i++) {
       let {
         nombreAsistenciaEntrada, 
         apellidoAsistenciaEntrada,
@@ -383,16 +368,17 @@ function EditarAlumno(props) {
         fechaAsistenciaEntrada,
         mesAsistenciaEntrada,
         añoAsistenciaEntrada,
-        horaClase,
-        tipoHorario,
         diasHorarios,
         horaHorario,
         claveHorario,
         puntualidadClase,
         modalidadClase,
-        entradaSalidaAsistencia,
-        id
-      } = asistenciasAlumno[i]
+        entradaSalidaAsistencia, 
+        id,
+        fechaInternaAsistenciaEntrada,
+        idiomaAsistenciaEntrada,
+        horaAsistenciaMilisegundos
+      } = asistenciasEntrada[i]
 
       nombreAsistenciaEntrada = nombreAlumno
       apellidoAsistenciaEntrada = apellidoAlumno
@@ -403,19 +389,20 @@ function EditarAlumno(props) {
         apellidoAsistenciaEntrada,
         claveEstudianteAsistenciaEntrada,
         fechaCompletaAsistenciaEntrada,
+        fechaInternaAsistenciaEntrada,
         horaAsistenciaEntrada,
         diaAsistenciaEntrada,
         fechaAsistenciaEntrada,
         mesAsistenciaEntrada,
         añoAsistenciaEntrada,
-        horaClase,
-        tipoHorario,
         diasHorarios,
         horaHorario,
         claveHorario,
         puntualidadClase,
         modalidadClase,
-        entradaSalidaAsistencia
+        entradaSalidaAsistencia,
+        idiomaAsistenciaEntrada,
+        horaAsistenciaMilisegundos
       }
 
       const docRef = doc(db, 'asistenciasEntrada', id)
@@ -423,7 +410,7 @@ function EditarAlumno(props) {
     }
 
     //Todo: Editar el nombre, apellido y clave de estudiante de los justificantes en espera del alumno
-    for(let i = 0; i < justificantesEnEsperaAlumno.length; i++) {
+    for(let i = 0; i < justificantesEnEspera.length; i++) {
       let {
         nombreJustificante, 
         apellidoJustificante,
@@ -438,7 +425,7 @@ function EditarAlumno(props) {
         correoJustificante,
         idFotoJustificante,
         id
-      } = justificantesEnEsperaAlumno[i]
+      } = justificantesEnEspera[i]
 
       nombreJustificante = nombreAlumno
       apellidoJustificante = apellidoAlumno
@@ -464,7 +451,7 @@ function EditarAlumno(props) {
     }
 
     //Todo: Editar el nombre, apellido y clave de estudiante de los justificantes aceptados del alumno
-    for(let i = 0; i < justificantesAceptadosAlumno.length; i++) {
+    for(let i = 0; i < justificantesAceptados.length; i++) {
       let {
         nombreJustificante, 
         apellidoJustificante,
@@ -479,7 +466,7 @@ function EditarAlumno(props) {
         correoJustificante,
         idFotoJustificante,
         id
-      } = justificantesAceptadosAlumno[i]
+      } = justificantesAceptados[i]
 
       nombreJustificante = nombreAlumno
       apellidoJustificante = apellidoAlumno
@@ -505,7 +492,7 @@ function EditarAlumno(props) {
     }
 
     //Todo: Editar el nombre, apellido y clave de estudiante de los justificantes rechazados del alumno
-    for(let i = 0; i < justificantesRechazadosAlumno.length; i++) {
+    for(let i = 0; i < justificantesRechazados.length; i++) {
       let {
         nombreJustificante, 
         apellidoJustificante,
@@ -520,7 +507,7 @@ function EditarAlumno(props) {
         correoJustificante,
         idFotoJustificante,
         id
-      } = justificantesRechazadosAlumno[i]
+      } = justificantesRechazados[i]
 
       nombreJustificante = nombreAlumno
       apellidoJustificante = apellidoAlumno
@@ -545,10 +532,56 @@ function EditarAlumno(props) {
       await setDoc(docRef, datos)
     }
 
+    //Todo: Editar el nombre, apellido y clave de estudiante de los pagos mensuales
+    for(let i = 0; i < pagosMensualidades.length; i++) {
+      let {
+        nombrePago,
+        apellidoPago,
+        claveEstudiantePago,
+        idiomaPago,
+        añoPagoMenActual,
+        numeroMesPagoMenActual,
+        fechaPagoMenActual,
+        fechaCompletaPagoMenActual,
+        añoDiaPago,
+        mesDiaPago,
+        fechaDiaPago,
+        fechaCompletaDiaPago,
+        añoFinMensualidad,
+        mesFinMensualidad,
+        fechaFinMensualidad,
+        id
+      } = pagosMensualidades[i]
+
+      nombrePago = nombreAlumno
+      apellidoPago = apellidoAlumno
+      claveEstudiantePago = claveEstudianteAlumno
+
+      const datos = {
+        nombrePago,
+        apellidoPago,
+        claveEstudiantePago,
+        idiomaPago,
+        añoPagoMenActual,
+        numeroMesPagoMenActual,
+        fechaPagoMenActual,
+        fechaCompletaPagoMenActual,
+        añoDiaPago,
+        mesDiaPago,
+        fechaDiaPago,
+        fechaCompletaDiaPago,
+        añoFinMensualidad,
+        mesFinMensualidad,
+        fechaFinMensualidad
+      }
+
+      const docRef = doc(db, 'pagosMensualidades', id)
+      await setDoc(docRef, datos)
+    }
+
     const nombre = nombreAlumno
     const apellido = apellidoAlumno
     const fechaNacimiento = fechaNacimientoAlumno
-    const genero = generoAlumno
     const correo = correoAlumno
     const contrasena = contrasenaAlumno
     const numeroTelefono = numeroTelefonoAlumno
@@ -582,7 +615,6 @@ function EditarAlumno(props) {
       nombre, 
       apellido, 
       fechaNacimiento,
-      genero, 
       correo, 
       contrasena,
       numeroTelefono, 
@@ -616,7 +648,7 @@ function EditarAlumno(props) {
           richColors
         />
         <div className='contenedor__todo-principio'>
-          <Link to={'/panel-control/alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
+          <Link to={'/sistema-asistencias/panel-control/alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
         </div>
         <div className='agregar-alumnos__formulario'>
           <form className='formulario' onSubmit={editarAlumnos}>
@@ -647,13 +679,6 @@ function EditarAlumno(props) {
               titulo='Selecciona la Fecha de Nacimiento' 
               cambiarValor={setFechaNacimientoAlumno} 
               valor={fechaNacimientoAlumno} 
-            />
-            <ListaOpciones 
-              titulo='Género'
-              placeholder='Selecciona el género del alumno'
-              valor={generoAlumno}
-              cambiarValor={setGeneroAlumno}
-              opciones={opcionesGenero}
             />
             <CampoEmail 
               titulo='Correo Electronico' 

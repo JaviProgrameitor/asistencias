@@ -1,4 +1,3 @@
-import '../assets/css/TablaAdministradores.css'
 
 import { useState } from 'react';
 import { Link, useResolvedPath } from "react-router-dom"
@@ -46,16 +45,17 @@ function TablaAdministradors(props) {
             <AiFillDelete 
               className='alumno-delete icon-alumno'
               onClick={() => {
-                if(puestoAdmin === 'Director') setModalEliminarAdministrador(true)
-                else toast.error('No tienes acceso a eliminar alumnos.')
+                puestoAdmin === 'Director' 
+                  ? setModalEliminarAdministrador(true) 
+                  : toast.error('No tienes acceso a eliminar alumnos.')
               }}
             />
           </div> 
         : <></>
       }
-      <div className='container-alumnos__table'>
-        <table className='tabla-alumnos'>
-          <thead className='tabla-cabecera-administradores'>
+      <div className='contenedor__tabla-scroll tamaño-tabla__400'>
+        <table className='tabla'>
+          <thead className='tabla-cabecera'>
             <tr>
               <th colSpan='1'>Nombre</th>
               <th colSpan='1'>Apellido</th>
@@ -65,42 +65,51 @@ function TablaAdministradors(props) {
           </thead>
           <tbody className='tabla-cuerpo'>
             {
-              administradores.map((admin, index) => <FilasAdministradores 
-                datos={admin} 
-                key={index}
-                posicion={index}
-                id={admin.id}
-                idAdministrador={idAdministrador}
-                actualizarDatos={actualizarDatos}
-              />)
+              administradores.map((admin, index) => 
+                <FilasAdministradores 
+                  datos={admin} 
+                  key={index}
+                  posicion={index}
+                  id={admin.id}
+                  idAdministrador={idAdministrador}
+                  actualizarDatos={actualizarDatos}
+                />
+              )
             }
           </tbody>
         </table>
       </div>
       {
-        modalEliminarAdministrador ? 
-          <div className='container-modal__fondo-oscuro'>
-            <div className='modal'>
-              <TiDelete className='modal__icon-salir' onClick={() => setModalEliminarAdministrador(false)} />
-              <div className='advertencia__eliminar-alumno'>
-              <h4 className='advertencia__titulo'>!ADVERTENCIA!</h4>
-              <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al administrador 
-              <span className='advertencia__resaltar'>{` ${perfilAdministrador.nombre}`}</span>
-              ?
-              </p>
-              <div className='contenedor__centro-separacion'>
-                <button className='boton__verde-oscuro' onClick={() => setModalEliminarAdministrador(false)}>Cancelar Eliminación</button>
-                <button className='boton__blanco' 
-                  onClick={() => {
-                    eliminarAdministrador(idAdministrador)
-                    setModalEliminarAdministrador(false)
-                  }}>Eliminar Administrador
-                  </button>
+        modalEliminarAdministrador 
+          ? <div className='container-modal__fondo-oscuro'>
+              <div className='modal'>
+                <TiDelete className='modal__icon-salir' onClick={() => setModalEliminarAdministrador(false)} />
+                <div className='advertencia__eliminar-alumno'>
+                  <h4 className='advertencia__titulo'>!ADVERTENCIA!</h4>
+                  <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al administrador 
+                  <span className='advertencia__resaltar'>{` ${perfilAdministrador.nombre}`}</span>
+                  ?
+                  </p>
+                  <div className='contenedor__centro-separacion'>
+                    <button 
+                      className='boton__verde-oscuro' 
+                      onClick={() => setModalEliminarAdministrador(false)}
+                    >
+                      Cancelar Eliminación
+                    </button>
+                    <button className='boton__blanco' 
+                      onClick={() => {
+                        eliminarAdministrador(idAdministrador)
+                        setModalEliminarAdministrador(false)
+                      }}
+                    >
+                      Eliminar Administrador
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div> 
-        : <></>
+            </div> 
+          : <></>
       }
     </div>
   )

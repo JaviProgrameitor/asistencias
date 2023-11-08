@@ -17,7 +17,7 @@ function CampoAutocompletar(props) {
           cambiarValor(newValue);
         }}
         options={opciones}
-        renderInput={(params) => <TextField {...params} required fullWidth placeholder={placeholder} color='secondary' />}
+        renderInput={(params) => <TextField {...params} required fullWidth placeholder={placeholder} color="success" />}
       />
     </div>
   )

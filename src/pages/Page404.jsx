@@ -13,9 +13,9 @@ function Page404() {
       <div className="contant_box_404">
         <h3>OOPS!</h3>
         
-        <p>Esta página no existe o no has iniciado sesión todavía!</p>
+        <p className='padd-x__20'>Esta página no existe o no has iniciado sesión todavía!</p>
         
-        <Link to={'/'} className="link_404">Ir a Página Principal</Link>
+        <Link className="boton__verde-oscuro" to={'/sistema-asistencias'}>Ir a Página Principal</Link>
       </div>
     </section>
   )

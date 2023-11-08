@@ -1,39 +1,39 @@
 import  '../../assets/css/components/Auth.css'
 
 import { useState, useEffect } from 'react'
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate, Link, useResolvedPath } from "react-router-dom"
 import { BsQrCodeScan } from 'react-icons/bs'
-
-import { initializeApp } from "firebase/app";
-import firebaseConfig from '../../firebase';
-import { collection, onSnapshot, getFirestore  } from "firebase/firestore";
 
 import Campo from '../Campo/Campo';
 import CampoContrasena from '../CampoContrasena/CampoContrasena'
 
 import { Toaster, toast } from 'sonner'
 
+import bcrypt from 'bcryptjs'
+
 function AuthAdmin(props) {
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
-  
   const navigate = useNavigate()
 
-  const { setAdmin, admin, scanner, setScanner } = props
+  const url = useResolvedPath("").pathname
+
+  const { administradores, setAdmin, admin, activarScanner, setActivarScanner } = props
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [ totalAdministradores, setTotalAdministradores ] = useState([])
   const [ sesion, setSesion ] = useState(false)
 
   //Todo: Función para iniciar sesión
   async function iniciar() {
-    const nuevoAdmin = totalAdministradores.filter((ad) => ad.correo === email)
-    await setAdmin(nuevoAdmin)
+    const nuevoAdmin = administradores.filter((ad) => ad.correo === email)
     
     if(nuevoAdmin.length > 0) {
-      if(nuevoAdmin[0].correo == email && nuevoAdmin[0].contrasena == password) setSesion(true)
-      else toast.error('Su contraseña está incorrecta')
+      bcrypt.compare(password, nuevoAdmin[0].contrasena, async(error, match) => {
+        if(match) {
+          await setAdmin(nuevoAdmin)
+          setSesion(true)
+        }
+        else if(!match) toast.error('La contraseña es incorrecta')
+      })
     } else toast.error('No tiene una cuenta de administrador')
   }
 
@@ -43,18 +43,9 @@ function AuthAdmin(props) {
 
   useEffect(() => {
     if(admin.length > 0 && sesion) {
-      navigate('/panel-control')
+      navigate(`${url}/panel-control`)
     }
   },[sesion])
-
-  //Todo: Función para leer los datos de la base de datos
-  useEffect(
-    () => 
-      onSnapshot(collection(db, 'administradores'),(snapshot) => 
-        setTotalAdministradores(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      [db]
-  )
 
   return (
     <div className="login-box">
@@ -80,11 +71,11 @@ function AuthAdmin(props) {
       </form>
       <div className='contenedor__centrado-separacion caja-enlace-scanner'>
         <div className='cajas-qr'>
-          <BsQrCodeScan className='scanner' onClick={() => setScanner(!scanner)}/>
+          <BsQrCodeScan className='scanner' onClick={() => setActivarScanner(!activarScanner)}/>
           <span className='span-qr'>Presencial</span>
         </div>
         <div className='cajas-qr'>
-          <Link to={'/scanner-en-linea'}><BsQrCodeScan className='scanner' /></Link>
+          <Link to={`${url}/scanner-en-linea`}><BsQrCodeScan className='scanner' /></Link>
           <span className='span-qr'>En Línea</span>
         </div>
       </div>

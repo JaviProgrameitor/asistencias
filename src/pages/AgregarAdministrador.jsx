@@ -20,6 +20,8 @@ import { Toaster, toast } from 'sonner'
 
 import { v4 as uuid } from 'uuid';
 
+import bcrypt from 'bcryptjs'
+
 function AgregarAdministrador(props) {
   const { administradores } = props
 
@@ -57,7 +59,7 @@ function AgregarAdministrador(props) {
       const nombre = nombreAdministrador
       const apellido = apellidoAdministrador
       const correo = correoAdministrador
-      const contrasena = contrasenaAdministrador
+      const contrasena = bcrypt.hashSync(contrasenaAdministrador)
       const puesto = puestoAdministrador
   
       const datos = {
@@ -87,7 +89,7 @@ function AgregarAdministrador(props) {
           richColors
         />
         <div className='perfil-alumno__icons'>
-          <Link to={'/panel-control/administradores'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
+          <Link to={'/sistema-asistencias/panel-control/administradores'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
         </div>
         <div className='agregar-alumnos__formulario'>
           <form className='formulario' onSubmit={agregarAdmin}>
@@ -100,6 +102,7 @@ function AgregarAdministrador(props) {
               foto={fotoApoyo}
               setFoto={setFotoApoyo}
               required={true}
+              classInput='imagen__foto-perfil-administrador'
             />
             <Campo 
               titulo='Nombre'

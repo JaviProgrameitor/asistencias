@@ -1,18 +1,13 @@
-
-import { useEffect, useState } from 'react';
-
 import FilasUsuarioJustificantes from '../components/FilasUsuarioJustificantes/FilasUsuarioJustificantes';
 
 function UsuarioJustificantesEnEspera(props) {
-  const { datos, fotoPrueba, setFotoPrueba } = props
-
-  const [ justificantes, setJustificantes ] = useState(datos)
+  const { fotoPrueba, setFotoPrueba, justificantes } = props
 
   return (
     <div>
       <h3 className='titulos-2'>Justificantes En Espera</h3>
       <div className='container-tabla'>
-        <table className='tabla-alumnos'>
+        <table className='tabla'>
           <thead className='tabla-cabecera'>
               <tr>
                 <th colSpan='1'>Hora de Emisión</th>
@@ -24,15 +19,15 @@ function UsuarioJustificantesEnEspera(props) {
             </thead>
             <tbody className="tabla-cuerpo">
             {
-              justificantes ? justificantes.map((alumno, index) => <FilasUsuarioJustificantes 
+              justificantes.map((alumno, index) => 
+                <FilasUsuarioJustificantes 
                   datos={alumno} 
                   key={index}
                   posicion={index}
                   valor={fotoPrueba}
                   cambiarValor={setFotoPrueba}
                 />
-              ) 
-              : <></>
+              )
             }
             </tbody>
         </table>

@@ -54,8 +54,8 @@ function FotoAlumno(props) {
             tipo && foto ? <img className='foto-alumno' src={foto} alt="Foto de perfil del alumno" /> : <></>
           }
         </div>
-      </div>
         <input className={`imagen ${classInput}`} type="file" name="images[]" required={required} onChange={elegirFoto} />
+      </div>
     </div>
   );
 }

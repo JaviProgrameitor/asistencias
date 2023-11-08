@@ -13,12 +13,12 @@ function TablaAsistencias(props) {
       <h3 className='titulos-2'>Asistencias del día de hoy</h3>
       <div className='contenedor__todo-final'>
         <Link to={`${url}/alumnos`} className='boton__verde-oscuro' >
-          <span>Ver Todos Los Justificantes</span>
+          <span>Ver todas las asistencias</span>
         </Link>
       </div>
-      <div className='container-tabla'>
-        <table className='tabla-alumnos'>
-          <thead className='tabla-cabecera'>
+      <div className='contenedor__tabla-scroll tamaño-tabla__400'>
+        <table className='tabla'>
+          <thead className='tabla-cabecera tabla-cabecera__tabla-scroll'>
               <tr>
                 <th colSpan='1'>Entrada o Salida</th>
                 <th colSpan='1'>Nombre</th>
@@ -32,12 +32,14 @@ function TablaAsistencias(props) {
           </thead>
           <tbody className="tabla-cuerpo">
             {
-              asistenciasEntrada ? asistenciasEntrada.map((asis, index) => <FilasAsistenciasEntrada 
-              datos={asis} 
-              key={index}
-              posicion={index}
-            />) 
-            : <></>
+              asistenciasEntrada.map((asis, index) => 
+                <FilasAsistenciasEntrada 
+                  datos={asis} 
+                  key={index}
+                  posicion={index}
+                  personales
+                />
+              )
             }
           </tbody>
         </table>

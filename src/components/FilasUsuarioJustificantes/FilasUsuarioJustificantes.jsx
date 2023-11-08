@@ -17,7 +17,14 @@ function FilasUsuarioJustificantes(props) {
   })
 
   return (
-    <tr className={`fila fila-administrador ${tipo} ${activo}`} onClick={() => cambiarValor(fotoJustificante)}>
+    <tr 
+      className={`fila fila-administrador ${tipo} ${activo}`} 
+      onClick={() => {
+        if(activo === "activo") cambiarValor(false)
+        else cambiarValor(fotoJustificante)
+      }
+    }
+    >
       <td className='td-admin'>{fechaEmisionJustificante}</td>
       <td className='td-admin'>{horaEmisionJustificante}</td>
       <td className='td-admin'>{fechaJustificante}</td>

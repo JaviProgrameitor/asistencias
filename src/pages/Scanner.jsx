@@ -5,71 +5,58 @@ import { TiDelete } from 'react-icons/ti'
 
 import CampoContrasena from '../components/CampoContrasena/CampoContrasena';
 
-import { initializeApp } from "firebase/app";
-import { addDoc, collection, onSnapshot, getFirestore  } from "firebase/firestore";
-import firebaseConfig from '../firebase';
+import { Toaster, toast } from 'sonner'
 
 function Scanner(props) {
-  const { scanner, setScanner, infoScanner, setInfoScanner, scannerAlumno, setScannerAlumno, setScannerTipo } = props
+  const { 
+    alumnos,
+    clases,
+    activarScanner, 
+    setActivarScanner,
+    setScannerAlumno, 
+    setScannerModalidad 
+  } = props
   
-  const [ alumnos, setAlumnos ] = useState([])
+  const mesMilisegundos = 2629800000;
+  const minutos30 = 1800000;
   const [ fechaActual, setFechaActual ] = useState(calcularFechaActual())
-
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
+  const [ scannerInformacion, setScannerInformacion ] = useState('')
 
   const navigate = useNavigate()
 
-  function scanearAlumno(e) {
+  async function EscanearAlumno(e) {
     e.preventDefault()
 
-    const resultado = alumnos.filter((alumno) => alumno.claveEstudiante == infoScanner)
-    setScannerAlumno(resultado)
-    setScannerTipo('Presencial')
+    const alumno = alumnos.filter((alumno) => alumno.claveEstudiante == scannerInformacion)
 
-    navigate('/scanner-alumno')
+    if(alumno.length > 0) {
+      await setScannerModalidad('Presencial')
+      await setScannerAlumno(alumno)
+
+      navigate('/sistema-asistencias/scanner-alumno')
+    } 
+    
+    else toast.error('Alumno no encontrado')
   }
 
   function calcularFechaActual() {
     const date = new Date();
-    const hora = date.getHours()//Saber la hora
-    const minutos = date.getMinutes()//Saber los minutos
-    const dia = date.getDay()//Saber el día de la semana
+    const año = date.getFullYear()
+    const mes = new Date(date.getTime() + mesMilisegundos).getMonth()
+    const fecha = date.getDate()
+    const hora = date.getTime()
+    let dia = date.getDay()
 
-    let minutoExacto;
-    
-    let horaClase;
+    for(let i = 0; i < clases.length; i++) {
+      let horaInicio = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaInicioClase}`).getTime() - minutos30;
+      let horaFinal = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaFinalClase}`).getTime() + minutos30;
 
-    //Todo: Calcular la hora de la asistencia
-    if(minutos < 10) minutoExacto = `0${minutos}`
-    else if(minutos >= 10) minutoExacto = `${minutos}`
-
-    horaClase = parseInt(`${hora}${minutoExacto}`)
-
-    if(dia == 1 || dia == 3 || dia == 5) {
-      if(1330 <= horaClase && horaClase <= 1600) {
-        return true
-      }
-
-      if(1630 <= horaClase && horaClase <= 1940) {
-        return true
-      }
-    }
-
-    if(dia == 2 || dia == 4) {
-      if(1100 <= horaClase && horaClase <= 1430) {
-        return true
-      }
-
-      else if(1630 <= horaClase && horaClase <= 1940) {
-        return true
-      }
-    }
-
-    if(dia == 6) {
-      if(1230 <= horaClase && horaClase <= 1640) {
-        return true
-      }
+      if(
+          clases[i].diasNumeroClase.includes(dia) && 
+          horaInicio < hora && hora < horaFinal
+        ) {
+          return true
+        }
     }
 
     return false
@@ -78,44 +65,35 @@ function Scanner(props) {
   useEffect(() => {
     const actualizandoFecha = setInterval(() => {
       setFechaActual(calcularFechaActual())
-    }, 60000);
+    }, 10000);
 
     return () => clearInterval(actualizandoFecha);
   }, []);
 
-  //Todo: Función para leer los datos de la base de datos
-  useEffect(
-    () => 
-      onSnapshot(collection(db, 'alumnos'),(snapshot) => 
-        setAlumnos(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      [db]
-  )
-
   return (
-    <div className='container-qr-code'>
-      <div className='container-qr-code__contenido'>
-        <TiDelete className='foto-prueba__icon' onClick={() => {
-          setScanner(!scanner)
-        }} />
-        {
-          fechaActual ?
-            <form onSubmit={scanearAlumno}>
-              <CampoContrasena 
-                className='campo-oscuro'
-                titulo='Escanea el Codigo QR'
-                placeholder='Escanea el cogigo'
-                valor={infoScanner}
-                cambiarValor={setInfoScanner}
-                autoFocus={true}
-              />
-            </form>
-          : <div>
-              <h4 className='titulos-2 titulos__blanco'>El scanner se desactivó temporalmente.</h4>
-              <h4 className='titulos-2 titulos__blanco'>Se activará automaticamente cuando haya una clase activa.</h4>
-            </div>
-        }
-      </div>
+    <div className='container-qr-code__contenido'>
+      <Toaster position="top-center" richColors />
+      <TiDelete 
+        className='foto-prueba__icon' 
+        onClick={() => {setActivarScanner(!activarScanner)}}
+      />
+      {
+        fechaActual ?
+          <form onSubmit={EscanearAlumno}>
+            <CampoContrasena 
+              className='campo-oscuro'
+              titulo='Escanea el Codigo QR'
+              placeholder='Escanea el codigo'
+              valor={scannerInformacion}
+              cambiarValor={setScannerInformacion}
+              autoFocus={true}
+            />
+          </form>
+        : <div>
+            <h4 className='titulos-2 titulos__blanco'>El scanner se desactivó temporalmente.</h4>
+            <h4 className='titulos-2 titulos__blanco'>Se activará automaticamente cuando haya una clase activa.</h4>
+          </div>
+      }
     </div>
   )
 }

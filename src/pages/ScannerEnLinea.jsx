@@ -4,86 +4,96 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from "react-router-dom"
 import { FaArrowCircleLeft } from 'react-icons/fa'
 
-import { initializeApp } from "firebase/app";
-import { collection, onSnapshot, getFirestore  } from "firebase/firestore";
-import firebaseConfig from '../firebase';
-
 import Html5QrcodePlugin from '../components/ScannerReader/ScannerReader';
 
-function ScannerEnLinea(props) {
-  const { infoScanner, setInfoScanner, scannerAlumno, setScannerAlumno, setScannerTipo } = props
+import { Toaster, toast } from 'sonner'
 
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
+function ScannerEnLinea(props) {
+  const { alumnos, clases, setScannerAlumno, setScannerModalidad } = props
   
-  const [alumnos, setAlumnos] = useState([])
+  const mesMilisegundos = 2629800000;
+  const minutos30 = 1800000;
+  const diaMilisegundos = 86400000;
   const [ fechaActual, setFechaActual ] = useState(calcularFechaActual())
 
   const navigate = useNavigate()
 
   function calcularFechaActual() {
-    const date = new Date();
-    const hora = date.getHours()//Saber la hora
-    const minutos = date.getMinutes()//Saber los minutos
-    const dia = date.getDay()//Saber el día de la semana
+    const date = new Date(1698384600000);
+    const año = date.getFullYear()
+    const mes = new Date(date.getTime() + mesMilisegundos).getMonth()
+    const fecha = date.getDate()
+    const hora = date.getTime()
+    let dia = date.getDay()
 
-    let minutoExacto;
-    
-    let horaClase;
+    for(let i = 0; i < clases.length; i++) {
+      let horaInicioPrueba = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaInicioClase}`).getTime() - minutos30
+      let horaFinalPrueba = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaFinalClase}`).getTime() + minutos30
+      let horaInicio;
+      let horaFinal;
+      
+      if(horaInicioPrueba > horaFinalPrueba) {
+        let restoInicio = hora - horaInicioPrueba;
+        let restoFinal = hora - horaFinalPrueba;
 
-    //Todo: Calcular la hora de la asistencia
-    if(minutos < 10) minutoExacto = `0${minutos}`
-    else if(minutos >= 10) minutoExacto = `${minutos}`
+        if(restoInicio < 0 && restoFinal < 0) {
+          restoInicio = restoInicio * -1;
+          restoFinal = restoFinal * -1;
+        }
 
-    horaClase = parseInt(`${hora}${minutoExacto}`)
+        if(restoInicio < restoFinal) {
+          horaInicio = horaInicioPrueba;
+          horaFinal = horaFinalPrueba + diaMilisegundos;
+        }
 
-    if(dia === 1 || dia === 2 || dia === 3 || dia === 4) {
-      if(1920 <= horaClase && horaClase <= 2125) {
-        return true
+        else {
+          horaInicio = horaInicioPrueba - diaMilisegundos;
+          horaFinal = horaFinalPrueba;
+        }
       }
+
+      else {
+        horaInicio = horaInicioPrueba;
+        horaFinal = horaFinalPrueba;
+      }
+
+      if(
+        clases[i].diasNumeroClase.includes(dia) && 
+        horaInicio < hora && hora < horaFinal
+      ) 
+        return true
     }
 
     return false
   }
 
-  function onNewScanResult(decodedText, decodedResult) {
-    setInfoScanner(decodedText)
+  async function EscanearAlumno(respuestaScanner, decodedResult) {
+    let alumno = alumnos.filter((alumno) => alumno.claveEstudiante == respuestaScanner)
+
+    if(alumno.length > 0) {
+      await setScannerModalidad('En linea')
+      await setScannerAlumno(alumno)
+
+      navigate('/sistema-asistencias/scanner-alumno')
+    } 
+    
+    else toast.error('Alumno no encontrado')
   };
-
-  function scanearAlumno() {
-    const resultado = alumnos.filter((alumno) => alumno.claveEstudiante == infoScanner)
-    setScannerAlumno(resultado)
-    setScannerTipo('En linea')
-
-    navigate('/scanner-alumno')
-  }
 
   useEffect(() => {
     const actualizandoFecha = setInterval(() => {
-      console.log("Calculando")
       setFechaActual(calcularFechaActual())
-    }, 60000);
+    }, 2000);
 
     return () => clearInterval(actualizandoFecha);
   }, []);
 
-  useEffect(() => {
-    if(infoScanner != undefined) scanearAlumno()
-  })
-
-  //Todo: Función para leer los datos de la base de datos
-  useEffect(
-    () => 
-      onSnapshot(collection(db, 'alumnos'),(snapshot) => 
-        setAlumnos(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      []
-  )
-
   return (
     <div className='container-qr-code-en-linea'>
       <div className='contenedor__todo-principio'>
-        <Link to={'/'}><FaArrowCircleLeft className='flecha-regresar__blanco icon-40' /></Link>
+        <Link to={'/sistema-asistencias'}>
+          <FaArrowCircleLeft className='flecha-regresar__blanco icon-40' />
+        </Link>
       </div>
       { 
         fechaActual ?
@@ -95,7 +105,7 @@ function ScannerEnLinea(props) {
                   fps={10}
                   qrbox={250}
                   disableFlip={false}
-                  qrCodeSuccessCallback={onNewScanResult}
+                  qrCodeSuccessCallback={EscanearAlumno}
                 />
               </div>
             </div>
@@ -105,6 +115,7 @@ function ScannerEnLinea(props) {
             <h4 className='titulos-2 titulos__blanco'>Se activará automaticamente cuando haya una clase activa.</h4>
           </div>
       }
+      <Toaster position="top-center" richColors />
     </div>
   );
 };

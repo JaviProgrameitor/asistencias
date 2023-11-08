@@ -4,8 +4,7 @@ import { useState } from 'react'
 import { FaArrowCircleLeft } from 'react-icons/fa'
 import { IoIosAddCircle } from 'react-icons/io'
 import { TiDelete } from 'react-icons/ti'
-import { Link } from 'react-router-dom'
-
+import { Link, useNavigate } from 'react-router-dom'
 
 import Campo from '../components/Campo/Campo'
 import CampoFecha from '../components/CampoFecha/CampoFecha'
@@ -13,10 +12,8 @@ import CampoEmail from '../components/CampoEmail/CampoEmail'
 import ListaOpciones from '../components/ListaOpciones/ListaOpciones'
 import FotoAlumno from '../components/FotoAlumno/FotoAlumno'
 import CampoContrasena from '../components/CampoContrasena/CampoContrasena'
-import CampoAutocompletar from '../components/CampoAutocompletar/CampoAutocompletar'
 
 import { initializeApp } from "firebase/app";
-import { getAuth } from 'firebase/auth'
 import { addDoc, collection, getFirestore  } from "firebase/firestore";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import firebaseConfig from '../firebase';
@@ -25,21 +22,20 @@ import { Toaster, toast } from 'sonner'
 
 import { v4 as uuid } from 'uuid';
 
-
+import bcrypt from 'bcryptjs'
 
 function AgregarAlumno(props) {
-  const { alumnos } = props
+  const { alumnos, idiomasImpartidos } = props
 
   const app = initializeApp(firebaseConfig)
   const db = getFirestore(app);
   const st = getStorage(app);
-  const auth = getAuth()
+  const navigate = useNavigate()
 
   const [ fotoPerfilAlumno, setFotoPerfilAlumno ] = useState()
   const [ nombreAlumno, setNombreAlumno ] = useState('')
   const [ apellidoAlumno, setApellidoAlumno ] = useState('')
   const [ fechaNacimientoAlumno, setFechaNacimientoAlumno ] = useState('')
-  const [ generoAlumno, setGeneroAlumno ] = useState('')
   const [ correoAlumno, setCorreoAlumno ] = useState('')
   const [ contrasenaAlumno, setContrasenaAlumno ] = useState('')
   const [ numeroTelefonoAlumno, setNumeroTelefonoAlumno ] = useState('')
@@ -194,9 +190,8 @@ function AgregarAlumno(props) {
       const nombre = nombreAlumno
       const apellido = apellidoAlumno
       const fechaNacimiento = fechaNacimientoAlumno
-      const genero = generoAlumno
       const correo = correoAlumno
-      const contrasena = contrasenaAlumno
+      const contrasena = bcrypt.hashSync(contrasenaAlumno)
       const numeroTelefono = numeroTelefonoAlumno
       const nivelAcademico = nivelAcademicoAlumno
       const codigoPostal = codigoPostalAlumno
@@ -227,7 +222,6 @@ function AgregarAlumno(props) {
         nombre, 
         apellido, 
         fechaNacimiento, 
-        genero,
         correo, 
         contrasena,
         numeroTelefono, 
@@ -250,6 +244,7 @@ function AgregarAlumno(props) {
       const collectionRef = collection(db, 'alumnos')
       const docRef = await addDoc(collectionRef, datos)
       toast.success('El Alumno ha sido creado con exito')
+      //navigate('/sistema-asistencias/panel-control/alumnos')
     }
 
     else toast.error('El correo electrónico ya ha sido utilizado.')
@@ -264,7 +259,9 @@ function AgregarAlumno(props) {
           richColors
         />
         <div className='contenedor__todo-principio'>
-          <Link to={'/panel-control/alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
+          <Link to={'/sistema-asistencias/panel-control/alumnos'}>
+            <FaArrowCircleLeft className='flecha-regresar icon-40' />
+          </Link>
         </div>
         <div className='agregar-alumnos__formulario'>
           <form className='formulario' onSubmit={datosEnviar}>
@@ -296,13 +293,6 @@ function AgregarAlumno(props) {
               titulo='Selecciona la Fecha de Nacimiento' 
               cambiarValor={setFechaNacimientoAlumno} 
               valor={fechaNacimientoAlumno} 
-            />
-            <ListaOpciones 
-              titulo='Género'
-              placeholder='Selecciona el género del alumno'
-              valor={generoAlumno}
-              cambiarValor={setGeneroAlumno}
-              opciones={opcionesGenero}
             />
             <CampoEmail 
               titulo='Correo Electrónico' 
@@ -433,7 +423,7 @@ function AgregarAlumno(props) {
                       placeholder='Ingresa el idioma de aprendizaje'
                       valor={idiomaAprendizajeAlumno[index]}
                       cambiarValor={actualizarDatos}
-                      opciones={opcionesIdiomas}
+                      opciones={idiomasImpartidos}
                       indice={index}
                       variable={idiomaAprendizajeAlumno}
                       funcion={setIdiomaAprendizajeAlumno}

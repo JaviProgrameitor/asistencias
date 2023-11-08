@@ -8,39 +8,81 @@ import GraficoLinea from "../components/GraficoLinea/GraficoLinea"
 import CampoAutocompletar from '../components/CampoAutocompletar/CampoAutocompletar'
 import CampoNumero from "../components/CampoNumero/CampoNumero";
 
-function ReportesContenido(props) {
-  const { asistencias, flechaRegresar, nombreAlumno } = props
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
+function ReportesContenido(props) {
+  const { asistencias, flechaRegresar, nombreAlumno, clases, idiomasImpartidos } = props
+
+  const [ idiomaSeleccionado, setIdiomaSeleccionado] = useState('General');
+  const [ clasesFiltradasPresencial, setClasesFiltradasPresencial ] = useState(clases.filter(clase => clase.modalidadClase == 'Presencial'))
+  const [ clasesFiltradasEnLinea, setClasesFiltradasEnLinea ] = useState(clases.filter(clase => clase.modalidadClase == 'En linea'))
+
+  //Todo: Estados primera gráfica
   const [ añoPorMes, setAñoPorMes ] = useState(new Date().getFullYear())
   const [ asistenciasTotalesMes, setAsistenciasTotalesMes ] = useState([])
 
   const [ añoSegundoPorMes, setAñoSegundoPorMes ] = useState(new Date().getFullYear() - 1)
   const [ asistenciasTotalesSegundoMes, setAsistenciasTotalesSegundoMes ] = useState([])
 
+  //Todo: Estados segunda gráfica
   const [ añoPorClase, setAñoPorClase ] = useState(new Date().getFullYear())
   const [ mesPorClase, setMesPorClase ] = useState(calcularMesPorNumero(new Date().getMonth()))
   const [ numeroMesPorClase, setNumeroMesPorClase ] = useState(calcularNumeroPorMes(mesPorClase))
   const [ asistenciasClases, setAsistenciasClases ] = useState([])
 
-  const [ añoSegundoPorClase, setAñoSegundoPorClase ] = useState(new Date().getFullYear())
-  const [ mesSegundoPorClase, setMesSegundoPorClase ] = useState("")
+  const [ añoSegundoPorClase, setAñoSegundoPorClase ] = useState(new Date().getFullYear() - 1)
+  const [ mesSegundoPorClase, setMesSegundoPorClase ] = useState(calcularMesPorNumero(new Date().getMonth()))
   const [ numeroMesSegundoPorClase, setNumeroMesSegundoPorClase ] = useState()
   const [ asistenciasSegundoClases, setAsistenciasSegundoClases ] = useState([])
 
+  //Todo: Estados tercera gráfica
   const [ añoPorclaseEnLinea, setAñoPorClaseEnLinea ] = useState(new Date().getFullYear())
   const [ mesPorClaseEnLinea, setMesPorClaseEnLinea ] = useState(calcularMesPorNumero(new Date().getMonth()))
   const [ numeroMesPorClaseEnLinea, setNumeroMesPorClaseEnLinea ] = useState(calcularNumeroPorMes(mesPorClaseEnLinea))
   const [ asistenciasClasesEnLinea, setAsistenciasClasesEnLInea ] = useState([])
 
-  const [ añoSegundoPorclaseEnLinea, setAñoSegundoPorClaseEnLinea ] = useState(new Date().getFullYear())
-  const [ mesSegundoPorClaseEnLinea, setMesSegundoPorClaseEnLinea ] = useState('')
+  const [ añoSegundoPorclaseEnLinea, setAñoSegundoPorClaseEnLinea ] = useState(new Date().getFullYear() - 1)
+  const [ mesSegundoPorClaseEnLinea, setMesSegundoPorClaseEnLinea ] = useState(calcularMesPorNumero(new Date().getMonth()))
   const [ numeroMesSegundoPorClaseEnLinea, setNumeroMesSegundoPorClaseEnLinea ] = useState()
   const [ asistenciasSegundoClasesEnLinea, setAsistenciasSegundoClasesEnLInea ] = useState([])
   
   let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
-  let clases = ["MatuLuMiVi200320", "VesLuMi500700", "MatuMaJu1130130", "VesMaJu500700", "Saba100400"]
-  let clasesEnLinea = ['NocLuMaMiJu740915']
+  function handleChange(event) {
+    setIdiomaSeleccionado(event.target.value);
+  };
+
+  function filtrarIdioma() {
+    let presenciales = []
+    let enLinea = []
+
+    if(idiomaSeleccionado == 'General') {
+      setClasesFiltradasPresencial(clases.filter(clase => clase.modalidadClase == 'Presencial'))
+      setClasesFiltradasEnLinea(clases.filter(clase => clase.modalidadClase == 'En linea'))
+
+      return
+    }
+
+    else {
+      for(let i = 0; i < clases.length; i++) {
+        if(clases[i].idiomaClase == idiomaSeleccionado && clases[i].modalidadClase == 'Presencial') {
+          presenciales.push(clases[i])
+        }
+      }
+
+      for(let i = 0; i < clases.length; i++) {
+        if(clases[i].idiomaClase == idiomaSeleccionado && clases[i].modalidadClase == 'En linea') {
+          enLinea.push(clases[i])
+        }
+      }
+    }
+
+    setClasesFiltradasPresencial(presenciales)
+    setClasesFiltradasEnLinea(enLinea)
+  }
 
   function valorMes(valor) {
     setMesPorClase(valor)
@@ -96,134 +138,157 @@ function ReportesContenido(props) {
     else if(11 === valor) return 'Diciembre'
   }
 
+  //Todo: Funciones primera Grafica
   function asistenciasPorMes() {
-    const enero = asistencias.filter((a) => a.mesAsistenciaEntrada == 0 && a.añoAsistenciaEntrada == añoPorMes)
-    const febrero = asistencias.filter((a) => a.mesAsistenciaEntrada == 1 && a.añoAsistenciaEntrada == añoPorMes)
-    const marzo = asistencias.filter((a) => a.mesAsistenciaEntrada == 2 && a.añoAsistenciaEntrada == añoPorMes)
-    const abril = asistencias.filter((a) => a.mesAsistenciaEntrada == 3 && a.añoAsistenciaEntrada == añoPorMes)
-    const mayo = asistencias.filter((a) => a.mesAsistenciaEntrada == 4 && a.añoAsistenciaEntrada == añoPorMes)
-    const junio = asistencias.filter((a) => a.mesAsistenciaEntrada == 5 && a.añoAsistenciaEntrada == añoPorMes)
-    const julio = asistencias.filter((a) => a.mesAsistenciaEntrada == 6 && a.añoAsistenciaEntrada == añoPorMes)
-    const agosto = asistencias.filter((a) => a.mesAsistenciaEntrada == 7 && a.añoAsistenciaEntrada == añoPorMes)
-    const septiembre = asistencias.filter((a) => a.mesAsistenciaEntrada == 8 && a.añoAsistenciaEntrada == añoPorMes)
-    const octubre = asistencias.filter((a) => a.mesAsistenciaEntrada == 9 && a.añoAsistenciaEntrada == añoPorMes)
-    const noviembre = asistencias.filter((a) => a.mesAsistenciaEntrada == 10 && a.añoAsistenciaEntrada == añoPorMes)
-    const diciembre = asistencias.filter((a) => a.mesAsistenciaEntrada == 11 && a.añoAsistenciaEntrada == añoPorMes)
+    let nuevosDatos = []
 
-    const nuevosDatos = [enero.length, febrero.length, marzo.length, abril.length, mayo.length, junio.length, julio.length, agosto.length, septiembre.length, octubre.length, noviembre.length, diciembre.length]
+    if(idiomaSeleccionado == 'General') {
+      for(let i = 0; i < meses.length; i++) {
+        let datos = asistencias.filter((a) => a.mesAsistenciaEntrada == calcularNumeroPorMes(meses[i]) && a.añoAsistenciaEntrada == añoPorMes)
+        nuevosDatos.push(datos.length)
+      }
+    }
+
+    else {
+      for(let i = 0; i < meses.length; i++) {
+        let datos = asistencias.filter((a) => a.mesAsistenciaEntrada == calcularNumeroPorMes(meses[i]) && a.añoAsistenciaEntrada == añoPorMes && a.idiomaAsistenciaEntrada == idiomaSeleccionado)
+        nuevosDatos.push(datos.length)
+      }
+    }
+
     setAsistenciasTotalesMes(nuevosDatos)
   }
 
   function asistenciasSegundoPorMes() {
-    const enero = asistencias.filter((a) => a.mesAsistenciaEntrada == 0 && a.añoAsistenciaEntrada == añoSegundoPorMes)
-    const febrero = asistencias.filter((a) => a.mesAsistenciaEntrada == 1 && a.añoAsistenciaEntrada == añoSegundoPorMes)
-    const marzo = asistencias.filter((a) => a.mesAsistenciaEntrada == 2 && a.añoAsistenciaEntrada == añoSegundoPorMes)
-    const abril = asistencias.filter((a) => a.mesAsistenciaEntrada == 3 && a.añoAsistenciaEntrada == añoSegundoPorMes)
-    const mayo = asistencias.filter((a) => a.mesAsistenciaEntrada == 4 && a.añoAsistenciaEntrada == añoSegundoPorMes)
-    const junio = asistencias.filter((a) => a.mesAsistenciaEntrada == 5 && a.añoAsistenciaEntrada == añoSegundoPorMes)
-    const julio = asistencias.filter((a) => a.mesAsistenciaEntrada == 6 && a.añoAsistenciaEntrada == añoSegundoPorMes)
-    const agosto = asistencias.filter((a) => a.mesAsistenciaEntrada == 7 && a.añoAsistenciaEntrada == añoSegundoPorMes)
-    const septiembre = asistencias.filter((a) => a.mesAsistenciaEntrada == 8 && a.añoAsistenciaEntrada == añoSegundoPorMes)
-    const octubre = asistencias.filter((a) => a.mesAsistenciaEntrada == 9 && a.añoAsistenciaEntrada == añoSegundoPorMes)
-    const noviembre = asistencias.filter((a) => a.mesAsistenciaEntrada == 10 && a.añoAsistenciaEntrada == añoSegundoPorMes)
-    const diciembre = asistencias.filter((a) => a.mesAsistenciaEntrada == 11 && a.añoAsistenciaEntrada == añoSegundoPorMes)
+    let nuevosDatos = []
 
-    const nuevosDatos = [enero.length, febrero.length, marzo.length, abril.length, mayo.length, junio.length, julio.length, agosto.length, septiembre.length, octubre.length, noviembre.length, diciembre.length]
+    if(idiomaSeleccionado == 'General') {
+      for(let i = 0; i < meses.length; i++) {
+        let datos = asistencias.filter((a) => a.mesAsistenciaEntrada == calcularNumeroPorMes(meses[i]) && a.añoAsistenciaEntrada == añoSegundoPorMes)
+        nuevosDatos.push(datos.length)
+      }
+    }
+
+    else {
+      for(let i = 0; i < meses.length; i++) {
+        let datos = asistencias.filter((a) => a.mesAsistenciaEntrada == calcularNumeroPorMes(meses[i]) && a.añoAsistenciaEntrada == añoSegundoPorMes && a.idiomaAsistenciaEntrada == idiomaSeleccionado)
+        nuevosDatos.push(datos.length)
+      }
+    }
+
     setAsistenciasTotalesSegundoMes(nuevosDatos)
   }
 
+  //Todo: Funciones segunda gráfica
   function asistenciasPorClase() {
-    const MatuLuMiVi200320 = asistencias.filter((a) => a.claveHorario == 'MatuLuMiVi200320' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase && a.modalidadClase == 'Presencial')
-    const VesLuMi500700 = asistencias.filter((a) => a.claveHorario == 'VesLuMi500700' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase && a.modalidadClase == 'Presencial')
-    const MatuMaJu1130130 = asistencias.filter((a) => a.claveHorario == 'MatuMaJu1130130' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase && a.modalidadClase == 'Presencial')
-    const VesMaJu500700 = asistencias.filter((a) => a.claveHorario == 'VesMaJu500700' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase && a.modalidadClase == 'Presencial')
-    const Saba100400 = asistencias.filter((a) => a.claveHorario == 'Saba100400' && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase && a.modalidadClase == 'Presencial')
+    let nuevosDatos = []
 
-    const nuevosDatos = [MatuLuMiVi200320.length, VesLuMi500700.length, MatuMaJu1130130.length, VesMaJu500700.length, Saba100400.length]
+    for(let i = 0; i < clasesFiltradasPresencial.length; i++) {
+      let filtrando = asistencias.filter((a) => a.claveHorario == clasesFiltradasPresencial[i].claveClase && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase && a.modalidadClase == 'Presencial')
+      nuevosDatos.push(filtrando.length)
+    }
+
     setAsistenciasClases(nuevosDatos)
   }
 
   function asistenciasSegundoPorClase() {
-    const MatuLuMiVi200320 = asistencias.filter((a) => a.claveHorario == 'MatuLuMiVi200320' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase && a.modalidadClase == 'Presencial')
-    const VesLuMi500700 = asistencias.filter((a) => a.claveHorario == 'VesLuMi500700' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase && a.modalidadClase == 'Presencial')
-    const MatuMaJu1130130 = asistencias.filter((a) => a.claveHorario == 'MatuMaJu1130130' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase && a.modalidadClase == 'Presencial')
-    const VesMaJu500700 = asistencias.filter((a) => a.claveHorario == 'VesMaJu500700' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase && a.modalidadClase == 'Presencial')
-    const Saba100400 = asistencias.filter((a) => a.claveHorario == 'Saba100400' && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase && a.modalidadClase == 'Presencial')
+    let nuevosDatos = []
 
-    const nuevosDatos = [MatuLuMiVi200320.length, VesLuMi500700.length, MatuMaJu1130130.length, VesMaJu500700.length, Saba100400.length]
+    for(let i = 0; i < clasesFiltradasPresencial.length; i++) {
+      let filtrando = asistencias.filter((a) => a.claveHorario == clasesFiltradasPresencial[i].claveClase && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase && a.modalidadClase == 'Presencial')
+      nuevosDatos.push(filtrando.length)
+    }
+
     setAsistenciasSegundoClases(nuevosDatos)
   }
 
+  //Todo: Funciones tercera gráfica
   function asistenciasPorClaseEnLinea() {
-    const NocLuMaMiJu740915 = asistencias.filter((a) => a.claveHorario == 'NocLuMaMiJu740915' && a.mesAsistenciaEntrada == numeroMesPorClaseEnLinea && a.añoAsistenciaEntrada == añoPorclaseEnLinea && a.modalidadClase == 'En linea')
+    let nuevosDatos = []
 
-    const nuevosDatos = [NocLuMaMiJu740915.length]
+    for(let i = 0; i < clasesFiltradasEnLinea.length; i++) {
+      let filtrando = asistencias.filter((a) => a.claveHorario == clasesFiltradasEnLinea[i].claveClase && a.mesAsistenciaEntrada == numeroMesPorClaseEnLinea && a.añoAsistenciaEntrada == añoPorclaseEnLinea && a.modalidadClase == 'En linea')
+      nuevosDatos.push(filtrando.length)
+    }
+
     setAsistenciasClasesEnLInea(nuevosDatos)
   }
 
   function asistenciasSegundoPorClaseEnLinea() {
-    const NocLuMaMiJu740915 = asistencias.filter((a) => a.claveHorario == 'NocLuMaMiJu740915' && a.mesAsistenciaEntrada == numeroMesSegundoPorClaseEnLinea && a.añoAsistenciaEntrada == añoSegundoPorclaseEnLinea && a.modalidadClase == 'En linea')
+    let nuevosDatos = []
 
-    const nuevosDatos = [NocLuMaMiJu740915.length]
-    setAsistenciasClasesEnLInea(nuevosDatos)
+    for(let i = 0; i < clasesFiltradasEnLinea.length; i++) {
+      let filtrando = asistencias.filter((a) => a.claveHorario == clasesFiltradasEnLinea[i].claveClase && a.mesAsistenciaEntrada == numeroMesSegundoPorClaseEnLinea && a.añoAsistenciaEntrada == añoSegundoPorclaseEnLinea && a.modalidadClase == 'En linea')
+      nuevosDatos.push(filtrando.length)
+    }
+
+    setAsistenciasSegundoClasesEnLInea(nuevosDatos)
   }
 
   //Todo: Total de asistencias por mes
   useEffect(() => {
     asistenciasPorMes()
-  }, [añoPorMes])
+  }, [añoPorMes, idiomaSeleccionado])
 
   useEffect(() => {
     asistenciasSegundoPorMes()
-  }, [añoSegundoPorMes])
+  }, [añoSegundoPorMes, idiomaSeleccionado])
 
   //Todo: Asistencias presenciales por clase numero 1 de la fecha numero 1
   useEffect(() => {
     asistenciasPorClase()
-  },[mesPorClase])
-
-  useEffect(() => {
-    asistenciasPorClase()
-  },[añoPorClase])
+  },[mesPorClase, añoPorClase, clasesFiltradasPresencial])
 
   //Todo: Asistencias presenciales por clase numero 1 de la fecha numero 2
   useEffect(() => {
     asistenciasSegundoPorClase()
-  },[mesSegundoPorClase])
+  },[mesSegundoPorClase, añoSegundoPorClase, clasesFiltradasPresencial])
 
-  useEffect(() => {
-    asistenciasSegundoPorClase()
-  },[añoSegundoPorClase])
-
-  //Todo: Asistencias en linea por clase numero 1 de la fecha numero 1
+  //Todo: Asistencias en linea por clase numero 2 de la fecha numero 1
   useEffect(() => {
     asistenciasPorClaseEnLinea()
-  },[mesPorClaseEnLinea])
+  },[mesPorClaseEnLinea, añoPorclaseEnLinea, clasesFiltradasEnLinea])
 
-  useEffect(() => {
-    asistenciasPorClaseEnLinea()
-  },[añoPorclaseEnLinea])
-
-  //Todo: Asistencias en linea por clase numero 1 de la fecha numero 2
+  //Todo: Asistencias en linea por clase numero 2 de la fecha numero 2
   useEffect(() => {
     asistenciasSegundoPorClaseEnLinea()
-  },[mesSegundoPorClaseEnLinea])
+  },[mesSegundoPorClaseEnLinea, añoSegundoPorclaseEnLinea, clasesFiltradasEnLinea])
 
   useEffect(() => {
-    asistenciasSegundoPorClaseEnLinea()
-  },[añoSegundoPorclaseEnLinea])
+    filtrarIdioma()
+  }, [idiomaSeleccionado])
 
   return ( 
     <div className='container-reportes'>
       {
         flechaRegresar ? <div className='contenedor__todo-principio'>
-          <Link to={'/panel-control/asistencias/alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
+          <Link to={'/sistema-asistencias/panel-control/asistencias/alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
           </div>
         : <></>
       }
       {
         nombreAlumno ? <h2 className="titulos-2 titulos__verde-oscuro">Asistencias de {nombreAlumno}</h2> : <></>
       }
+      <div>
+        <h3 className='titulos-2'>Asistencias {idiomaSeleccionado}</h3>
+        <FormControl fullWidth variant='filled' color='success'>
+          <InputLabel id="demo-simple-select-label">Idioma</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={idiomaSeleccionado}
+            label="Age"
+            onChange={handleChange}
+          >
+            <MenuItem value={'General'}>General</MenuItem>
+            {
+              idiomasImpartidos.map((idioma, index) => 
+                <MenuItem key={index} value={`${idioma}`}>{idioma}</MenuItem>
+              )
+            }
+          </Select>
+        </FormControl>
+      </div>
       <div className='primera-grafica'>
         <h3 className='titulos-2'>Total de Asistencias Por Mes</h3>
         <div className='graficas__campos'>
@@ -231,7 +296,7 @@ function ReportesContenido(props) {
             <h4 className='titulos-3'>Primera Fecha</h4>
             <div>
               <CampoNumero
-                titulo='Selecciona el año'
+                titulo='El año'
                 valor={añoPorMes}
                 cambiarValor={setAñoPorMes}
               />
@@ -241,7 +306,7 @@ function ReportesContenido(props) {
             <h4 className='titulos-3'>Primera Fecha</h4>
             <div>
               <CampoNumero
-                titulo='Selecciona el año'
+                titulo='El año'
                 valor={añoSegundoPorMes}
                 cambiarValor={setAñoSegundoPorMes}
               />
@@ -270,7 +335,7 @@ function ReportesContenido(props) {
                 cambiarValor={valorMes}
               />
               <CampoNumero
-                titulo='Selecciona el mes del año'
+                titulo='El año'
                 valor={añoPorClase}
                 cambiarValor={setAñoPorClase}
               />
@@ -287,7 +352,7 @@ function ReportesContenido(props) {
                 cambiarValor={valorMesSegundo}
               />
               <CampoNumero
-                titulo='Selecciona el mes del año'
+                titulo='El año'
                 valor={añoSegundoPorClase}
                 cambiarValor={setAñoSegundoPorClase}
               />
@@ -296,7 +361,7 @@ function ReportesContenido(props) {
         </div>
         <GraficoLinea 
           titulo='Asistencias Por Clase' 
-          nombresDatos={clases} 
+          nombresDatos={clasesFiltradasPresencial.map(clase => {if(clase.modalidadClase == 'Presencial') return clase.nombreClase}).filter(clase => clase != undefined)} 
           primerosDatos={asistenciasClases}
           segundosDatos={asistenciasSegundoClases}
           labelPrimeroDatos={`Asistencias ${mesPorClase} ${añoPorClase}`}
@@ -317,7 +382,7 @@ function ReportesContenido(props) {
                 cambiarValor={valorMesEnLinea}
               />
               <CampoNumero
-                titulo='Selecciona el mes del año'
+                titulo='El año'
                 valor={añoPorclaseEnLinea}
                 cambiarValor={setAñoPorClaseEnLinea}
               />
@@ -334,7 +399,7 @@ function ReportesContenido(props) {
                 cambiarValor={valorMesSegundoEnLinea}
               />
               <CampoNumero
-                titulo='Selecciona el mes del año'
+                titulo='El año'
                 valor={añoSegundoPorclaseEnLinea}
                 cambiarValor={setAñoSegundoPorClaseEnLinea}
               />
@@ -343,7 +408,7 @@ function ReportesContenido(props) {
         </div>
         <GraficoLinea 
           titulo='Asistencias Por Clase' 
-          nombresDatos={clasesEnLinea} 
+          nombresDatos={clasesFiltradasEnLinea.map(clase => {if(clase.modalidadClase == 'En linea') return clase.nombreClase}).filter(clase => clase != undefined)} 
           primerosDatos={asistenciasClasesEnLinea}
           segundosDatos={asistenciasSegundoClasesEnLinea}
           labelPrimeroDatos={`Asistencias ${mesPorClaseEnLinea} ${añoPorclaseEnLinea}`}

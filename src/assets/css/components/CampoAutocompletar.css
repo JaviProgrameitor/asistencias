@@ -26,3 +26,7 @@
 .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
   border-radius: none;
 }
+
+.css-1glvl0p-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-clearIndicator {
+  display: none !important;
+}

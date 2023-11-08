@@ -12,31 +12,3 @@
 .alumno-edit {
   color: blue;
 }
-
-/* tabla de alumnos */
-.container-alumnos__table {
-  display: flex;
-  justify-content: center;
-}
-
-.tabla-alumnos {
-  border-spacing: 0;
-}
-
-.tabla-cabecera tr th {
-  border-bottom: 3px solid greenyellow;
-  padding: 8px 15px;
-  text-align: center;
-}
-
-.tabla-cuerpo {
-  text-align: center;
-}
-
-@media (max-width: 500px) {
-  .tabla-cabecera tr th {
-    padding: 8px 2px;
-    text-align: center;
-    font-size: 12px;
-  }
-}

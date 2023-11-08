@@ -3,21 +3,30 @@ import '../../assets/css/components/Filas.css'
 import { useEffect, useState } from 'react'
 
 function FilasAlumnos(props) {
-  const { posicion, idAlumno, actualizarDatos, datos } = props
-  const { nombre, apellido, numeroTelefono, claveEstudiante, idiomaAprendizaje, modalidadEstudio, fechaPago, id } = props.datos
-  const [tipo, setTipo] = useState()
-  const [activo, setActivo] = useState()
+  const { idAlumno, actualizarDatos, datos, comprobarMensualidad = false } = props
+  const { 
+    nombre, 
+    apellido, 
+    numeroTelefono, 
+    claveEstudiante, 
+    idiomaAprendizaje, 
+    modalidadEstudio, 
+    fechaPago, 
+    estadoMensualidad, 
+    clasesMensualidad, 
+    id 
+  } = datos
+  const [ activo, setActivo ] = useState("")
 
   useEffect(() => {
-    if(posicion === 0 || posicion % 2 === 0) setTipo('elemento-par')
-    else setTipo('elemento-impar')
-
-    if(id === idAlumno) setActivo('activo')
-    else setActivo('inactivo')
+    id === idAlumno ? setActivo('activo') : setActivo('inactivo')
   }, [idAlumno])
 
   return (
-    <tr className={`fila ${tipo} ${activo}`} onClick={() => actualizarDatos(datos)}>
+    <tr 
+      className={`fila ${activo} ${comprobarMensualidad ? clasesMensualidad.join(' ') : ''}`} 
+      onClick={() => {activo === "activo" ? actualizarDatos(false) : actualizarDatos(datos)}}
+    >
       <td>{nombre}</td>
       <td>{apellido}</td>
       <td>{numeroTelefono}</td>
@@ -43,6 +52,19 @@ function FilasAlumnos(props) {
           }
         </ul>
       </td>
+      {
+        comprobarMensualidad ?
+          <td>
+            <ul>
+              {
+                idiomaAprendizaje.map((idioma, index) => 
+                  <li key={index}>{estadoMensualidad[index]}</li>
+                )
+              }
+            </ul>
+          </td>
+        : <></>
+      }
     </tr>
   )
 }

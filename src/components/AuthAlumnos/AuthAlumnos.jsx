@@ -1,56 +1,48 @@
 import  '../../assets/css/components/Auth.css'
 
 import { useState, useEffect } from 'react'
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate, Link, useResolvedPath } from "react-router-dom"
 import { BsQrCodeScan } from 'react-icons/bs'
-
-import { initializeApp } from "firebase/app";
-import firebaseConfig from '../../firebase';
-import { collection, onSnapshot, getFirestore  } from "firebase/firestore";
 
 import Campo from '../Campo/Campo';
 import CampoContrasena from '../CampoContrasena/CampoContrasena'
 
 import { Toaster, toast } from 'sonner'
 
+import bcrypt from 'bcryptjs'
+
 function AuthAlumnos(props) {
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
 
   const navigate = useNavigate()
-  
-  const { setUsuario, usuario, scanner, setScanner } = props
 
-  const [ totalAlumnos, setTotalAlumnos ] = useState([])
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const url = useResolvedPath("").pathname
+  
+  const { alumnos, setUsuario, usuario, activarScanner, setActivarScanner } = props
+
+  const [ email, setEmail ] = useState("")
+  const [ password, setPassword ] = useState("")
   const [ sesion, setSesion ] = useState(false)
 
   //Todo: Función para iniciar sesión
   const iniciar = async() => {
-    const nuevoAlumno = totalAlumnos.filter((ad) => ad.correo === email)
-    setUsuario(nuevoAlumno)
+    const nuevoAlumno = alumnos.filter((ad) => ad.correo === email)
 
     if(nuevoAlumno.length > 0) {
-      if(nuevoAlumno[0].correo == email && nuevoAlumno[0].contrasena == password) setSesion(true)
-      else toast.error('Su contraseña está incorrecta')
+      bcrypt.compare(password, nuevoAlumno[0].contrasena, async(error, match) => {
+        if(match) {
+          await setUsuario(nuevoAlumno)
+          setSesion(true)
+        }
+        else if(!match) toast.error('La contraseña es incorrecta')
+      })
     } else toast.error('No tiene una cuenta de alumno')
   }
 
   useEffect(() => {
     if(usuario.length > 0 && sesion) {
-      navigate('/perfil-alumno')
+      navigate(`${url}/perfil-alumno`)
     }
   })
-
-  //Todo: Función para leer los datos de la base de datos
-  useEffect(
-    () => 
-      onSnapshot(collection(db, 'alumnos'),(snapshot) => 
-        setTotalAlumnos(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      [db]
-  )
 
   function formulario(e) {
     e.preventDefault()
@@ -80,11 +72,11 @@ function AuthAlumnos(props) {
       </form>
       <div className='contenedor__centrado-separacion caja-enlace-scanner'>
         <div className='cajas-qr'>
-          <BsQrCodeScan className='scanner' onClick={() => setScanner(!scanner)}/>
+          <BsQrCodeScan className='scanner' onClick={() => setActivarScanner(!activarScanner)}/>
           <span className='span-qr'>Presencial</span>
         </div>
         <div className='cajas-qr'>
-          <Link to={'/scanner-en-linea'}><BsQrCodeScan className='scanner' /></Link>
+          <Link to={`${url}/scanner-en-linea`}><BsQrCodeScan className='scanner' /></Link>
           <span className='span-qr'>En Línea</span>
         </div>
       </div>

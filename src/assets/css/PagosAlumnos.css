@@ -1,0 +1,26 @@
+.container-idiomas {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.caja-idiomas {
+  width: 220px;
+  padding: 15px 0;
+  border-radius: 25px;
+  background-color: #c3f6c0;
+
+  font-family: 'Fredoka', sans-serif;
+  text-align: center;
+  cursor: pointer;
+}
+
+.idioma-activo {
+  background-color: #133210;
+  color: white;
+}
+
+.container-botones {
+  width: 30%;
+  margin-top: 20px;
+}

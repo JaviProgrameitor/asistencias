@@ -9,78 +9,101 @@ import UsuarioJustificantesEnEspera from './UsuarioJustificantesEnEspera';
 import UsuarioJustificantesAceptados from './UsuarioJustificantesAceptados';
 import UsuarioJustificantesRechazados from './UsuarioJustificantesRechazados';
 
+import Modal from '@mui/material/Modal';
+
 function UsuarioJustificantes(props) {
-  const { justificantesEnEspera, justificantesAceptados, justificantesRechazados } = props
+  const { justificantesEnEspera, justificantesAceptados, justificantesRechazados, urlActual } = props
 
   const [ fotoPrueba, setFotoPrueba ] = useState(false)
   const [ mostrarFotoPrueba, setMostrarFotoPrueba ] = useState(false)
 
   const url = useResolvedPath("").pathname
 
-  function ToggleMostrarPrueba(mostrar) {
-    document.querySelector('body').classList.toggle('body__pantalla-negra')
-    setMostrarFotoPrueba(mostrar)
-  }
-
   return (
-    <div>
+    <div className='padd-x__20 padd-top__20'>
       <h3 className='titulos-1'>Justificantes</h3>
-      <div className='contenedor__todo-final contenedor__margin-ambos'>
-        <Link to={`/perfil-alumno/crear-justificante`} className='boton__verde-oscuro'>
+      <div className='contenedor__todo-final contenedor__margin-ambos contenedor-usuario-justificantes'>
+        <Link to={`/sistema-asistencias/perfil-alumno/crear-justificante`} className='boton__verde-oscuro'>
           <span className='agregar-alumnos__texto'>Crear Justificante</span>
         </Link>
         {
           fotoPrueba ? 
-            <button className='boton__blanco' onClick={() => ToggleMostrarPrueba(true)}>Ver Prueba</button>
-            
+            <button className='boton__blanco' onClick={() => setMostrarFotoPrueba(true)}>Ver Prueba</button>
           : <></>
         }
       </div>
       <div className='container-botones-usuario-justificantes'>
-        <div className='caja-links-usuario-justificantes'>
-          <Link className='link-usuario-justificante' to={`${url}`} onClick={() => setFotoPrueba(false)}>Justificantes En Espera</Link>
-        </div>
-        <div className='caja-links-usuario-justificantes'>
-          <Link className='link-usuario-justificante' to={`${url}/justificantes-aceptados`} onClick={() => setFotoPrueba(false)}>Justificantes Aceptados</Link>
-        </div>
-        <div className='caja-links-usuario-justificantes'>
-          <Link className='link-usuario-justificante' to={`${url}/justificantes-rechazados`} onClick={() => setFotoPrueba(false)}>Justificantes Rechazados</Link>
-        </div>
+          <Link 
+            className={`link-usuario-justificantes ${urlActual == url ? "link-usuario-justificante_activo" : ""}`} 
+            to={`${url}`} 
+            onClick={() => {
+              setFotoPrueba(false)
+            }}
+          >
+            <span>Justificantes En Espera</span>
+          </Link>
+          <Link 
+            className={`link-usuario-justificantes ${urlActual.includes(`${url}/justificantes-aceptados`) ? "link-usuario-justificante_activo" : ""}`} 
+            to={`${url}/justificantes-aceptados`} 
+            onClick={() => {
+              setFotoPrueba(false)
+            }}
+          >
+            <span>Justificantes Aceptados</span>
+          </Link>
+          <Link 
+            className={`link-usuario-justificantes ${urlActual.includes(`${url}/justificantes-rechazados`) ? "link-usuario-justificante_activo" : ""}`} 
+            to={`${url}/justificantes-rechazados`} 
+            onClick={() => {
+              setFotoPrueba(false)
+            }}
+          >
+            <span>Justificantes Rechazados</span>
+          </Link>
       </div>
-      {
-        mostrarFotoPrueba ? <div className='container-foto-prueba'>
+      <Modal
+        open={mostrarFotoPrueba}
+        onClose={setMostrarFotoPrueba}
+        className={'usuario-justificantes__modal'}
+      > 
+        <div className='container-foto-prueba'>
           <div className='caja-foto-prueba'>
-            <TiDelete className='foto-prueba__icon' onClick={() => ToggleMostrarPrueba(false)} />
+            <TiDelete className='foto-prueba__icon' onClick={() => setMostrarFotoPrueba(false)} />
             <img className='foto-prueba' src={fotoPrueba} alt="Foto prueba del justificante" />
           </div>
-          </div> 
-        : <></>
-      }
+        </div> 
+      </Modal>
       <div>
         <Routes>
           <Route
             path='/' 
-            element={<UsuarioJustificantesEnEspera 
+            element={
+              <UsuarioJustificantesEnEspera 
                 fotoPrueba={fotoPrueba} 
                 setFotoPrueba={setFotoPrueba} 
-                datos={justificantesEnEspera} 
-              />} 
+                justificantes={justificantesEnEspera} 
+              />
+            } 
           />
           <Route
             path='/justificantes-aceptados' 
-            element={<UsuarioJustificantesAceptados 
+            element={
+              <UsuarioJustificantesAceptados 
                 fotoPrueba={fotoPrueba} 
                 setFotoPrueba={setFotoPrueba} 
-                datos={justificantesAceptados} 
-              />} 
+                justificantes={justificantesAceptados} 
+              />
+            } 
           />
           <Route
             path='/justificantes-rechazados' 
-            element={<UsuarioJustificantesRechazados 
+            element={
+              <UsuarioJustificantesRechazados 
                 fotoPrueba={fotoPrueba} 
                 setFotoPrueba={setFotoPrueba} 
-                datos={justificantesRechazados} 
-              />} 
+                justificantes={justificantesRechazados} 
+              />
+            } 
           />
         </Routes>
       </div>

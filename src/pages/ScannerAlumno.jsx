@@ -1,7 +1,9 @@
 import '../assets/css/PerfilAlumno.css'
 import '../assets/css/ScannerAlumno.css'
 
-import { useState, useEffect } from 'react';
+import alumnoIcono from '../assets/img/alumno.png'
+
+import { useState } from 'react';
 import { useNavigate } from "react-router-dom"
 
 import Indicadores from '../components/Indicadores/Indicadores';
@@ -10,27 +12,27 @@ import IndicadoresMultiples from '../components/IndicadoresMultiples/Indicadores
 import emailjs from '@emailjs/browser';
 
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, getFirestore, onSnapshot  } from "firebase/firestore";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
 import firebaseConfig from '../firebase';
 
 function ScannerAlumno(props) {
-  const { infoScanner, setInfoScanner,scannerAlumno, setScannerAlumno, scannerTipo, setScannerTipo, asistenciasEntrada } = props
+  const {
+    setScannerAlumno, 
+    scannerModalidad, 
+    setScannerModalidad, 
+    asistenciasEntrada, 
+    clases,
+    pagosMensualidades
+  } = props
+
   const { 
     foto, 
     nombre, 
-    apellido, 
-    numeroTelefono, 
+    apellido,
     claveEstudiante, 
-    idiomaAprendizaje, 
-    modalidadEstudio, 
-    fechaPago, 
-    id, 
-    fechaNacimiento, 
-    correo, 
-    nivelAcademico, 
-    nivelIdioma, 
-    fechaIngreso,
-    genero
+    idiomaAprendizaje,
+    correo,
+    fechaPago
   } = props.scannerAlumno[0]
   const informacionAlumno = [
     {
@@ -38,20 +40,8 @@ function ScannerAlumno(props) {
       valor: `${nombre} ${apellido}`
     },
     {
-      titulo: 'Fecha de Nacimiento',
-      valor: fechaNacimiento
-    },
-    {
       titulo: 'Correo',
       valor: correo
-    },
-    {
-      titulo: 'Número Telefónico',
-      valor: numeroTelefono
-    },
-    {
-      titulo: 'Nivel Academico',
-      valor: nivelAcademico
     }
   ]
 
@@ -60,18 +50,438 @@ function ScannerAlumno(props) {
 
   const navigate = useNavigate()
 
+  const mesMilisegundos = 2629800000;
+  const minutos30 = 1800000;
+  const diaMilisegundos = 86400000;
+  const minutoMilisegundos = 60000;
+  const coloresAlumno = {
+    colorFondoCercaPago: 'cerca-pago',
+    colorFondoPago: 'dia-pago',
+    colorFondoDeuda: 'deudas',
+  }
+
+  const diasMeses = {
+    "Enero" : 31,
+    "Febrero" : 28,
+    "FebreroBisiesto" : 29,
+    "Marzo" : 31,
+    "Abril" : 30,
+    "Mayo" : 31,
+    "Junio" : 30,
+    "Julio" : 31,
+    "Agosto" : 31,
+    "Septiembre" : 30,
+    "Octubre" : 31,
+    "Noviembre" : 30,
+    "Diciembre" : 31
+  }
+
   const [ nombreAlumno, setNombreAlumno ] = useState(nombre)
   const [ apellidoAlumno, setApellidoAlumno ] = useState(apellido)
   const [ claveEstudianteAlumno, setClaveEstudianteAlumno ] = useState(claveEstudiante)
   const [ correoAlumno, setCorreoAlumno ] = useState(correo)
 
-  setTimeout(() => {
-    asistenciaEntrada()
-    setInfoScanner('')
-    setScannerTipo('')
-    navigate('/')
-  }, 8000);
+  // setTimeout(() => {
+  //   if(nombre !== false) asistenciaEntrada()
+  //   setScannerModalidad('')
+  //   navigate('/sistema-asistencias')
+  // }, 3000);
 
+  function calcularNumeroPorMes(valor) {
+    if(valor === 'Enero') return 0
+    else if(valor === 'Febrero') return 1
+    else if(valor === 'Marzo') return 2
+    else if(valor === 'Abril') return 3
+    else if(valor === 'Mayo') return 4
+    else if(valor === 'Junio') return 5
+    else if(valor === 'Julio') return 6
+    else if(valor === 'Agosto') return 7
+    else if(valor === 'Septiembre') return 8
+    else if(valor === 'Octubre') return 9
+    else if(valor === 'Noviembre') return 10
+    else if(valor === 'Diciembre') return 11
+  }
+
+  function calcularFinMensualidad(tipoRespuesta, fecha, mes, año) {
+    let mesFinal;
+    let añoFinal;
+    let fechaFinal;
+
+    if(12 == (mes + 1)) {
+      mesFinal = 'Enero'
+      añoFinal = año + 1;
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(1 == (mes + 1)) {
+      mesFinal = 'Febrero'
+      añoFinal = año
+
+      if(año % 4 == 0) {
+        if(parseInt(fecha) > diasMeses["FebreroBisiesto"]) fechaFinal = diasMeses["FebreroBisiesto"]
+        else fechaFinal = fecha
+      }
+
+      else {
+        if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+        else fechaFinal = fecha
+      }
+    }
+
+    else if(2 == (mes + 1)) {
+      mesFinal = 'Marzo'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(3 == (mes + 1)) {
+      mesFinal = 'Abril'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(4 == (mes + 1)) {
+      mesFinal = 'Mayo'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(5 == (mes + 1)) {
+      mesFinal = 'Junio'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+    else if(6 == (mes + 1)) {
+      mesFinal = 'Julio'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(7 == (mes + 1)) {
+      mesFinal = 'Agosto'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+    
+    else if(8 == (mes + 1)) {
+      mesFinal = 'Septiembre'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(9 == (mes + 1)) {
+      mesFinal = 'Octubre'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(10 == (mes + 1)) {
+      mesFinal = 'Noviembre'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(11 == (mes + 1)) {
+      mesFinal = 'Diciembre'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    if(tipoRespuesta == "string") return `${fechaFinal}/${mesFinal}/${añoFinal}`
+    else if(tipoRespuesta == "objeto") return [fechaFinal, calcularNumeroPorMes(mesFinal), añoFinal]
+  }
+
+  function calcularAnteriorMensualidad(tipoRespuesta, fecha, mes, año) {
+    let mesFinal;
+    let añoFinal;
+    let fechaFinal;
+
+    if(0 == (mes - 1)) {
+      mesFinal = 'Enero'
+      añoFinal = año;
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(1 == (mes - 1)) {
+      mesFinal = 'Febrero'
+      añoFinal = año
+
+      if(año % 4 == 0) {
+        if(parseInt(fecha) > diasMeses["FebreroBisiesto"]) fechaFinal = diasMeses["FebreroBisiesto"]
+        else fechaFinal = fecha
+      }
+
+      else {
+        if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+        else fechaFinal = fecha
+      }
+    }
+
+    else if(2 == (mes - 1)) {
+      mesFinal = 'Marzo'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(3 == (mes - 1)) {
+      mesFinal = 'Abril'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(4 == (mes - 1)) {
+      mesFinal = 'Mayo'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(5 == (mes - 1)) {
+      mesFinal = 'Junio'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+    else if(6 == (mes - 1)) {
+      mesFinal = 'Julio'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(7 == (mes - 1)) {
+      mesFinal = 'Agosto'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+    
+    else if(8 == (mes - 1)) {
+      mesFinal = 'Septiembre'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(9 == (mes - 1)) {
+      mesFinal = 'Octubre'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(10 == (mes - 1)) {
+      mesFinal = 'Noviembre'
+      añoFinal = año
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    else if(-1 == (mes - 1)) {
+      mesFinal = 'Diciembre'
+      añoFinal = año - 1
+
+      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
+      else fechaFinal = fecha
+    }
+
+    if(tipoRespuesta == "string") return `${fechaFinal}/${mesFinal}/${añoFinal}`
+    else if(tipoRespuesta == "objeto") return [fechaFinal, calcularNumeroPorMes(mesFinal), añoFinal]
+  }
+
+  function comprobarMensualidad(idioma, idiomaFecha) {
+    let colorMensualidad = false;
+
+    const date = new Date(1698384600000)
+    const año = date.getFullYear()
+    const mes = date.getMonth()
+    const fecha = date.getDate()
+
+    const [ fechaAnterior, mesAnterior, añoAnterior ] = calcularAnteriorMensualidad("objeto", idiomaFecha, mes, año)
+    const [ fechaProximo, mesProximo, añoProximo ] = calcularFinMensualidad("objeto", idiomaFecha, mes, año)
+
+    const pagoAnterior = pagosMensualidades.filter(pago => pago.añoFinMensualidad == año && pago.mesFinMensualidad == mes && pago.idiomaPago == idioma && pago.claveEstudiantePago == claveEstudiante)
+    const pago = pagosMensualidades.filter(pago => pago.añoPagoMenActual == año && pago.numeroMesPagoMenActual == mes && pago.idiomaPago == idioma && pago.claveEstudiantePago == claveEstudiante)
+    const pagoProximo = pagosMensualidades.filter(pago => pago.añoPagoMenActual == añoProximo && pago.numeroMesPagoMenActual == mesProximo && pago.idiomaPago == idioma && pago.claveEstudiantePago == claveEstudiante)
+
+    if(pagoAnterior.length <= 0) {
+      const hoyMili = new Date(`${mes + 1} ${fecha}, ${año}`)
+      const pagoMili = new Date(`${mesAnterior + 1} ${fechaAnterior}, ${añoAnterior}`)
+      const resto = Math.round((hoyMili - pagoMili) / diaMilisegundos)
+
+      if(colorMensualidad === false) colorMensualidad = coloresAlumno.colorFondoDeuda
+
+      return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Retraso de ${resto} días`}</span>
+    }
+
+    else if(pago.length > 0) {
+      if(pagoProximo.length > 0) {
+        return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Sin Deudas`}</span>
+      }
+      
+      else {
+        const hoyMili = new Date(`${mes + 1} ${fecha}, ${año}`)
+        const pagoMili = new Date(`${mesProximo + 1} ${fechaProximo}, ${añoProximo}`)
+        const resto = Math.round((pagoMili - hoyMili) / diaMilisegundos)
+
+        if(resto <= 5) {
+          if(colorMensualidad === false) colorMensualidad = coloresAlumno.colorFondoCercaPago
+
+          return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Faltan ${resto} días`}</span>
+        }
+
+        return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Sin Deudas`}</span>
+      }
+    }
+
+    else {
+      const hoyMili = new Date(`${mes + 1} ${fecha}, ${año}`)
+      const pagoMili = new Date(`${mes + 1} ${idiomaFecha}, ${año}`)
+
+      if(idiomaFecha == fecha) {
+        if(colorMensualidad === false) colorMensualidad = coloresAlumno.colorFondoPago
+
+        return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Día de Pago`}</span>
+      }
+
+      else if(pagoMili > hoyMili) {
+        const resto = Math.round((pagoMili - hoyMili) / diaMilisegundos)
+
+        if(resto <= 5) {
+          if(colorMensualidad === false) colorMensualidad = coloresAlumno.colorFondoCercaPago
+
+          return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Faltan ${resto} días`}</span>
+        }
+
+        return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Sin Deudas`}</span>
+      }
+
+      else {
+        const resto = Math.round((hoyMili - pagoMili) / diaMilisegundos)
+
+        if(colorMensualidad === false) colorMensualidad = coloresAlumno.colorFondoDeuda
+
+        return <span className={`${colorMensualidad} comprobante-mensualidad`}>{`Mensualidad del Idioma ${idioma}: Retraso de ${resto} días`}</span>
+      }
+    }
+  }
+
+  //Todo: Calcular Asistencia
+
+  //Función para calcular la asistencia, saber la hora en la que asistió y la clase
+  function calcularAsistencia(accion, hora, modalidad) {
+    const date = new Date(1698384600000);
+    const año = date.getFullYear()
+    const mes = new Date(date.getTime() + mesMilisegundos).getMonth()
+    const fecha = date.getDate()
+    let dia = date.getDay()
+
+    for(let i = 0; i < clases.length; i++) {
+      let horaInicioPrueba = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaInicioClase}`).getTime()
+      let horaFinalPrueba = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaFinalClase}`).getTime();
+      let horaInicio;
+      let horaFinal;
+      let puntualidad;
+      
+      if(horaInicioPrueba > horaFinalPrueba) {
+        let restoInicio = hora - horaInicioPrueba;
+        let restoFinal = hora - horaFinalPrueba;
+
+        if(restoInicio < 0 && restoFinal < 0) {
+          restoInicio = restoInicio * -1;
+          restoFinal = restoFinal * -1;
+        }
+
+        if(restoInicio < restoFinal) {
+          horaInicio = horaInicioPrueba;
+          horaFinal = horaFinalPrueba + diaMilisegundos;
+        }
+
+        else {
+          horaInicio = horaInicioPrueba - diaMilisegundos;
+          horaFinal = horaFinalPrueba;
+        }
+      }
+
+      else {
+        horaInicio = horaInicioPrueba;
+        horaFinal = horaFinalPrueba;
+      }
+
+      if(
+          accion == 'Entrada' &&
+          clases[i].modalidadClase == modalidad && 
+          clases[i].diasNumeroClase.includes(dia) && 
+          (horaInicio - minutos30) < hora && hora < horaFinal
+        ) {
+        if(hora <= horaInicio) puntualidad = 'Llegó a tiempo.'
+        else puntualidad = `Llegó ${Math.round((hora - horaInicio) / minutoMilisegundos)} minutos tarde.`
+
+        return {
+          diasHorarios : clases[i].diasClase,
+          horaHorario : `${clases[i].horaInicioClase} a ${clases[i].horaFinalClase}`,
+          claveHorario : clases[i].claveClase,
+          puntualidadClase: puntualidad,
+          idiomaAsistenciaEntrada: clases[i].idiomaClase
+        }
+      }
+
+      else if(
+        accion == 'Salida' &&
+        clases[i].modalidadClase == modalidad && 
+        clases[i].diasNumeroClase.includes(dia) && 
+        horaInicio < hora && hora < (horaFinal + minutos30)
+      ) {
+        if(hora >= horaFinal) puntualidad = 'Salió en tiempo.'
+        else puntualidad = `Salió ${Math.round((horaFinal - hora) / minutoMilisegundos)} minutos antes.`
+
+        return {
+          diasHorarios : clases[i].diasClase,
+          horaHorario : `${clases[i].horaInicioClase} a ${clases[i].horaFinalClase}`,
+          claveHorario : clases[i].claveClase,
+          puntualidadClase: puntualidad,
+          idiomaAsistenciaEntrada: clases[i].idiomaClase
+        }
+      }
+    }
+  }
+
+  //Función para enviar el mensaje a los alumnos
   function enviarMensaje(accionAula) {  
     let serviceId;
     let datosMensaje;
@@ -88,9 +498,9 @@ function ScannerAlumno(props) {
       accion__asistencia: 'salido del'
     }
 
-    if(correoAlumno.includes('@hotmail.com')) serviceId = 'service_s03txqx'
+    if(correoAlumno.includes('@hotmail.com') || correoAlumno.includes('@outlook.com')) serviceId = 'service_72zexmm'
 
-    else if(correoAlumno.includes('@gmail.com')) serviceId = 'service_c3doz7i'
+    else if(correoAlumno.includes('@gmail.com')) serviceId = 'service_rtdxwlf'
 
     emailjs.send(serviceId, 'template_mbn5lyh', datosMensaje, 'EjqKxLfA5pfR3G7aa')
       .then((result) => {
@@ -100,184 +510,80 @@ function ScannerAlumno(props) {
       });
   }
 
-  function bienvenida() {
-    if(genero === 'Hombre') return 'Bienvenido Querido Alumno'
-    else if(genero === 'Mujer') return 'Bienvenida Querida Alumna'
-  }
+  //Función para saber si es entrada o salida del alumno
+  function entradaSalidaAlumno(hora) {
+    let asistencia = []
+    const date = new Date(1698384600000);
+    const año = date.getFullYear()
+    const mes = new Date(date.getTime() + mesMilisegundos).getMonth()
+    const fecha = date.getDate()
+    let dia = date.getDay()
 
-  function entradaSalidaAlumno() {
-    const date = new Date();
-    const año = date.getFullYear()//Saber el año
-    const mes = date.getMonth()//Saber el mes
-    const fecha = date.getDate()//Saber la fecha
-    const hora = date.getHours()//Saber la hora
-    const minutos = date.getMinutes()//Saber los minutos
-    const dia = date.getDay()//Saber el día de la semana
+    for(let i = 0; i < clases.length; i++) {
+      let horaInicioPrueba = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaInicioClase}`).getTime() - minutos30
+      let horaFinalPrueba = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaFinalClase}`).getTime() + minutos30;
+      let horaInicio;
+      let horaFinal;
+      
+      if(horaInicioPrueba > horaFinalPrueba) {
+        let restoInicio = hora - horaInicioPrueba;
+        let restoFinal = hora - horaFinalPrueba;
 
-    let minutoExacto;
-    let horaClase;
-    let asistencia;
+        if(restoInicio < 0 && restoFinal < 0) {
+          restoInicio = restoInicio * -1;
+          restoFinal = restoFinal * -1;
+        }
 
-    //Todo: Calcular exactametne la fecha y la hora de la asistencia
-    if(minutos < 10) minutoExacto = `0${minutos}`
-    else if(minutos >= 10) minutoExacto = `${minutos}`
+        if(restoInicio < restoFinal) {
+          horaInicio = horaInicioPrueba;
+          horaFinal = horaFinalPrueba + diaMilisegundos;
+        }
 
-    //Todo: calcular la clase de la asistencia
+        else {
+          horaInicio = horaInicioPrueba - diaMilisegundos;
+          horaFinal = horaFinalPrueba;
+        }
+      }
 
-    horaClase = parseInt(`${hora}${minutoExacto}`)
+      else {
+        horaInicio = horaInicioPrueba;
+        horaFinal = horaFinalPrueba;
+      }
 
-    if(dia == 1 || dia == 3 || dia == 5) {
-      if(1330 <= horaClase && horaClase <= 1520) {
+      if(
+        clases[i].diasNumeroClase.includes(dia) && 
+        horaInicio < hora && hora < horaFinal
+      ) {
         asistencia = asistenciasEntrada.filter((a) => 
           a.claveEstudianteAsistenciaEntrada == claveEstudianteAlumno && 
-          a.añoAsistenciaEntrada == año &&
-          a.mesAsistenciaEntrada == mes &&
-          a.fechaAsistenciaEntrada == fecha &&
-          a.claveHorario == 'MatuLuMiVi200320'
+          horaInicio < a.horaAsistenciaMilisegundos && a.horaAsistenciaMilisegundos < horaFinal &&
+          a.claveHorario == clases[i].claveClase
         )
       }
     }
 
-    if(dia == 1 || dia == 3) {
-      if(1630 <= horaClase && horaClase <= 1900) {
-        asistencia = asistenciasEntrada.filter((a) => 
-          a.claveEstudianteAsistenciaEntrada == claveEstudiante && 
-          a.añoAsistenciaEntrada == año &&
-          a.mesAsistenciaEntrada == mes &&
-          a.fechaAsistenciaEntrada == fecha &&
-          a.claveHorario == 'VesLuMi500700'
-        )
-      }
-    }
-
-    if(dia == 1 || dia == 2 || dia == 3 || dia == 4) {
-      if(1920 <= horaClase && horaClase <= 2115) {
-        asistencia = asistenciasEntrada.filter((a) => 
-          a.claveEstudianteAsistenciaEntrada == claveEstudiante && 
-          a.añoAsistenciaEntrada == año &&
-          a.mesAsistenciaEntrada == mes &&
-          a.fechaAsistenciaEntrada == fecha &&
-          a.claveHorario == 'NocLuMaMiJu740915'
-        )
-      }
-    }
-
-    if(dia == 2 || dia == 4) {
-      if(1100 <= horaClase && horaClase <= 1330) {
-        asistencia = asistenciasEntrada.filter((a) => 
-          a.claveEstudianteAsistenciaEntrada == claveEstudiante && 
-          a.añoAsistenciaEntrada == año &&
-          a.mesAsistenciaEntrada == mes &&
-          a.fechaAsistenciaEntrada == fecha &&
-          a.claveHorario == 'MatuMaJu1130130'
-        )
-      }
-
-      if(1630 <= horaClase && horaClase <= 1900) {
-        asistencia = asistenciasEntrada.filter((a) => 
-          a.claveEstudianteAsistenciaEntrada == claveEstudiante && 
-          a.añoAsistenciaEntrada == año &&
-          a.mesAsistenciaEntrada == mes &&
-          a.fechaAsistenciaEntrada == fecha &&
-          a.claveHorario == 'VesMaJu500700'
-        )
-      }
-    }
-
-    if(dia == 6) {
-      if(1230 <= horaClase && horaClase <= 1600) {
-        asistencia = asistenciasEntrada.filter((a) => 
-          a.claveEstudianteAsistenciaEntrada == claveEstudiante && 
-          a.añoAsistenciaEntrada == año &&
-          a.mesAsistenciaEntrada == mes &&
-          a.fechaAsistenciaEntrada == fecha &&
-          a.claveHorario == 'Saba100400'
-        )
-      }
-    }
-
-    console.log("Asistencias " + asistencia)
-    console.log("Cantidad asistencias " + asistencia.length % 2)
     return (asistencia.length % 2 == 0)
   }
 
+  //Función para saber la hora de la entrada del alumno
   function horaEntrada() {
-    const date = new Date();
-    const hora = date.getHours()//Saber la hora
-    const minutos = date.getMinutes()//Saber los minutos
-    const dia = date.getDay()//Saber el día de la semana
+    const date = new Date(1698384600000);
+    const horaExacta = date.getTime()
 
-    let minutoExacto;
-    let horaClase;
-    let textoClase;
     let nombreClase;
 
-    //Todo: Calcular exactametne la fecha y la hora de la asistencia
-    if(minutos < 10) minutoExacto = `0${minutos}`
-    else if(minutos >= 10) minutoExacto = `${minutos}`
+    let accion = entradaSalidaAlumno(horaExacta) ? 'Entrada' :  'Salida';
 
-    //Todo: calcular la clase de la asistencia
+    let { puntualidadClase } = calcularAsistencia(accion, horaExacta, scannerModalidad)
 
-    horaClase = parseInt(`${hora}${minutoExacto}`) 
-
-    if(dia === 1 || dia === 3 || dia === 5) {
-      if(1330 <= horaClase && horaClase <= 1520) {
-        if(horaClase <= 1411) textoClase = 'Gracias por llegar temprano.'
-        else if(horaClase > 1459) textoClase = `Trata de llegar más temprano. Llegáste ${(horaClase - 40) - 1400} minutos tarde.`
-        else if(horaClase > 1411) textoClase = `Trata de llegar más temprano. Llegáste ${horaClase - 1400} minutos tarde.`
-      }
-    }
-
-    if(dia === 1 || dia === 3) {
-      if(1630 <= horaClase && horaClase <= 1900) {
-        if(horaClase <= 1711) textoClase = 'Gracias por llegar temprano.'
-        else if(horaClase > 1859) textoClase = `Trata de llegar más temprano. Llegáste ${(horaClase - 80) - 1700} minutos tarde.`
-        else if(horaClase > 1759) textoClase = `Trata de llegar más temprano. Llegáste ${(horaClase - 40) - 1700} minutos tarde.`
-        else if(horaClase > 1711) textoClase = `Trata de llegar más temprano. Llegáste ${horaClase - 1700} minutos tarde.`
-      }
-    }
-
-    if(dia === 1 || dia === 2 || dia === 3 || dia === 4) {
-      if(1920 <= horaClase && horaClase <= 2115) {
-        if(horaClase <= 1951) textoClase = 'Llegó puntual.'
-        else if(horaClase > 2059) textoClase = `Llegó ${(horaClase - 80) - 1940} minutos tarde.`
-        else if(horaClase > 1959) textoClase = `Llegó ${(horaClase - 40) - 1940} minutos tarde.`
-        else if(horaClase > 1951) textoClase = `Llegó ${horaClase - 1940} minutos tarde.`
-      }
-    }
-
-    if(dia == 2 || dia == 4) {
-      if(1100 <= horaClase && horaClase <= 1330) {
-        if(horaClase <= 1141) textoClase = 'Gracias por llegar temprano.'
-        else if(horaClase > 1259) textoClase = `Trata de llegar más temprano. Llegáste ${(horaClase - 80) - 1130} minutos tarde.`
-        else if(horaClase > 1159) textoClase = `Trata de llegar más temprano. Llegáste ${(horaClase - 40) - 1130} minutos tarde.`
-        else if(horaClase > 1141) textoClase = `Trata de llegar más temprano. Llegáste ${horaClase - 1130} minutos tarde.`
-      }
-
-      if(1630 <= horaClase && horaClase <= 1900) {
-        if(horaClase <= 1711) textoClase = 'Gracias por llegar temprano.'
-        else if(horaClase > 1859) textoClase = `Trata de llegar más temprano. Llegáste ${(horaClase - 80) - 1700} minutos tarde.`
-        else if(horaClase > 1759) textoClase = `Trata de llegar más temprano. Llegáste ${(horaClase - 40) - 1700} minutos tarde.`
-        else if(horaClase > 1711) textoClase = `Trata de llegar más temprano. Llegáste ${horaClase - 1700} minutos tarde.`
-      }
-    }
-
-    if(dia == 6) {
-      if(1230 <= horaClase && horaClase <= 1600) {
-        if(horaClase <= 1311) textoClase = 'Gracias por llegar temprano.'
-        else if(horaClase > 1559) textoClase = `Trata de llegar más temprano. Llegáste ${(horaClase - 120) - 1300} minutos tarde.`
-        else if(horaClase > 1459) textoClase = `Trata de llegar más temprano. Llegáste ${(horaClase - 80) - 1300} minutos tarde.`
-        else if(horaClase > 1359) textoClase = `Trata de llegar más temprano. Llegáste ${(horaClase - 40) - 1300} minutos tarde.`
-        else if(horaClase > 1311) textoClase = `Trata de llegar más temprano. Llegáste ${horaClase - 1300} minutos tarde.`
-      }
-    }
-
-    if(textoClase == 'Gracias por llegar temprano.') nombreClase = 'puntual'
+    if(accion == 'Entrada'  && puntualidadClase == 'Llegó a tiempo.') nombreClase = 'puntual'
+    else if(accion == 'Salida'  && puntualidadClase == 'Salió en tiempo.') nombreClase = 'puntual'
     else nombreClase = 'impuntual'
 
-    return <span className={`hora-entrada__texto ${nombreClase}`}>{textoClase}</span>
+    return <span className={`hora-entrada__texto ${nombreClase}`}>{puntualidadClase}</span>
   }
 
+  //Función para agregar la asistencia del alumno
   async function asistenciaEntrada() {
     const date = new Date();
     const año = date.getFullYear()//Saber el año
@@ -286,18 +592,20 @@ function ScannerAlumno(props) {
     const hora = date.getHours()//Saber la hora
     const minutos = date.getMinutes()//Saber los minutos
     const dia = date.getDay()//Saber el día de la semana
+    const horaExacta = date.getTime()
 
     let mesExacto;
     let fechaExacto;
     let minutoExacto;
-    
-    let horaClase;
-    let tipoHorario;
-    let diasHorarios;
-    let horaHorario;
-    let claveHorario;
-    let puntualidadClase;
-    let entradaSalida;
+
+    let entradaSalida = entradaSalidaAlumno(horaExacta) ? 'Entrada' :  'Salida'
+    let { 
+      diasHorarios, 
+      horaHorario, 
+      claveHorario, 
+      puntualidadClase, 
+      idiomaAsistenciaEntrada 
+    } = calcularAsistencia(entradaSalida, horaExacta, scannerModalidad)
 
     //Todo: Calcular exactametne la fecha y la hora de la asistencia
     if((mes + 1) < 10) mesExacto = `0${mes + 1}`
@@ -309,280 +617,94 @@ function ScannerAlumno(props) {
     if(minutos < 10) minutoExacto = `0${minutos}`
     else if(minutos >= 10) minutoExacto = `${minutos}`
 
-    //Todo: calcular la clase de la asistencia
-
-    horaClase = parseInt(`${hora}${minutoExacto}`)
-
-    //Todo: Se calcula si es la entrada o salida del alumno
-
-    //Todo: Entrada
-    if(entradaSalidaAlumno()) {
-      entradaSalida = 'Entrada'
-
-      if(scannerTipo == 'Presencial') {
-        //Todo: Horarios de las clases de inglés presenciales
-        if(dia == 1 || dia == 3 || dia == 5) {
-          if(1330 <= horaClase && horaClase <= 1520) {
-            tipoHorario = 'Matutino'
-            diasHorarios = 'Lunes-Miercoles-Viernes'
-            horaHorario = '2:00 p.m a 3:20 p.m'
-            claveHorario = 'MatuLuMiVi200320'
-  
-            if(horaClase <= 1411) puntualidadClase = 'Llegó puntual.'
-            else if(horaClase > 1459) puntualidadClase = `Llegó ${(horaClase - 40) - 1400} minutos tarde.`
-            else if(horaClase > 1411) puntualidadClase = `Llegó ${horaClase - 1400} minutos tarde.`
-          }
-        }
-  
-        if(dia == 1 || dia == 3) {
-          if(1630 <= horaClase && horaClase <= 1900) {
-            tipoHorario = 'Vespertino'
-            diasHorarios = 'Lunes-Miercoles'
-            horaHorario = '5:00 p.m a 7:00 p.m'
-            claveHorario = 'VesLuMi500700'
-  
-            if(horaClase <= 1711) puntualidadClase = 'Llegó puntual.'
-            else if(horaClase > 1859) puntualidadClase = `Llegó ${(horaClase - 80) - 1700} minutos tarde.`
-            else if(horaClase > 1759) puntualidadClase = `Llegó ${(horaClase - 40) - 1700} minutos tarde.`
-            else if(horaClase > 1711) puntualidadClase = `Llegó ${horaClase - 1700} minutos tarde.`
-          }
-        }
-  
-        else if(dia == 2 || dia == 4) {
-          if(1100 <= horaClase && horaClase <= 1330) {
-            tipoHorario = 'Matutino'
-            diasHorarios = 'Martes-Jueves'
-            horaHorario = '11:30 a.m a 1:30 p.m'
-            claveHorario = 'MatuMaJu1130130'
-  
-            if(horaClase <= 1141) puntualidadClase = 'Llegó puntual.'
-            else if(horaClase > 1259) puntualidadClase = `Llegó ${(horaClase - 80) - 1130} minutos tarde.`
-            else if(horaClase > 1159) puntualidadClase = `Llegó ${(horaClase - 40) - 1130} minutos tarde.`
-            else if(horaClase > 1141) puntualidadClase = `Llegó ${horaClase - 1130} minutos tarde.`
-          }
-  
-          if(1630 <= horaClase && horaClase <= 1900) {
-            tipoHorario = 'Vespertino'
-            diasHorarios = 'Martes-Jueves'
-            horaHorario = '5:00 p.m a 7:00 p.m'
-            claveHorario = 'VesMaJu500700'
-  
-            if(horaClase <= 1711) puntualidadClase = 'Llegó puntual.'
-            else if(horaClase > 1859) puntualidadClase = `Llegó ${(horaClase - 80) - 1700} minutos tarde.`
-            else if(horaClase > 1759) puntualidadClase = `Llegó ${(horaClase - 40) - 1700} minutos tarde.`
-            else if(horaClase > 1711) puntualidadClase = `Llegó ${horaClase - 1700} minutos tarde.`
-          }
-        }
-  
-        else if(dia == 6) {
-          if(1230 <= horaClase && horaClase <= 1600) {
-            tipoHorario = 'Sabatina'
-            diasHorarios = 'Sabado'
-            horaHorario = '1:00 p.m a 4:00 p.m'
-            claveHorario = 'Saba100400'
-  
-            if(horaClase <= 1311) puntualidadClase = 'Llegó puntual.'
-            else if(horaClase > 1559) puntualidadClase = `Llegó ${(horaClase - 120) - 1300} minutos tarde.`
-            else if(horaClase > 1459) puntualidadClase = `Llegó ${(horaClase - 80) - 1300} minutos tarde.`
-            else if(horaClase > 1359) puntualidadClase = `Llegó ${(horaClase - 40) - 1300} minutos tarde.`
-            else if(horaClase > 1311) puntualidadClase = `Llegó ${horaClase - 1300} minutos tarde.`
-          }
-        }
-  
-        else return 
-      }
-  
-      else if(scannerTipo == 'En linea') {
-        if(dia == 1 || dia == 2 || dia == 3 || dia == 4) {
-          if(1920 <= horaClase && horaClase <= 2115) {
-            tipoHorario = 'Nocturno'
-            diasHorarios = 'Lunes-Martes-Miercoles-Jueves'
-            horaHorario = '7:40 p.m a 9:15 p.m'
-            claveHorario = 'NocLuMaMiJu740915'
-  
-            if(horaClase <= 1951) puntualidadClase = 'Llegó puntual.'
-            else if(horaClase > 2059) puntualidadClase = `Llegó ${(horaClase - 80) - 1940} minutos tarde.`
-            else if(horaClase > 1959) puntualidadClase = `Llegó ${(horaClase - 40) - 1940} minutos tarde.`
-            else if(horaClase > 1951) puntualidadClase = `Llegó ${horaClase - 1940} minutos tarde.`
-          }
-        }
-  
-        else return
-      }
-  
-      else return
-    }
-
-    //Todo: Salida
-    if(entradaSalidaAlumno() == false) {
-      entradaSalida = 'Salida'
-
-      if(scannerTipo == 'Presencial') {
-        //Todo: Horarios de las clases de inglés presenciales
-        if(dia == 1 || dia == 3 || dia == 5) {
-          if(1400 <= horaClase && horaClase <= 1600) {
-            tipoHorario = 'Matutino'
-            diasHorarios = 'Lunes-Miercoles-Viernes'
-            horaHorario = '2:00 p.m a 3:20 p.m'
-            claveHorario = 'MatuLuMiVi200320'
-  
-            if(horaClase >= 1520) puntualidadClase = 'Salió en tiempo.'
-            else if(horaClase < 1500) puntualidadClase = `Salió ${(1520 - 40) - horaClase} minutos antes.`
-            else if(horaClase < 1520) puntualidadClase = `Salió ${1520 - horaClase} minutos antes.`
-          }
-        }
-
-        if(dia == 1 || dia == 3) {
-          if(1700 <= horaClase && horaClase <= 1940) {
-            tipoHorario = 'Vespertino'
-            diasHorarios = 'Lunes-Miercoles'
-            horaHorario = '5:00 p.m a 7:00 p.m'
-            claveHorario = 'VesLuMi500700'
-  
-            if(horaClase >= 1900) puntualidadClase = 'Salió en tiempo.'
-            else if(horaClase < 1800) puntualidadClase = `Salió ${(1900 - 80) - horaClase} minutos antes.`
-            else if(horaClase < 1900) puntualidadClase = `Salió ${(1900 - 40) - horaClase} minutos antes.`
-          }
-        }
-
-        else if(dia == 2 || dia == 4) {
-          if(1130 <= horaClase && horaClase <= 1400) {
-            tipoHorario = 'Matutino'
-            diasHorarios = 'Martes-Jueves'
-            horaHorario = '11:30 a.m a 1:30 p.m'
-            claveHorario = 'MatuMaJu1130130'
-  
-            if(horaClase >= 1330) puntualidadClase = 'Salió en tiempo.'
-            else if(horaClase < 1200) puntualidadClase = `Salió ${(1330 - 80) - horaClase} minutos antes.`
-            else if(horaClase < 1300) puntualidadClase = `Salió ${(1330 - 40) - horaClase} minutos antes.`
-            else if(horaClase < 1330) puntualidadClase = `Salió ${1330 - horaClase} minutos antes.`
-          }
-  
-          if(1700 <= horaClase && horaClase <= 1940) {
-            tipoHorario = 'Vespertino'
-            diasHorarios = 'Martes-Jueves'
-            horaHorario = '5:00 p.m a 7:00 p.m'
-            claveHorario = 'VesMaJu500700'
-  
-            if(horaClase >= 1900) puntualidadClase = 'Salió en tiempo.'
-            else if(horaClase < 1800) puntualidadClase = `Salió ${(1900 - 80) - horaClase} minutos antes.`
-            else if(horaClase < 1900) puntualidadClase = `Salió ${(1900 - 40) - horaClase} minutos antes.`
-          }
-        }
-
-        else if(dia == 6) {
-          if(1300 <= horaClase && horaClase <= 1640) {
-            tipoHorario = 'Sabatina'
-            diasHorarios = 'Sabado'
-            horaHorario = '1:00 p.m a 4:00 p.m'
-            claveHorario = 'Saba100400'
-  
-            if(horaClase >= 1600) puntualidadClase = 'Salió en tiempo.'
-            else if(horaClase < 1400) puntualidadClase = `Salió ${(1600 - 120) - horaClase} minutos antes.`
-            else if(horaClase < 1500) puntualidadClase = `Salió ${(1600 - 80) - horaClase} minutos antes.`
-            else if(horaClase < 1600) puntualidadClase = `Salió ${(1600 - 40) - horaClase} minutos antes.`
-          }
-        }
-  
-        else return 
-      }
-
-      else if(scannerTipo == 'En linea') {
-        if(dia == 1 || dia == 2 || dia == 3 || dia == 4) {
-          if(1940 <= horaClase && horaClase <= 2140) {
-            tipoHorario = 'Nocturno'
-            diasHorarios = 'Lunes-Martes-Miercoles-Jueves'
-            horaHorario = '7:40 p.m a 9:15 p.m'
-            claveHorario = 'NocLuMaMiJu740915'
-  
-            if(horaClase >= 2115) puntualidadClase = 'Salió en tiempo.'
-            else if(horaClase < 2000) puntualidadClase = `Salió ${(2115 - 80) - horaClase} minutos antes.`
-            else if(horaClase < 2100) puntualidadClase = `Salió ${(2115 - 40) - horaClase} minutos antes.`
-            else if(horaClase < 2115) puntualidadClase = `Salió ${2115 - horaClase} minutos antes.`
-          }
-        }
-  
-        else return
-      }
-
-      else return
-    }
-
     const nombreAsistenciaEntrada = nombreAlumno
     const apellidoAsistenciaEntrada = apellidoAlumno
     const claveEstudianteAsistenciaEntrada = claveEstudianteAlumno
     let fechaCompletaAsistenciaEntrada = `${fechaExacto}/${mesExacto}/${año}`
+    const fechaInternaAsistenciaEntrada = `${año}-${mesExacto}-${fechaExacto}`
     const horaAsistenciaEntrada = `${hora}:${minutoExacto}`
     const diaAsistenciaEntrada = dia
     const fechaAsistenciaEntrada = fecha
     const mesAsistenciaEntrada = mes
     const añoAsistenciaEntrada = año
-    const modalidadClase = scannerTipo
+    const modalidadClase = scannerModalidad
     const entradaSalidaAsistencia = entradaSalida
+    const horaAsistenciaMilisegundos = horaExacta
 
     const datos = {
       nombreAsistenciaEntrada, 
       apellidoAsistenciaEntrada,
       claveEstudianteAsistenciaEntrada,
       fechaCompletaAsistenciaEntrada,
+      fechaInternaAsistenciaEntrada,
       horaAsistenciaEntrada,
       diaAsistenciaEntrada,
       fechaAsistenciaEntrada,
       mesAsistenciaEntrada,
       añoAsistenciaEntrada,
-      horaClase,
-      tipoHorario,
       diasHorarios,
       horaHorario,
       claveHorario,
       puntualidadClase,
       modalidadClase,
-      entradaSalidaAsistencia
+      entradaSalidaAsistencia,
+      idiomaAsistenciaEntrada,
+      horaAsistenciaMilisegundos
     }
 
-    enviarMensaje(entradaSalidaAlumno())
+    //enviarMensaje(entradaSalidaAlumno())
 
     const collectionRef = collection(db, 'asistenciasEntrada')
     const docRef = await addDoc(collectionRef, datos)
   }
 
   return (
-    <div className='container-principal-perfil-alumno container-principal-scanner-alumno'>
-      <div className='container-perfil-alumno'>
-        <div className='personal__fondo scanner-alumno-fondo'>
-          <img className='perfil-foto-alumno perfil-foto-scanner-alumno' src={foto} alt="Foto de Perfil del Alumno" />
-        </div>
-        <div className="container-loading-bar">
-          <div className='caja-loading-bar'>
-            <div className="loading-bar">
-              8
+    <div className={`container-principal-perfil-alumno container-principal-scanner-alumno ${nombre !== false ? "" : "contenedor__ambos-lados_centrado"}`}>
+      {
+        nombre !== false ? 
+          <div className='container-perfil-alumno'>
+            <div className='personal__fondo scanner-alumno-fondo'>
+              <img className='perfil-foto-alumno perfil-foto-scanner-alumno' src={foto} alt="Foto de Perfil del Alumno" />
+            </div>
+            <div className='container-bienvenida'>
+              <h2 className='bienvenida__titulo'>Bienvenidos Queridos Alumnos</h2>
+            </div>
+            <div className='container__hora-entrada'>
+              {horaEntrada()}
+            </div>
+            <div className='contenedor__centrado-separacion'>
+              {
+                idiomaAprendizaje.map((idioma, index) => 
+                  <span className='comprobante-mensualidad' key={index}>{comprobarMensualidad(idioma, fechaPago[index])}</span>
+                )
+              }
+            </div>
+            <div className='container-perfil-alumno__informacion'>
+              <div className='perfil-alumno__personal perfil-scaner-alumno__personal'>
+                <h2 className='titulos-2'>Información Personal</h2>
+                {
+                  informacionAlumno.map((info, index) => 
+                    <Indicadores 
+                      titulo={info.titulo} 
+                      respuesta={info.valor} 
+                      key={index} 
+                    />
+                  )
+                }
+              </div>
+              <div className='perfil-alumno__centro-idiomas perfil-scaner-alumno__centro-idiomas'>
+                <h2 className='titulos-2'>Información Centro de Idiomas</h2>
+                <Indicadores titulo={'Clave del Estudiante'} respuesta={claveEstudiante} />
+                <IndicadoresMultiples titulo={'Idiomas de Aprendizaje'} respuesta={idiomaAprendizaje} />
+              </div>
             </div>
           </div>
-        </div>
-        <div className='container-bienvenida'>
-          <h2 className='bienvenida__titulo'>{bienvenida()}</h2>
-        </div>
-        <div className='container__hora-entrada'>
-          {horaEntrada()}
-        </div>
-        <div className='container-perfil-alumno__informacion'>
-          <div className='perfil-alumno__personal perfil-scaner-alumno__personal'>
-            <h2 className='titulos-2'>Información Personal</h2>
-            {
-              informacionAlumno.map((info, index) => <Indicadores titulo={info.titulo} respuesta={info.valor} key={index} />)
-            }
+        : 
+          <div className='contenedor__ambos-lados_centrado'>
+            <img className='icono__alumno-no-encontrado' src={alumnoIcono} alt="Icono de Alumno" />
+            <p className='texto__alumno-no-encontrado'>Alumno no encontrado.</p>
           </div>
-          <div className='perfil-alumno__centro-idiomas perfil-scaner-alumno__centro-idiomas'>
-            <h2 className='titulos-2'>Información Centro de Idiomas</h2>
-            <Indicadores titulo={'Clave del Estudiante'} respuesta={claveEstudiante} />
-            <IndicadoresMultiples titulo={'Idiomas de Aprendizaje'} respuesta={idiomaAprendizaje} />
-            <IndicadoresMultiples titulo={'Nivel MCERLC'} respuesta={nivelIdioma} />
-            <IndicadoresMultiples titulo={'Modalidad de Estudio'} respuesta={modalidadEstudio} />
-            <IndicadoresMultiples titulo={'Fecha de Ingreso'} respuesta={fechaIngreso} />
-            <IndicadoresMultiples titulo={'Fecha de Pago'} respuesta={fechaPago} />
-          </div>
-        </div>
-      </div>
+      }
     </div>
   )
 }

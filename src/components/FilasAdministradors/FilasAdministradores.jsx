@@ -9,15 +9,24 @@ function FilasAdministradores(props) {
   const [ activo, setActivo ] = useState()
 
   useEffect(() => {
-    if(posicion === 0 || posicion % 2 === 0) setTipo('elemento-par')
-    else setTipo('elemento-impar')
-
     if(id === idAdministrador) setActivo('activo')
     else setActivo('inactivo')
-  })
+  }, [idAdministrador])
+
+  useEffect(() => {
+    if(posicion === 0 || posicion % 2 === 0) setTipo('elemento-par')
+    else setTipo('elemento-impar')
+  }, [posicion])
 
   return (
-    <tr className={`fila fila-administrador ${tipo} ${activo}`}  onClick={() => actualizarDatos(datos)}>
+    <tr 
+      className={`fila fila-administrador ${tipo} ${activo}`}  
+      onClick={(e) => {
+        if(activo === "activo") actualizarDatos(false)
+        else actualizarDatos(datos)
+      }
+    }
+    >
       <td className='td-admin'>{nombre}</td>
       <td className='td-admin' >{apellido}</td>
       <td className='td-admin' >{correo}</td>

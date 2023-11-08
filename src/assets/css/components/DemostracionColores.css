@@ -1,0 +1,11 @@
+.container-demostracion-color__caja-color {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.container-demostracion-color__caja-texto {
+  font-family: 'Fredoka', sans-serif;
+}

@@ -1,3 +1,4 @@
+/* Diseño por defecto */
 .campo {
   margin: 24px 0;
 }
@@ -26,6 +27,7 @@
   padding: 5px 20px;
 }
 
+/* Diseño Oscuro */
 .campo-oscuro label {
   color: white;
 }
@@ -34,4 +36,14 @@
   background-color: black;
   outline-color: greenyellow;
   color: white;
+}
+
+/* Diseño Verde claro */
+.campo-verde-claro label {
+  color: black;
+}
+
+.campo-verde-claro input {
+  background-color: #c3f6c0;
+  color: black;
 }

@@ -5,16 +5,18 @@
 .scanner-alumno-fondo {
   box-sizing: border-box;
   background: none;
-  background-color: #c0ffa7;
+  background-color: green;
   margin: 0;
   padding: 8px;
+  height: auto;
 }
 
 .perfil-foto-scanner-alumno {
   box-sizing: border-box;
-  width: 200px;
+  width: 250px;
+  height: 250px;
   padding: 5px;
-  transform: translate(0);
+  transform: none;
 }
 
 .bienvenida__titulo {
@@ -95,6 +97,20 @@
   animation: animateC 2s linear infinite;
 }
 
+.comprobante-mensualidad {
+  padding: 10px 18px;
+  font-size: 18px;
+}
+
+/* Alumno no encontrado */
+.texto__alumno-no-encontrado {
+  box-sizing: border-box;
+  padding: 0 20px;
+  text-align: center;
+  font-size: 50px;
+  font-weight: 600;
+}
+
 @keyframes animateC {
   0% {
     transform: rotate(0deg);
@@ -123,10 +139,26 @@
   .perfil-scaner-alumno__personal, .perfil-scaner-alumno__centro-idiomas {
     width: 100%;
   }
+
+  .icono__alumno-no-encontrado {
+    width: 340px;
+  }
+
+  .texto__alumno-no-encontrado {
+    font-size: 35px;
+  }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 515px) {
   .bienvenida__titulo {
     font-size: 32px;
+  }
+
+  .icono__alumno-no-encontrado {
+    width: 250px;
+  }
+
+  .texto__alumno-no-encontrado {
+    font-size: 25px;
   }
 }

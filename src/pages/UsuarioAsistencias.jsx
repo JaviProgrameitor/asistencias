@@ -10,7 +10,7 @@ import firebaseConfig from '../firebase';
 import UsuarioAsistenciasContenido from "./UsuarioAsistenciasContenido";
 
 function UsuarioAsistencias(props) {
-  const { claveEstudiante } = props.datos
+  const { claveEstudiante } = props.datos[0]
 
   const [ asistenciasEntrada, setAsistenciasEntrada ] = useState([])
 
@@ -27,10 +27,15 @@ function UsuarioAsistencias(props) {
     )
 
   return (
-    <div>
+    <div className="padd-x__20 padd-top__20">
       <h3 className='titulos-1'>Asistencias</h3>
       <Routes>
-        <Route path='/' element={<UsuarioAsistenciasContenido datos={asistenciasEntrada.filter(justi => justi.claveEstudiante === claveEstudiante)} />} />
+        <Route path='/' element={
+            <UsuarioAsistenciasContenido 
+              asistencias={asistenciasEntrada} 
+            />
+          } 
+        />
       </Routes>
     </div>
   )

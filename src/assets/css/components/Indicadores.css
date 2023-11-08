@@ -2,16 +2,26 @@
   min-width: 250px;
 }
 
+
 .informacion-personal__indicador {
   font-size: 30px;
   margin: 0;
   font-family: 'Ubuntu', sans-serif;
-  font-weight: 600;
+  font-weight: 500;
+}
+
+.indicadores__chicos .informacion-personal__indicador {
+  font-size: 22px;
+  font-weight: 500;
 }
 
 .informacion-personal__respuesta {
   font-family: 'Fredoka', sans-serif;
   font-size: 20px;
+}
+
+.indicadores__chicos .informacion-personal__respuesta {
+  font-size: 18px;
 }
 
 @media (max-width: 500px) {

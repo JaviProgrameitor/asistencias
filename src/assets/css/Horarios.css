@@ -1,0 +1,23 @@
+.container-links-horarios {
+  display: flex;
+}
+
+.caja-links-horarios {
+  width: 50%;
+  text-align: center;
+}
+
+.links-horarios {
+  display: block;
+  text-decoration: none;
+  color: black;
+  background-color: greenyellow;
+  font-family: 'Fredoka', sans-serif;
+  width: 100%;
+  padding: 11px 5px;
+}
+
+.links-horarios:hover, .links-horarios_activo {
+  background-color: green;
+  color: white;
+}

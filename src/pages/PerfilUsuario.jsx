@@ -1,18 +1,25 @@
 import '../assets/css/PerfilAlumno.css'
 
-import { useEffect, useState } from 'react';
-import { Link, useResolvedPath } from "react-router-dom"
-import { FaArrowCircleLeft } from 'react-icons/fa'
-import { FcPlanner } from 'react-icons/fc'
-
 import Indicadores from '../components/Indicadores/Indicadores';
 import IndicadoresMultiples from '../components/IndicadoresMultiples/IndicadoresMultiples';
 
 function PerfilUsuario(props) {
-  const url = useResolvedPath("").pathname
-
-  const { datos } = props
-  const { foto, nombre, apellido, numeroTelefono, claveEstudiante, idiomaAprendizaje, modalidadEstudio, fechaPago, id, fechaNacimiento, correo, nivelAcademico, nivelIdioma, fechaIngreso } = props.datos[0]
+  const { 
+    foto, 
+    nombre, 
+    apellido, 
+    numeroTelefono, 
+    claveEstudiante, 
+    idiomaAprendizaje, 
+    modalidadEstudio, 
+    fechaPago, 
+    id, 
+    fechaNacimiento, 
+    correo, 
+    nivelAcademico, 
+    nivelIdioma, 
+    fechaIngreso 
+  } = props.datos[0]
   const informacionAlumno = [
     {
       titulo: 'Nombre Completo',
@@ -37,19 +44,25 @@ function PerfilUsuario(props) {
   ]
 
   return (
-    <div className='container-principal-perfil-alumno'>
+    <div className='container-principal-perfil-alumno padd-x__20 padd-top__20'>
       <div className='container-perfil-alumno'>
         <div className='perfil-alumno__personal'>
           <div className='personal__fondo'>
             <img className='perfil-foto-alumno' src={foto} alt="Foto de Perfil del Alumno" />
           </div>
-          <h2 className='perfil-titulo'>Información Personal</h2>
+          <h2 className='perfil-titulo titulos-2'>Información Personal</h2>
           {
-            informacionAlumno.map((info, index) => <Indicadores titulo={info.titulo} respuesta={info.valor} key={index} />)
+            informacionAlumno.map((info, index) => 
+              <Indicadores 
+                titulo={info.titulo} 
+                respuesta={info.valor} 
+                key={index}
+              />
+            )
           }
         </div>
         <div className='perfil-alumno__centro-idiomas'>
-          <h2 className='perfil-titulo'>Información Centro de Idiomas</h2>
+          <h2 className='perfil-titulo titulos-2'>Información Centro de Idiomas</h2>
           <Indicadores titulo={'Clave del Estudiante'} respuesta={claveEstudiante} />
           <IndicadoresMultiples titulo={'Idiomas de Aprendizaje'} respuesta={idiomaAprendizaje} />
           <IndicadoresMultiples titulo={'Nivel MCERLC'} respuesta={nivelIdioma} />

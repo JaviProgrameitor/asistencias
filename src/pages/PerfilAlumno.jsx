@@ -92,7 +92,7 @@ function PerfilAlumno(props) {
     <div>
       <div className='container-perfil-alumno'>
         <div className='contenedor__todo-principio'>
-          <Link to={'/panel-control/alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
+          <Link to={'/sistema-asistencias/panel-control/alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
         </div>
         <div className='perfil-alumno__personal'>
           <div className='contenedor-_foto-alumno'>
