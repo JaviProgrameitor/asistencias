@@ -4,8 +4,7 @@ import { Link, useResolvedPath } from "react-router-dom"
 import { FaArrowCircleLeft } from 'react-icons/fa'
 
 import FilasAlumnos from '../components/FilasAlumnos/FilasAlumnos'
-
-import TextField from '@mui/material/TextField';
+import BarraBusquedaTexto from '../components/BarraBusquedaTexto/BarraBusquedaTexto';
 
 function TablaJustificantesAlumno(props) {
   const { alumnos, idAlumno, actualizarDatos } = props
@@ -38,12 +37,14 @@ function TablaJustificantesAlumno(props) {
 
   useEffect(() => {
     busqueda(palabraFiltrar)
-  },[palabraFiltrar])
+  },[palabraFiltrar, alumnos])
 
   return (
     <div>
       <div className='contenedor__todo-principio'>
-        <Link to={'/sistema-asistencias/panel-control/justificantes'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
+        <Link to={'/sistema-asistencias/panel-control/justificantes'}>
+          <FaArrowCircleLeft className='flecha-regresar icon-40' />
+        </Link>
       </div>
       <h4 className='titulos-2'>Selecciona un alumno para ver sus justificantes</h4>
       {
@@ -54,15 +55,11 @@ function TablaJustificantesAlumno(props) {
           </div> 
         : <></>
       }
-      <TextField 
-        id="filled-basic" 
-        label="Buscar Alumno" 
-        variant="filled"
-        fullWidth
-        color='success'
+      <BarraBusquedaTexto
+        titulo='Buscar Alumno'
         placeholder='Por nombre, apellido o clave de estudiante'
-        margin='dense'
-        onChange={(e) => setPalabraFiltrar(e.target.value)}
+        valor={palabraFiltrar}
+        cambiarValor={setPalabraFiltrar}
       />
       <div className='contenedor__tabla-scroll tamaño-tabla__250'>
         <table className='tabla'>
@@ -70,10 +67,8 @@ function TablaJustificantesAlumno(props) {
             <tr>
               <th colSpan='1'>Nombre</th>
               <th colSpan='1'>Apellido</th>
-              <th colSpan='1'>Número Telefónico</th>
               <th colSpan='1'>Clave de Estudiante</th>
               <th colSpan='1'>Idioma de Aprendizaje</th>
-              <th colSpan='1'>Modalidad de Estudio</th>
               <th colSpan='1'>Fecha de Pago</th>
             </tr>
           </thead>

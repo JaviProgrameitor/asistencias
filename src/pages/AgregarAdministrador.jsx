@@ -1,8 +1,6 @@
 
 import { useState } from 'react'
 import { FaArrowCircleLeft } from 'react-icons/fa'
-import { IoIosAddCircle } from 'react-icons/io'
-import { TiDelete } from 'react-icons/ti'
 import { Link } from 'react-router-dom'
 
 import Campo from '../components/Campo/Campo'
@@ -10,11 +8,9 @@ import CampoEmail from '../components/CampoEmail/CampoEmail'
 import ListaOpciones from '../components/ListaOpciones/ListaOpciones'
 import FotoAlumno from '../components/FotoAlumno/FotoAlumno'
 import CampoContrasena from '../components/CampoContrasena/CampoContrasena'
+import Loader from '../components/Loader/Loader'
 
-import { initializeApp } from "firebase/app";
-import { addDoc, collection, getFirestore  } from "firebase/firestore";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
-import firebaseConfig from '../firebase';
+import { createDatabase, createStorage, getURLStorage } from '../firebase'
 
 import { Toaster, toast } from 'sonner'
 
@@ -25,10 +21,6 @@ import bcrypt from 'bcryptjs'
 function AgregarAdministrador(props) {
   const { administradores } = props
 
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
-  const st = getStorage(app);
-
   const [ fotoPerfilAdministrador, setFotoPerfilAdministrador ] = useState()
   const [ nombreAdministrador, setNombreAdministrador ] = useState('')
   const [ apellidoAdministrador, setApellidoAdministrador ] = useState('')
@@ -37,6 +29,7 @@ function AgregarAdministrador(props) {
   const [ puestoAdministrador, setPuestoAdministrador ] = useState('')
 
   const [ fotoApoyo, setFotoApoyo ] = useState(false)
+  const [ activarLoader, setActivarLoader ] = useState(false)
 
   const opcionesPuestos = [
     'Director',
@@ -49,12 +42,13 @@ function AgregarAdministrador(props) {
     const adminIns = administradores.filter((ad) => ad.correo === correoAdministrador)
 
     if(adminIns.length <= 0) {
+      setActivarLoader(true)
+
       const identificadorAleatorio = uuid()
-      const metadata = {contentType: 'image/png'};
-      const storageRef = ref(st, `administradores/${identificadorAleatorio}`)
-      await uploadBytesResumable(storageRef, fotoPerfilAdministrador, metadata)
+      const storageRef = `administradores/${identificadorAleatorio}`
+      await createStorage(storageRef, fotoPerfilAdministrador)
   
-      const foto = await getDownloadURL(storageRef)
+      const foto = await getURLStorage(storageRef)
       const idFoto = identificadorAleatorio;
       const nombre = nombreAdministrador
       const apellido = apellidoAdministrador
@@ -71,13 +65,24 @@ function AgregarAdministrador(props) {
         contrasena,
         puesto
       }
-  
-      const collectionRef = collection(db, 'administradores')
-      const docRef = await addDoc(collectionRef, datos)
+
+      await createDatabase('administradores', datos)
+      setActivarLoader(false)
+      reiniciarDatos()
       toast.success('El Administrador ha sido creado con exito')
     }
 
     else toast.error('El correo electrónico ya ha sido utilizado.')
+  }
+
+  function reiniciarDatos() {
+    setFotoPerfilAdministrador()
+    setNombreAdministrador('')
+    setApellidoAdministrador('')
+    setCorreoAdministrador('')
+    setContraenaAdministrador('')
+    setPuestoAdministrador('')
+    setFotoApoyo(false)
   }
 
   return (
@@ -89,7 +94,9 @@ function AgregarAdministrador(props) {
           richColors
         />
         <div className='perfil-alumno__icons'>
-          <Link to={'/sistema-asistencias/panel-control/administradores'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
+          <Link to={'/sistema-asistencias/panel-control/administradores'}>
+            <FaArrowCircleLeft className='flecha-regresar icon-40' />
+          </Link>
         </div>
         <div className='agregar-alumnos__formulario'>
           <form className='formulario' onSubmit={agregarAdmin}>
@@ -139,6 +146,9 @@ function AgregarAdministrador(props) {
           </form>
         </div>
       </div>
+      <Loader
+        activarLoader={activarLoader}
+      />
     </div>
   )
 }

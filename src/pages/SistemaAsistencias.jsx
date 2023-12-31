@@ -6,9 +6,10 @@ import PanelControl from './PanelControl';
 import Usuario from './Usuario';
 import ScannerAlumno from './ScannerAlumno';
 import ScannerEnLinea from './ScannerEnLinea'
+import AdministrarQR from './AdministrarQR';
 
 import { initializeApp } from "firebase/app";
-import { collection, getFirestore, onSnapshot  } from "firebase/firestore";
+import { collection, getFirestore, onSnapshot, orderBy, query } from "firebase/firestore";
 import firebaseConfig from '../firebase';
 
 import { Routes, Route } from 'react-router-dom'
@@ -17,7 +18,7 @@ function SistemaAsistencias(props) {
   const [ admin, setAdmin ] = useState(false)
   const [ usuario, setUsuario ] = useState(false)
   const [ scannerAlumno, setScannerAlumno ] = useState()
-  const [ scannerModalidad, setScannerModalidad ] = useState()
+  const [ scannerClase, setScannerClase ] = useState()
 
   const [ alumnos, setAlumnos ] = useState([])
   const [ alumnosCompleto, setAlumnosCompleto ] = useState([])
@@ -301,24 +302,24 @@ function SistemaAsistencias(props) {
     const pagoAnterior = 
       pagosMensualidades.filter(
         pago => 
-        pago.añoFinMensualidad == año && 
-        pago.mesFinMensualidad == mes && 
+        new Date(pago.finalMensualidad).getFullYear() == año && 
+        new Date(pago.finalMensualidad).getMonth() == mes && 
         pago.idiomaPago == idioma && 
         pago.claveEstudiantePago == claveEstudiante
       )
     const pago = 
       pagosMensualidades.filter(
         pago => 
-        pago.añoPagoMenActual == año && 
-        pago.numeroMesPagoMenActual == mes && 
+        new Date(pago.inicioMensualidad).getFullYear() == año && 
+        new Date(pago.inicioMensualidad).getMonth() == mes && 
         pago.idiomaPago == idioma && 
         pago.claveEstudiantePago == claveEstudiante
       )
     const pagoProximo = 
       pagosMensualidades.filter(
         pago => 
-        pago.añoPagoMenActual == añoProximo && 
-        pago.numeroMesPagoMenActual == mesProximo && 
+        new Date(pago.inicioMensualidad).getFullYear() == añoProximo && 
+        new Date(pago.inicioMensualidad).getMonth() == mesProximo && 
         pago.idiomaPago == idioma && 
         pago.claveEstudiantePago == claveEstudiante
       )
@@ -403,9 +404,11 @@ function SistemaAsistencias(props) {
 
   //Todo: Función para leer los datos de la base de datos
   useEffect(
-    () => 
-    {
-      onSnapshot(collection(db, 'asistenciasEntrada'),(snapshot) => 
+    () => {
+      const collectionRef = collection(db, 'asistenciasEntrada')
+      const q = query(collectionRef, orderBy('fechaAsistenciaEntrada', 'desc'))
+
+      onSnapshot(q,(snapshot) => 
         setAsistenciasEntrada(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
       )
     },[db]
@@ -422,30 +425,41 @@ function SistemaAsistencias(props) {
 
   //Todo: Función para leer los datos de la base de datos
   useEffect(
-    () => 
-      onSnapshot(collection(db, 'alumnos'),(snapshot) => 
+    () => {
+      const collectionRef = collection(db, 'alumnos')
+      const q = query(collectionRef, orderBy('nombre', 'asc'))
+
+      onSnapshot(q,(snapshot) => 
         setAlumnos(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      [db]
+      )
+    },[db]
   )
 
   //Todo: Función para leer los datos de la base de datos
   useEffect(
-    () => 
-      onSnapshot(collection(db, 'administradores'),(snapshot) => 
+    () => {
+      const collectionRef = collection(db, 'administradores')
+      const q = query(collectionRef, orderBy('nombre', 'asc'))
+
+      onSnapshot(q,(snapshot) => 
         setAdministradores(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      [db]
+      )
+    },[db]
   )
 
   //Todo: Función para leer los datos de la base de datos
   useEffect(
-    () => 
-      onSnapshot(collection(db, 'pagosMensualidades'),(snapshot) => 
+    () => {
+      const collectionRef = collection(db, 'pagosMensualidades')
+      const q = query(collectionRef, orderBy('inicioMensualidad', 'desc'))
+
+      onSnapshot(q,(snapshot) => 
         setPagosMensualidades(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
+      )
+    },
       [db]
   )
+
   useEffect(() => {
     nuevosAlumnos()
   }, [pagosMensualidades, alumnos])
@@ -459,12 +473,12 @@ function SistemaAsistencias(props) {
             alumnos={alumnos}
             clases={clases.filter(clase => clase.modalidadClase == 'Presencial')}
             administradores={administradores}
-            setScannerModalidad={setScannerModalidad} 
             setAdmin={setAdmin} 
             admin={admin} 
             setUsuario={setUsuario} 
             usuario={usuario}
-            setScannerAlumno={setScannerAlumno} 
+            setScannerAlumno={setScannerAlumno}
+            setScannerClase={setScannerClase}
           />
         } 
       />
@@ -488,6 +502,8 @@ function SistemaAsistencias(props) {
           <Usuario 
             datos={usuario} 
             setUsuario={setUsuario} 
+            asistenciasEntrada={asistenciasEntrada}
+            pagosMensualidades={pagosMensualidades}
           />
         } 
       />
@@ -497,8 +513,8 @@ function SistemaAsistencias(props) {
           <ScannerEnLinea 
             alumnos={alumnos}
             clases={clases.filter(clase => clase.modalidadClase == 'En linea')}
-            setScannerModalidad={setScannerModalidad}
             setScannerAlumno={setScannerAlumno}
+            setScannerClase={setScannerClase}
           />
         } 
       /> 
@@ -506,15 +522,19 @@ function SistemaAsistencias(props) {
         path='/scanner-alumno' 
         element={
           <ScannerAlumno 
-            asistenciasEntrada={asistenciasEntrada} 
-            scannerModalidad={scannerModalidad} 
-            setScannerModalidad={setScannerModalidad}
+            asistenciasEntrada={asistenciasEntrada}
             scannerAlumno={scannerAlumno} 
             setScannerAlumno={setScannerAlumno}
             clases={clases}
             pagosMensualidades={pagosMensualidades}
+            scannerClase={scannerClase}
+            setScannerClase={setScannerClase}
           />
         }
+      />
+      <Route
+        path='/administrar-qr'
+        element={<AdministrarQR />}
       />
       <Route 
         path='*' 

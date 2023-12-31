@@ -4,19 +4,17 @@ import { useState } from 'react'
 import { FaArrowCircleLeft } from 'react-icons/fa'
 import { IoIosAddCircle } from 'react-icons/io'
 import { TiDelete } from 'react-icons/ti'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import Campo from '../components/Campo/Campo'
 import CampoFecha from '../components/CampoFecha/CampoFecha'
 import CampoEmail from '../components/CampoEmail/CampoEmail'
 import ListaOpciones from '../components/ListaOpciones/ListaOpciones'
 import FotoAlumno from '../components/FotoAlumno/FotoAlumno'
-import CampoContrasena from '../components/CampoContrasena/CampoContrasena'
+import CampoContrasena from '../components/CampoContrasena/CampoContrasena';
+import Loader from '../components/Loader/Loader';
 
-import { initializeApp } from "firebase/app";
-import { addDoc, collection, getFirestore  } from "firebase/firestore";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
-import firebaseConfig from '../firebase';
+import { createDatabase, createStorage, getURLStorage } from '../firebase'
 
 import { Toaster, toast } from 'sonner'
 
@@ -26,11 +24,6 @@ import bcrypt from 'bcryptjs'
 
 function AgregarAlumno(props) {
   const { alumnos, idiomasImpartidos } = props
-
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
-  const st = getStorage(app);
-  const navigate = useNavigate()
 
   const [ fotoPerfilAlumno, setFotoPerfilAlumno ] = useState()
   const [ nombreAlumno, setNombreAlumno ] = useState('')
@@ -65,18 +58,14 @@ function AgregarAlumno(props) {
   const [ fotoApoyoCurp, setFotoApoyoCurp ] = useState(false)
   const [ fotoApoyoComprobantePagoInicial, setFotoApoyoComprobantePagoInicial ] = useState(false)
 
+  const [ activarLoader, setActivarLoader ] = useState(false)
+
 
   const opcionesNivelesAcademicos = [
     'Primaria',
     'Secundaria',
     'Bachillerato',
     'Educación Superior'
-  ]
-
-  const opcionesIdiomas = [
-    'Inglés',
-    'Francés',
-    'Aleman'
   ]
 
   const opcionesModalidades = [
@@ -96,11 +85,6 @@ function AgregarAlumno(props) {
 
   const opcionesFechasPagos = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
-  ]
-
-  const opcionesGenero = [
-    'Hombre',
-    'Mujer'
   ]
 
   function agregarIdioma() {
@@ -140,9 +124,39 @@ function AgregarAlumno(props) {
     funcion(nuevosValores)
   }
 
-  function asignarValor(valor) {
+  function reiniciarDatos() {
+    setFotoPerfilAlumno()
+    setNombreAlumno('')
+    setApellidoAlumno('')
+    setFechaNacimientoAlumno('')
+    setCorreoAlumno('')
+    setContrasenaAlumno('')
+    setNumeroTelefonoAlumno('')
+    setNivelAcademicoAlumno('')
+    setCodigoPostalAlumno('')
+    setPaisAlumno('')
+    setEstadoAlumno('')
     setMunicipioAlumno('')
-    valor === null ? setEstadoAlumno('') : setEstadoAlumno(valor)
+    setColoniaAlumno('')
+    setCalleAlumno('')
+    setNumeroExteriorAlumno('')
+    setFotoActaNacimiento('')
+    setFotoIne('')
+    setFotoCurp('')
+    setFotoComprobantePagoInicial('')
+
+    setClaveEstudianteAlumno('')
+    setIdiomaAprendizajeAlumno([''])
+    setNivelIdiomaAlumno([''])
+    setModalidadEstudioAlumno([''])
+    setFechaIngresoAlumno([''])
+    setFechaPagoAlumno([''])
+
+    setFotoApoyo(false)
+    setFotoApoyoActaNacimiento(false)
+    setFotoApoyoIne(false)
+    setFotoApoyoCurp(false)
+    setFotoApoyoComprobantePagoInicial(false)
   }
 
   async function datosEnviar(e) {
@@ -151,37 +165,34 @@ function AgregarAlumno(props) {
     const alumnosIns = alumnos.filter((al) => al.correo === correoAlumno)
 
     if(alumnosIns.length <= 0) {
+      setActivarLoader(true)
+
       const identificadorAleatorio = uuid()
       const identificadorAleatorio2 = uuid()
       const identificadorAleatorio3 = uuid()
       const identificadorAleatorio4 = uuid()
       const identificadorAleatorio5 = uuid()
 
-      const metadata = {contentType: fotoPerfilAlumno.type};
-      const storageRef = ref(st, `alumnos/${identificadorAleatorio}`)
-      await uploadBytesResumable(storageRef, fotoPerfilAlumno, metadata)
+      const storageRef = `alumnos/${identificadorAleatorio}`
+      await createStorage(storageRef, fotoPerfilAlumno)
 
-      const metadataActa = {contentType: fotoActaNacimiento.type};
-      const storageRefActa = ref(st, `documentos/${identificadorAleatorio2}`)
-      await uploadBytesResumable(storageRefActa, fotoActaNacimiento, metadataActa)
+      const storageRefActa = `documentos/${identificadorAleatorio2}`
+      await createStorage(storageRefActa, fotoActaNacimiento)
 
-      const metadataIne = {contentType: fotoIne.type};
-      const storageRefIne = ref(st, `documentos/${identificadorAleatorio3}`)
-      await uploadBytesResumable(storageRefIne, fotoIne, metadataIne)
+      const storageRefIne = `documentos/${identificadorAleatorio3}`
+      await createStorage(storageRefIne, fotoIne)
 
-      const metadataCurp = {contentType: fotoCurp.type};
-      const storageRefCurp = ref(st, `documentos/${identificadorAleatorio4}`)
-      await uploadBytesResumable(storageRefCurp, fotoCurp, metadataCurp)
+      const storageRefCurp = `documentos/${identificadorAleatorio4}`
+      await createStorage(storageRefCurp, fotoCurp)
 
-      const metadataComPagoIni = {contentType: fotoComprobantePagoInicial.type};
-      const storageRefComPagoIni = ref(st, `documentos/${identificadorAleatorio5}`)
-      await uploadBytesResumable(storageRefComPagoIni, fotoComprobantePagoInicial, metadataComPagoIni)
+      const storageRefComPagoIni = `documentos/${identificadorAleatorio5}`
+      await createStorage(storageRefComPagoIni, fotoComprobantePagoInicial)
   
-      const foto = await getDownloadURL(storageRef)
-      const actaNacimiento = await getDownloadURL(storageRefActa)
-      const ine = await getDownloadURL(storageRefIne)
-      const curp = await getDownloadURL(storageRefCurp)
-      const comprobantePagoInicial = await getDownloadURL(storageRefComPagoIni)
+      const foto = await getURLStorage(storageRef)
+      const actaNacimiento = await getURLStorage(storageRefActa)
+      const ine = await getURLStorage(storageRefIne)
+      const curp = await getURLStorage(storageRefCurp)
+      const comprobantePagoInicial = await getURLStorage(storageRefComPagoIni)
       const idFoto = identificadorAleatorio;
       const idActaNacimiento = identificadorAleatorio2
       const idIne = identificadorAleatorio3
@@ -240,11 +251,11 @@ function AgregarAlumno(props) {
         fechaIngreso,
         fechaPago
       }
-  
-      const collectionRef = collection(db, 'alumnos')
-      const docRef = await addDoc(collectionRef, datos)
+
+      await createDatabase('alumnos', datos)
+      setActivarLoader(false)
+      reiniciarDatos()
       toast.success('El Alumno ha sido creado con exito')
-      //navigate('/sistema-asistencias/panel-control/alumnos')
     }
 
     else toast.error('El correo electrónico ya ha sido utilizado.')
@@ -274,7 +285,7 @@ function AgregarAlumno(props) {
               tipo={false}
               foto={fotoApoyo}
               setFoto={setFotoApoyo}
-              required={true}
+              required
               classInput='imagen__foto-perfil'
             />
             <Campo 
@@ -369,7 +380,7 @@ function AgregarAlumno(props) {
               tipo={false}
               foto={fotoApoyoActaNacimiento}
               setFoto={setFotoApoyoActaNacimiento}
-              required={false}
+              required
               classInput='imagen__acta-nacimiento'
             />
             <FotoAlumno 
@@ -380,7 +391,7 @@ function AgregarAlumno(props) {
               tipo={false}
               foto={fotoApoyoIne}
               setFoto={setFotoApoyoIne}
-              required={false}
+              required
               classInput='imagen__ine'
             />
             <FotoAlumno 
@@ -391,7 +402,7 @@ function AgregarAlumno(props) {
               tipo={false}
               foto={fotoApoyoCurp}
               setFoto={setFotoApoyoCurp}
-              required={false}
+              required
               classInput='imagen__curp'
             />
             <FotoAlumno 
@@ -402,7 +413,7 @@ function AgregarAlumno(props) {
               tipo={false}
               foto={fotoApoyoComprobantePagoInicial}
               setFoto={setFotoApoyoComprobantePagoInicial}
-              required={false}
+              required
               classInput='imagen__comprobante-pago-inicial'
             />
             <h4 className='formulario__subtitulo'>Información del Centro de Idiomas</h4>
@@ -474,6 +485,9 @@ function AgregarAlumno(props) {
           </form>
         </div>
       </div>
+      <Loader
+        activarLoader={activarLoader}
+      />
     </div>
   )
 }

@@ -7,13 +7,12 @@ import { FcStackOfPhotos } from 'react-icons/fc'
 import { AiFillCheckCircle } from 'react-icons/ai'
 
 import FilasJustificantes from "../components/FilasJustificantes/FilasJustificantes"
+import Loader from '../components/Loader/Loader'
+import BarraBusquedaTexto from '../components/BarraBusquedaTexto/BarraBusquedaTexto';
 
-import TextField from '@mui/material/TextField';
 import Modal from '@mui/material/Modal';
 
-import { doc, deleteDoc, getFirestore, addDoc, collection } from "firebase/firestore";
-import { initializeApp } from "firebase/app";
-import firebaseConfig from '../firebase';
+import { createDatabase, deleteDatabase } from '../firebase'
 
 import emailjs from '@emailjs/browser';
 
@@ -27,9 +26,8 @@ function TablaJustificantes(props) {
   const [ filtrarJustificantes, setFiltrarJustificantes ] = useState(justificantes)
   const [ modalEstado, setModalEstado ] = useState(false)
   const [ palabraFiltrar, setPalabraFiltrar ] = useState('')
-  
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
+  const [ activarLoader, setActivarLoader ] = useState(false)
+
   const url = useResolvedPath("").pathname
 
   //Todo: Función para buscar JUSTIFICANTES por medio de nombres o apellidos
@@ -57,28 +55,30 @@ function TablaJustificantes(props) {
   }
 
   async function aceptarJustificacion() {
-    const docRef = doc(db, 'justificantesEnEspera', justificanteSeleccionado.id)
-    await deleteDoc(docRef)
+    setActivarLoader(true)
+
+    await deleteDatabase('justificantesEnEspera', justificanteSeleccionado.id)
 
     const nombreJustificante = justificanteSeleccionado.nombreJustificante
     const apellidoJustificante = justificanteSeleccionado.apellidoJustificante
     const claveEstudianteJustificante = justificanteSeleccionado.claveEstudianteJustificante
     const numeroTelefonoJustificante = justificanteSeleccionado.numeroTelefonoJustificante
+    const correoJustificante = justificanteSeleccionado.correoJustificante
+    const fechaInternaJustificante = justificanteSeleccionado.fechaInternaJustificante
     const fechaEmisionJustificante = justificanteSeleccionado.fechaEmisionJustificante
-    const horaEmisionJustificante = justificanteSeleccionado.horaEmisionJustificante
     const fechaJustificante = justificanteSeleccionado.fechaJustificante
     const motivoJustificante = justificanteSeleccionado.motivoJustificante
     const explicacionJustificante = justificanteSeleccionado.explicacionJustificante
-    const correoJustificante = justificanteSeleccionado.correoJustificante
     const fotoJustificante = justificanteSeleccionado.fotoJustificante
     const idFotoJustificante = justificanteSeleccionado.idFotoJustificante
+
     const datosMensaje = {
       nombre__alumno: `${nombreJustificante} ${apellidoJustificante}`,
       from_name: correoJustificante,
       estatus: 'ha sido aprobado.',
-      fecha__emision: fechaEmisionJustificante,
-      hora__emision: horaEmisionJustificante,
-      fecha__justificar: fechaJustificante,
+      fecha__emision: new Date(fechaEmisionJustificante).toLocaleDateString(),
+      hora__emision: `${new Date(fechaEmisionJustificante).getHours()}:${new Date(fechaEmisionJustificante).getMinutes()}`,
+      fecha__justificar: new Date(fechaJustificante).toLocaleDateString(),
       motivo__justificante: motivoJustificante,
       explicacion__justificante: explicacionJustificante
     }
@@ -90,13 +90,13 @@ function TablaJustificantes(props) {
       apellidoJustificante,
       claveEstudianteJustificante,
       numeroTelefonoJustificante,
+      fechaInternaJustificante,
       fechaEmisionJustificante,
-      horaEmisionJustificante,
       fechaJustificante,
       motivoJustificante,
       explicacionJustificante,
-      correoJustificante,
       fotoJustificante,
+      correoJustificante,
       idFotoJustificante
     }
 
@@ -104,42 +104,44 @@ function TablaJustificantes(props) {
 
     else if(correoJustificante.includes('@gmail.com')) serviceId = 'service_c3doz7i'
 
-    emailjs.send(serviceId, 'template_tje7ak6', datosMensaje, 'EjqKxLfA5pfR3G7aa')
-      .then((result) => {
-          console.log(result.text);
-      }, (error) => {
-          console.log(error.text);
-      });
+    // emailjs.send(serviceId, 'template_tje7ak6', datosMensaje, 'EjqKxLfA5pfR3G7aa')
+    //   .then((result) => {
+    //     console.log(result.text);
+    //   }, (error) => {
+    //     console.log(error.text);
+    //   });
 
-    const collectionRef = collection(db, 'justificantesAceptados')
-    const docRefAdd = await addDoc(collectionRef, datos)
+    await createDatabase('justificantesAceptados', datos)
     cambiarValor(false)
+    setActivarLoader(false)
     toast.success('El Justificante ha sido aceptado con exito.')
   }
 
   async function rechazarJustificacion() {
-    const docRef = doc(db, 'justificantesEnEspera', justificanteSeleccionado.id)
-    await deleteDoc(docRef)
+    setActivarLoader(true)
+
+    await deleteDatabase('justificantesEnEspera', justificanteSeleccionado.id)
 
     const nombreJustificante = justificanteSeleccionado.nombreJustificante
     const apellidoJustificante = justificanteSeleccionado.apellidoJustificante
     const claveEstudianteJustificante = justificanteSeleccionado.claveEstudianteJustificante
     const numeroTelefonoJustificante = justificanteSeleccionado.numeroTelefonoJustificante
+    const correoJustificante = justificanteSeleccionado.correoJustificante
+    const fechaInternaJustificante = justificanteSeleccionado.fechaInternaJustificante
     const fechaEmisionJustificante = justificanteSeleccionado.fechaEmisionJustificante
-    const horaEmisionJustificante = justificanteSeleccionado.horaEmisionJustificante
     const fechaJustificante = justificanteSeleccionado.fechaJustificante
     const motivoJustificante = justificanteSeleccionado.motivoJustificante
     const explicacionJustificante = justificanteSeleccionado.explicacionJustificante
-    const correoJustificante = justificanteSeleccionado.correoJustificante
     const fotoJustificante = justificanteSeleccionado.fotoJustificante
     const idFotoJustificante = justificanteSeleccionado.idFotoJustificante
+
     const datosMensaje = {
       nombre__alumno: `${nombreJustificante} ${apellidoJustificante}`,
       from_name: correoJustificante,
       estatus: 'ha sido rechazado.',
-      fecha__emision: fechaEmisionJustificante,
-      hora__emision: horaEmisionJustificante,
-      fecha__justificar: fechaJustificante,
+      fecha__emision: new Date(fechaEmisionJustificante).toLocaleDateString(),
+      hora__emision: `${new Date(fechaEmisionJustificante).getHours()}:${new Date(fechaEmisionJustificante).getMinutes()}`,
+      fecha__justificar: new Date(fechaJustificante).toLocaleDateString(),
       motivo__justificante: motivoJustificante,
       explicacion__justificante: explicacionJustificante
     }
@@ -151,13 +153,13 @@ function TablaJustificantes(props) {
       apellidoJustificante,
       claveEstudianteJustificante,
       numeroTelefonoJustificante,
+      fechaInternaJustificante,
       fechaEmisionJustificante,
-      horaEmisionJustificante,
       fechaJustificante,
       motivoJustificante,
       explicacionJustificante,
-      correoJustificante,
       fotoJustificante,
+      correoJustificante,
       idFotoJustificante
     }
 
@@ -165,16 +167,16 @@ function TablaJustificantes(props) {
 
     else if(correoJustificante.includes('@gmail.com')) serviceId = 'service_c3doz7i'
 
-    emailjs.send(serviceId, 'template_tje7ak6', datosMensaje, 'EjqKxLfA5pfR3G7aa')
-      .then((result) => {
-          console.log(result.text);
-      }, (error) => {
-          console.log(error.text);
-      });
+    // emailjs.send(serviceId, 'template_tje7ak6', datosMensaje, 'EjqKxLfA5pfR3G7aa')
+    //   .then((result) => {
+    //       console.log(result.text);
+    //   }, (error) => {
+    //       console.log(error.text);
+    //   });
 
-    const collectionRef = collection(db, 'justificantesRechazados')
-    const docRefAdd = await addDoc(collectionRef, datos)
+    await createDatabase('justificantesRechazados', datos)
     cambiarValor(false)
+    setActivarLoader(false)
     toast.success('El Justificante ha sido rechazado con exito.')
   }
 
@@ -207,15 +209,11 @@ function TablaJustificantes(props) {
           <span>Ver todos los justificantes</span>
         </Link>
       </div>
-      <TextField 
-        id="filled-basic" 
-        label="Buscar Justificante" 
-        variant="filled"
-        fullWidth
-        color='success'
-        placeholder='Por nombre del alumno, apellido o clave de estudiante'
-        margin='dense'
-        onChange={(e) => setPalabraFiltrar(e.target.value)}
+      <BarraBusquedaTexto
+        titulo='Buscar Alumno'
+        placeholder='Por nombre, apellido o clave de estudiante'
+        valor={palabraFiltrar}
+        cambiarValor={setPalabraFiltrar}
       />
       {
         fotoPrueba ?
@@ -244,7 +242,6 @@ function TablaJustificantes(props) {
               <tr>
                 <th colSpan='1'>Nombre</th>
                 <th colSpan='1'>Apellido</th>
-                <th colSpan='1'>Clave de Estudiante</th>
                 <th colSpan='1'>Hora de Emisión</th>
                 <th colSpan='1'>Fecha de Emisión</th>
                 <th colSpan='1'>Fecha a Justificar</th>
@@ -268,14 +265,20 @@ function TablaJustificantes(props) {
         </table>
       </div>
       <Modal
+        className='modal__superior'
         open={modalEstado}
         onClose={() => setModalEstado(false)}
       >
-        <div className='caja-foto-prueba'>
-          <TiDelete className='foto-prueba__icon' onClick={() => setModalEstado(false)} />
-          <img className='foto-prueba' src={fotoPrueba} alt="" />
-        </div>
+        <img 
+          className='foto-prueba centrar__contenido' 
+          src={fotoPrueba} 
+          alt="Imagen del justificante"
+          onClick={() => setModalEstado(false)}
+          />
       </Modal>
+      <Loader
+        activarLoader={activarLoader}
+      />
     </div>
   )
 }

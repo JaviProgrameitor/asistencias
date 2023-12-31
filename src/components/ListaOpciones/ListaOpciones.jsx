@@ -10,7 +10,7 @@ function ListaOpciones(props) {
         <option value="" disabled defaultValue="" hidden>{placeholder}</option>
         {
           opciones.map((opcion, index) => {
-          return <option key={index} value={opcion}>{opcion}</option>
+            return <option key={index} value={opcion}>{opcion}</option>
           })
         }
       </select>

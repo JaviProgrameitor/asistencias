@@ -4,8 +4,7 @@ import { Link, useResolvedPath } from "react-router-dom"
 import { FaArrowCircleLeft } from 'react-icons/fa'
 
 import FilasAlumnos from "../components/FilasAlumnos/FilasAlumnos"
-
-import TextField from '@mui/material/TextField';
+import BarraBusquedaTexto from '../components/BarraBusquedaTexto/BarraBusquedaTexto';
 
 function TablaAsistenciasAlumnos(props) {
   const { alumnos, idAlumno, actualizarDatos } = props
@@ -53,15 +52,11 @@ function TablaAsistenciasAlumnos(props) {
         </div> 
         : <></>
       }
-      <TextField 
-        id="filled-basic" 
-        label="Buscar Alumno" 
-        variant="filled"
-        fullWidth
-        color='success'
+      <BarraBusquedaTexto
+        titulo='Buscar Alumno'
         placeholder='Por nombre, apellido o clave de estudiante'
-        margin='dense'
-        onChange={(e) => setPalabraFiltrar(e.target.value)}
+        valor={palabraFiltar}
+        cambiarValor={setPalabraFiltrar}
       />
       <div className='contenedor__tabla-scroll tamaño-tabla__300'>
         <table className='tabla'>
@@ -69,10 +64,8 @@ function TablaAsistenciasAlumnos(props) {
             <tr>
               <th colSpan='1'>Nombre</th>
               <th colSpan='1'>Apellido</th>
-              <th colSpan='1'>Número Telefónico</th>
               <th colSpan='1'>Clave de Estudiante</th>
               <th colSpan='1'>Idioma de Aprendizaje</th>
-              <th colSpan='1'>Modalidad de Estudio</th>
               <th colSpan='1'>Fecha de Pago</th>
             </tr>
           </thead>

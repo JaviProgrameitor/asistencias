@@ -11,18 +11,15 @@ import IndicadoresMultiples from '../components/IndicadoresMultiples/Indicadores
 
 import emailjs from '@emailjs/browser';
 
-import { initializeApp } from "firebase/app";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
-import firebaseConfig from '../firebase';
+import { createDatabase } from '../firebase';
 
 function ScannerAlumno(props) {
   const {
-    setScannerAlumno, 
-    scannerModalidad, 
-    setScannerModalidad, 
-    asistenciasEntrada, 
-    clases,
-    pagosMensualidades
+    setScannerAlumno,
+    asistenciasEntrada,
+    pagosMensualidades,
+    setScannerClase,
+    scannerClase
   } = props
 
   const { 
@@ -44,9 +41,6 @@ function ScannerAlumno(props) {
       valor: correo
     }
   ]
-
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
 
   const navigate = useNavigate()
 
@@ -81,11 +75,14 @@ function ScannerAlumno(props) {
   const [ claveEstudianteAlumno, setClaveEstudianteAlumno ] = useState(claveEstudiante)
   const [ correoAlumno, setCorreoAlumno ] = useState(correo)
 
-  // setTimeout(() => {
-  //   if(nombre !== false) asistenciaEntrada()
-  //   setScannerModalidad('')
-  //   navigate('/sistema-asistencias')
-  // }, 3000);
+  setTimeout(() => {
+    asistenciaEntrada()
+    setScannerClase()
+    setScannerAlumno()
+    navigate('/sistema-asistencias')
+  }, 10000);
+
+  //Todo: Calcular mensualidad
 
   function calcularNumeroPorMes(valor) {
     if(valor === 'Enero') return 0
@@ -327,7 +324,7 @@ function ScannerAlumno(props) {
   function comprobarMensualidad(idioma, idiomaFecha) {
     let colorMensualidad = false;
 
-    const date = new Date(1698384600000)
+    const date = new Date(1699489800000)
     const año = date.getFullYear()
     const mes = date.getMonth()
     const fecha = date.getDate()
@@ -403,81 +400,56 @@ function ScannerAlumno(props) {
 
   //Todo: Calcular Asistencia
 
-  //Función para calcular la asistencia, saber la hora en la que asistió y la clase
-  function calcularAsistencia(accion, hora, modalidad) {
-    const date = new Date(1698384600000);
+  //Función para calcular la puntualidad
+  function puntualidadAlumno(accion, hora) {
+    const date = new Date(1700013600000);
     const año = date.getFullYear()
     const mes = new Date(date.getTime() + mesMilisegundos).getMonth()
     const fecha = date.getDate()
-    let dia = date.getDay()
 
-    for(let i = 0; i < clases.length; i++) {
-      let horaInicioPrueba = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaInicioClase}`).getTime()
-      let horaFinalPrueba = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaFinalClase}`).getTime();
-      let horaInicio;
-      let horaFinal;
-      let puntualidad;
-      
-      if(horaInicioPrueba > horaFinalPrueba) {
-        let restoInicio = hora - horaInicioPrueba;
-        let restoFinal = hora - horaFinalPrueba;
+    let horaInicioPrueba = new Date(`${mes} ${fecha}, ${año} ${scannerClase.horaInicioClase}`).getTime()
+    let horaFinalPrueba = new Date(`${mes} ${fecha}, ${año} ${scannerClase.horaFinalClase}`).getTime();
+    let horaInicio;
+    let horaFinal;
+    let puntualidadClase;
+    
+    if(horaInicioPrueba > horaFinalPrueba) {
+      let restoInicio = hora - horaInicioPrueba;
+      let restoFinal = hora - horaFinalPrueba;
 
-        if(restoInicio < 0 && restoFinal < 0) {
-          restoInicio = restoInicio * -1;
-          restoFinal = restoFinal * -1;
-        }
+      if(restoInicio < 0 && restoFinal < 0) {
+        restoInicio = restoInicio * -1;
+        restoFinal = restoFinal * -1;
+      }
 
-        if(restoInicio < restoFinal) {
-          horaInicio = horaInicioPrueba;
-          horaFinal = horaFinalPrueba + diaMilisegundos;
-        }
-
-        else {
-          horaInicio = horaInicioPrueba - diaMilisegundos;
-          horaFinal = horaFinalPrueba;
-        }
+      if(restoInicio < restoFinal) {
+        horaInicio = horaInicioPrueba;
+        horaFinal = horaFinalPrueba + diaMilisegundos;
       }
 
       else {
-        horaInicio = horaInicioPrueba;
+        horaInicio = horaInicioPrueba - diaMilisegundos;
         horaFinal = horaFinalPrueba;
       }
+    }
 
-      if(
-          accion == 'Entrada' &&
-          clases[i].modalidadClase == modalidad && 
-          clases[i].diasNumeroClase.includes(dia) && 
-          (horaInicio - minutos30) < hora && hora < horaFinal
-        ) {
-        if(hora <= horaInicio) puntualidad = 'Llegó a tiempo.'
-        else puntualidad = `Llegó ${Math.round((hora - horaInicio) / minutoMilisegundos)} minutos tarde.`
+    else {
+      horaInicio = horaInicioPrueba;
+      horaFinal = horaFinalPrueba;
+    }
 
-        return {
-          diasHorarios : clases[i].diasClase,
-          horaHorario : `${clases[i].horaInicioClase} a ${clases[i].horaFinalClase}`,
-          claveHorario : clases[i].claveClase,
-          puntualidadClase: puntualidad,
-          idiomaAsistenciaEntrada: clases[i].idiomaClase
-        }
-      }
+    if(accion == 'Entrada') {
+      if(hora <= horaInicio) puntualidadClase = 'Llegó a tiempo.'
+      else puntualidadClase = `Llegó ${Math.round((hora - horaInicio) / minutoMilisegundos)} minutos tarde.`
 
-      else if(
-        accion == 'Salida' &&
-        clases[i].modalidadClase == modalidad && 
-        clases[i].diasNumeroClase.includes(dia) && 
-        horaInicio < hora && hora < (horaFinal + minutos30)
-      ) {
-        if(hora >= horaFinal) puntualidad = 'Salió en tiempo.'
-        else puntualidad = `Salió ${Math.round((horaFinal - hora) / minutoMilisegundos)} minutos antes.`
+      return puntualidadClase
+    }
 
-        return {
-          diasHorarios : clases[i].diasClase,
-          horaHorario : `${clases[i].horaInicioClase} a ${clases[i].horaFinalClase}`,
-          claveHorario : clases[i].claveClase,
-          puntualidadClase: puntualidad,
-          idiomaAsistenciaEntrada: clases[i].idiomaClase
-        }
-      }
+    else if(accion == 'Salida') {
+      if(hora >= horaFinal) puntualidadClase = 'Salió en tiempo.'
+      else puntualidadClase = `Salió ${Math.round((horaFinal - hora) / minutoMilisegundos)} minutos antes.`
+
+      return puntualidadClase
     }
   }
 
@@ -513,68 +485,60 @@ function ScannerAlumno(props) {
   //Función para saber si es entrada o salida del alumno
   function entradaSalidaAlumno(hora) {
     let asistencia = []
-    const date = new Date(1698384600000);
+    const date = new Date(1700013600000);
     const año = date.getFullYear()
     const mes = new Date(date.getTime() + mesMilisegundos).getMonth()
     const fecha = date.getDate()
-    let dia = date.getDay()
 
-    for(let i = 0; i < clases.length; i++) {
-      let horaInicioPrueba = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaInicioClase}`).getTime() - minutos30
-      let horaFinalPrueba = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaFinalClase}`).getTime() + minutos30;
-      let horaInicio;
-      let horaFinal;
-      
-      if(horaInicioPrueba > horaFinalPrueba) {
-        let restoInicio = hora - horaInicioPrueba;
-        let restoFinal = hora - horaFinalPrueba;
+    let horaInicioPrueba = new Date(`${mes} ${fecha}, ${año} ${scannerClase.horaInicioClase}`).getTime() - minutos30
+    let horaFinalPrueba = new Date(`${mes} ${fecha}, ${año} ${scannerClase.horaFinalClase}`).getTime() + minutos30;
+    let horaInicio;
+    let horaFinal;
+    
+    if(horaInicioPrueba > horaFinalPrueba) {
+      let restoInicio = hora - horaInicioPrueba;
+      let restoFinal = hora - horaFinalPrueba;
 
-        if(restoInicio < 0 && restoFinal < 0) {
-          restoInicio = restoInicio * -1;
-          restoFinal = restoFinal * -1;
-        }
+      if(restoInicio < 0 && restoFinal < 0) {
+        restoInicio = restoInicio * -1;
+        restoFinal = restoFinal * -1;
+      }
 
-        if(restoInicio < restoFinal) {
-          horaInicio = horaInicioPrueba;
-          horaFinal = horaFinalPrueba + diaMilisegundos;
-        }
-
-        else {
-          horaInicio = horaInicioPrueba - diaMilisegundos;
-          horaFinal = horaFinalPrueba;
-        }
+      if(restoInicio < restoFinal) {
+        horaInicio = horaInicioPrueba;
+        horaFinal = horaFinalPrueba + diaMilisegundos;
       }
 
       else {
-        horaInicio = horaInicioPrueba;
+        horaInicio = horaInicioPrueba - diaMilisegundos;
         horaFinal = horaFinalPrueba;
-      }
-
-      if(
-        clases[i].diasNumeroClase.includes(dia) && 
-        horaInicio < hora && hora < horaFinal
-      ) {
-        asistencia = asistenciasEntrada.filter((a) => 
-          a.claveEstudianteAsistenciaEntrada == claveEstudianteAlumno && 
-          horaInicio < a.horaAsistenciaMilisegundos && a.horaAsistenciaMilisegundos < horaFinal &&
-          a.claveHorario == clases[i].claveClase
-        )
       }
     }
 
-    return (asistencia.length % 2 == 0)
+    else {
+      horaInicio = horaInicioPrueba;
+      horaFinal = horaFinalPrueba;
+    }
+
+    asistencia = asistenciasEntrada.filter((a) => 
+      a.claveEstudianteAsistenciaEntrada == claveEstudianteAlumno && 
+      horaInicio < a.horaAsistenciaMilisegundos && a.horaAsistenciaMilisegundos < horaFinal &&
+      a.claveHorario == scannerClase.claveClase
+    )
+
+    return asistencia.length % 2 == 0 ? 'Entrada' :  'Salida'
   }
 
   //Función para saber la hora de la entrada del alumno
   function horaEntrada() {
-    const date = new Date(1698384600000);
+    const date = new Date(1700013600000);
     const horaExacta = date.getTime()
 
     let nombreClase;
 
-    let accion = entradaSalidaAlumno(horaExacta) ? 'Entrada' :  'Salida';
+    let accion = entradaSalidaAlumno(horaExacta)
 
-    let { puntualidadClase } = calcularAsistencia(accion, horaExacta, scannerModalidad)
+    let puntualidadClase = puntualidadAlumno(accion, horaExacta)
 
     if(accion == 'Entrada'  && puntualidadClase == 'Llegó a tiempo.') nombreClase = 'puntual'
     else if(accion == 'Salida'  && puntualidadClase == 'Salió en tiempo.') nombreClase = 'puntual'
@@ -585,27 +549,17 @@ function ScannerAlumno(props) {
 
   //Función para agregar la asistencia del alumno
   async function asistenciaEntrada() {
-    const date = new Date();
+    const date = new Date(1700013600000);
     const año = date.getFullYear()//Saber el año
     const mes = date.getMonth()//Saber el mes
     const fecha = date.getDate()//Saber la fecha
-    const hora = date.getHours()//Saber la hora
-    const minutos = date.getMinutes()//Saber los minutos
-    const dia = date.getDay()//Saber el día de la semana
     const horaExacta = date.getTime()
 
     let mesExacto;
     let fechaExacto;
-    let minutoExacto;
 
-    let entradaSalida = entradaSalidaAlumno(horaExacta) ? 'Entrada' :  'Salida'
-    let { 
-      diasHorarios, 
-      horaHorario, 
-      claveHorario, 
-      puntualidadClase, 
-      idiomaAsistenciaEntrada 
-    } = calcularAsistencia(entradaSalida, horaExacta, scannerModalidad)
+    let entradaSalida = entradaSalidaAlumno(horaExacta)
+    let puntualidadClase = puntualidadAlumno(entradaSalida, horaExacta)
 
     //Todo: Calcular exactametne la fecha y la hora de la asistencia
     if((mes + 1) < 10) mesExacto = `0${mes + 1}`
@@ -614,48 +568,24 @@ function ScannerAlumno(props) {
     if(fecha < 10) fechaExacto = `0${fecha}`
     else if(fecha >= 10) fechaExacto = `${fecha}`
 
-    if(minutos < 10) minutoExacto = `0${minutos}`
-    else if(minutos >= 10) minutoExacto = `${minutos}`
-
-    const nombreAsistenciaEntrada = nombreAlumno
-    const apellidoAsistenciaEntrada = apellidoAlumno
-    const claveEstudianteAsistenciaEntrada = claveEstudianteAlumno
-    let fechaCompletaAsistenciaEntrada = `${fechaExacto}/${mesExacto}/${año}`
-    const fechaInternaAsistenciaEntrada = `${año}-${mesExacto}-${fechaExacto}`
-    const horaAsistenciaEntrada = `${hora}:${minutoExacto}`
-    const diaAsistenciaEntrada = dia
-    const fechaAsistenciaEntrada = fecha
-    const mesAsistenciaEntrada = mes
-    const añoAsistenciaEntrada = año
-    const modalidadClase = scannerModalidad
-    const entradaSalidaAsistencia = entradaSalida
-    const horaAsistenciaMilisegundos = horaExacta
-
     const datos = {
-      nombreAsistenciaEntrada, 
-      apellidoAsistenciaEntrada,
-      claveEstudianteAsistenciaEntrada,
-      fechaCompletaAsistenciaEntrada,
-      fechaInternaAsistenciaEntrada,
-      horaAsistenciaEntrada,
-      diaAsistenciaEntrada,
-      fechaAsistenciaEntrada,
-      mesAsistenciaEntrada,
-      añoAsistenciaEntrada,
-      diasHorarios,
-      horaHorario,
-      claveHorario,
+      nombreAsistenciaEntrada: nombreAlumno, 
+      apellidoAsistenciaEntrada: apellidoAlumno,
+      claveEstudianteAsistenciaEntrada: claveEstudianteAlumno,
+      fechaInternaAsistenciaEntrada: `${año}-${mesExacto}-${fechaExacto}`,
+      fechaAsistenciaEntrada: horaExacta,
+      diasHorarios: scannerClase.diasClase,
+      horaHorario: `${scannerClase.horaInicioClase} a ${scannerClase.horaFinalClase}`,
+      claveHorario: scannerClase.claveClase,
       puntualidadClase,
-      modalidadClase,
-      entradaSalidaAsistencia,
-      idiomaAsistenciaEntrada,
-      horaAsistenciaMilisegundos
+      modalidadClase: scannerClase.modalidadClase,
+      entradaSalidaAsistencia: entradaSalida,
+      idiomaAsistenciaEntrada: scannerClase.idiomaClase,
     }
 
     //enviarMensaje(entradaSalidaAlumno())
 
-    const collectionRef = collection(db, 'asistenciasEntrada')
-    const docRef = await addDoc(collectionRef, datos)
+    await createDatabase('asistenciasEntrada', datos)
   }
 
   return (
@@ -675,7 +605,12 @@ function ScannerAlumno(props) {
             <div className='contenedor__centrado-separacion'>
               {
                 idiomaAprendizaje.map((idioma, index) => 
-                  <span className='comprobante-mensualidad' key={index}>{comprobarMensualidad(idioma, fechaPago[index])}</span>
+                  <span 
+                    className='comprobante-mensualidad padd__20' 
+                    key={index}
+                  >
+                    {comprobarMensualidad(idioma, fechaPago[index])}
+                  </span>
                 )
               }
             </div>

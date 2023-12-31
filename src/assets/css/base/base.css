@@ -1,3 +1,10 @@
+:root {
+  --family-fredoka: 'Fredoka', sans-serif;
+  --family-poppins: 'Poppins', sans-serif;
+  --family-montserrat: 'Montserrat', sans-serif;
+  --family-ubuntu: 'Ubuntu', sans-serif;
+}
+
 /* Estilos body */
 .body__pantalla-negra {
   overflow: hidden;
@@ -13,27 +20,27 @@
   display: inline;
   font-size: 50px;
   margin: 0;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: var(--family-ubuntu);
   border-bottom: 5px solid greenyellow;
 }
 
 .titulos-2 {
   text-align: center;
   font-size: 40px;
-  font-family: 'Fredoka', sans-serif;
+  font-family: var(--family-fredoka);
   margin: 20px 0;
 }
 
 .titulos-3 {
   text-align: center;
   font-size: 25px;
-  font-family: 'Fredoka', sans-serif;
+  font-family: var(--family-fredoka);
 }
 
 .titulos-4 {
   text-align: center;
   font-size: 20px;
-  font-family: 'Fredoka', sans-serif;
+  font-family: var(--family-fredoka);
   font-weight: 400;
   margin-top: 0;
 }
@@ -52,6 +59,10 @@
 
 .titulos__izquierda {
   text-align: left;
+}
+
+.balance {
+  text-wrap: balance;
 }
 
 /* Estilos de los contenedores */
@@ -140,7 +151,18 @@
   gap: 15px;
 }
 
+.gap-y__10 {
+  row-gap: 10px;
+}
+
+.gap-x__25 {
+  column-gap: 25px;
+}
+
 /* Estilos padding */
+.padd__20 {
+  padding: 20px;
+}
 
 .padd-x__20 {
   padding-left: 20px;
@@ -156,9 +178,15 @@
   padding-bottom: 10px;
 }
 
+.padd-y__20 {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
 /* Estilos de la tabla */
 .contenedor__tabla-scroll {
   overflow-y: scroll;
+  overflow-x: auto;
 }
 
 .tamaño-tabla__250 {
@@ -203,6 +231,11 @@
   border-radius: 10px;  
 }
 
+.scroll {
+  overflow-y: scroll;
+}
+
+/* Estilos tablas */
 .tabla {
   border-spacing: 0;
   margin: auto;
@@ -221,11 +254,14 @@
 }
 
 .tabla-cuerpo {
+  font-family: var(--family-poppins);
   text-align: center;
+  font-size: 15px;
 }
 
 /* Estilos de los botones */
 .boton__verde-oscuro {
+  text-align: center;
   height: 45px;
   box-sizing: border-box;
 
@@ -244,6 +280,7 @@
 }
 
 .boton__blanco {
+  text-align: center;
   height: 45px;
   box-sizing: border-box;
 
@@ -320,14 +357,21 @@
 }
 
 /* Estilos modal */
+.modal__medio {
+  z-index: 5000 !important;
+}
+
+.modal__superior {
+  z-index: 10000 !important;
+}
+
 .container-modal__fondo-oscuro {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.8);
-  position: absolute;
+  position: fixed;
   left: 0;
-  top: 0;
-  z-index: 100;
+  z-index: 9999999999;
 }
 
 .modal {
@@ -393,18 +437,27 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  overflow-y: auto;
 }
 
 .modal__contenido {
-  width: 500px;
-  min-height: 400px;
+  width: clamp(200px, 70%, 500px);
+  height: 400px;
   padding: 25px 25px;
 }
 
 .modal__contenido-2 {
-  width: 800px;
-  min-height: 400px;
+  width: clamp(200px, 70%, 800px);
+  height: 90%;
   padding: 25px 25px;
+}
+
+.centrar__contenido {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Stepper Mui */
@@ -426,13 +479,6 @@
   margin:  24px 0 !important;
 }
 
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
-  background-color: #c3f6c0 !important;
-  box-shadow: 10px 10px 30px rgba(0, 0, 0, .06) !important;
-  outline-color: #6278f7 !important;
-  font-size: 16px !important;
-}
-
 .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
   border-radius: none !important;
   border-style: none !important; 
@@ -440,15 +486,11 @@
 }
 
 .css-e784if-MuiTypography-root {
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: var(--family-montserrat);
   font-size: 18px !important;
   font-weight: 600 !important;
   display: block !important;
   margin-bottom: 8px !important;
-}
-
-.MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon.css-1kkal6p-MuiAutocomplete-root .MuiOutlinedInput-root {
-  background-color: #c3f6c0 !important;
 }
 
 .css-wvuepv-MuiInputBase-root-MuiOutlinedInput-root {
@@ -462,6 +504,24 @@
   text-wrap: wrap;
 }
 
+@media (max-width: 800px) {
+  .tabla-cabecera tr th {
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 700px) {
+  .contenedor__titulos-1 {
+    text-align: center;
+  }
+
+  .titulos-1 {
+    font-size: 30px;
+  }
+}
+
 @media (max-width: 500px) {
   .titulo-justificantes {
     font-size: 25px;
@@ -469,11 +529,5 @@
 
   .titulos-2 {
     font-size: 30px;
-  }
-
-  .tabla-cabecera tr th {
-    padding: 8px 2px;
-    text-align: center;
-    font-size: 12px;
   }
 }

@@ -25,10 +25,6 @@
   text-align: center;
 }
 
-.usuario-justificantes__modal {
-  z-index: 1700 !important;
-}
-
 @media (max-width: 500px) {
   .container-botones-usuario-justificantes {
     flex-direction: column;

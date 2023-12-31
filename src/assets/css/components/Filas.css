@@ -1,12 +1,14 @@
 .fila {
   cursor: pointer;
-  -webkit-box-shadow: 1px 3px 22px -4px rgba(0,0,0,0.8);
-  -moz-box-shadow: 1px 3px 22px -4px rgba(0,0,0,0.8);
-  box-shadow: 1px 3px 22px -4px rgba(0,0,0,0.8);
 }
 
 .td-admin {
+  border-bottom: 1px solid black;
   padding: 16px;
+}
+
+.td-admin ul {
+  margin: 0;
 }
 
 .ultima-td-admin {
@@ -16,10 +18,6 @@
 
 .elemento-par {
   background-color: white;
-}
-
-.elemento-impar {
-  background-color: #c3f6c0;
 }
 
 .cerca-pago {
@@ -54,9 +52,15 @@
   font-size: 55px;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 800px) {
   .td-admin {
     font-size: 10px;
     padding: 5px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .icon-rechazar {
+    font-size: 35px;
   }
 }

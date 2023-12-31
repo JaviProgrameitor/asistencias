@@ -4,21 +4,15 @@ import { useEffect, useState } from 'react'
 import PagosAlumnos from '../../pages/PagosAlumnos'
 
 function FilasPagos(props) {
-  const { posicion, pagoSeleccionado, setPagoSeleccionado } = props
+  const { posicion, pagoSeleccionado, setPagoSeleccionado, personal = false } = props
   const {
     nombrePago,
     apellidoPago,
     claveEstudiantePago,
     idiomaPago,
-    añoPagoMenActual,
-    numeroMesPagoMenActual,
-    fechaPagoMenActual,
-    fechaCompletaPagoMenActual,
-    añoDiaPago,
-    mesDiaPago,
-    fechaDiaPago,
-    fechaCompletaDiaPago,
-    id
+    id,
+    diaPago,
+    inicioMensualidad
   } = props.datos
 
   const [tipo, setTipo] = useState("")
@@ -42,12 +36,18 @@ function FilasPagos(props) {
         else setPagoSeleccionado(props.datos)
       }}
     >
-      <td className='td-admin'>{nombrePago}</td>
-      <td className='td-admin'>{apellidoPago}</td>
-      <td className='td-admin'>{claveEstudiantePago}</td>
+      {
+        !personal
+          ? <>
+              <td className='td-admin'>{nombrePago}</td>
+              <td className='td-admin'>{apellidoPago}</td>
+            </>
+          : ''
+      }
+      
       <td className='td-admin'>{idiomaPago}</td>
-      <td className='td-admin'>{fechaCompletaDiaPago}</td>
-      <td className='td-admin'>{fechaCompletaPagoMenActual}</td>
+      <td className='td-admin'>{new Date(diaPago).toLocaleDateString()}</td>
+      <td className='td-admin'>{new Date(inicioMensualidad).toLocaleDateString()}</td>
     </tr>
   )
 }

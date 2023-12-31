@@ -23,8 +23,8 @@ const Inicio = (props) => {
     admin, 
     setUsuario, 
     usuario,
-    setScannerAlumno, 
-    setScannerModalidad 
+    setScannerAlumno,
+    setScannerClase
   } = props
   const [ tipoFormulario, setTipoFormulario ] = useState(true)
   const [ activarScanner, setActivarScanner ] = useState(false)
@@ -32,7 +32,9 @@ const Inicio = (props) => {
   return (
     <section className='contenedor-principal'>
       <div className='contenedor_link-principio'>
-        <Link to={'/'}><FaArrowCircleLeft className='flecha-regresar icon-80' /></Link>
+        <Link to={'/'}>
+          <FaArrowCircleLeft className='flecha-regresar icon-80' />
+        </Link>
       </div>
       <article className='contenedor-home'>
         <div className="contenedor-formularios">
@@ -58,16 +60,15 @@ const Inicio = (props) => {
               Administradores
             </button>
             {
-              tipoFormulario === true ? 
-                <AuthAlumnos
+              tipoFormulario === true 
+              ? <AuthAlumnos
                   alumnos={alumnos}
                   setUsuario={setUsuario} 
                   usuario={usuario} 
                   activarScanner={activarScanner} 
                   setActivarScanner={setActivarScanner} 
                 /> 
-              : 
-                <AuthAdmin 
+              : <AuthAdmin 
                   administradores={administradores}
                   setAdmin={setAdmin} 
                   admin={admin} 
@@ -86,10 +87,10 @@ const Inicio = (props) => {
           <Scanner 
             alumnos={alumnos}
             clases={clases}
-            setScannerModalidad={setScannerModalidad} 
             activarScanner={activarScanner} 
             setActivarScanner={setActivarScanner}
-            setScannerAlumno={setScannerAlumno} 
+            setScannerAlumno={setScannerAlumno}
+            setScannerClase={setScannerClase}
           /> 
         </>
       </Modal>

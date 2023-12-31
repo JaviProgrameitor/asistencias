@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import FilasIdiomas from '../components/FilasIdiomas/FilasIdiomas'
 import Campo from '../components/Campo/Campo'
+import Loader from '../components/Loader/Loader'
 
-import { initializeApp } from "firebase/app";
-import { doc, deleteDoc, addDoc, collection, getFirestore  } from "firebase/firestore";
-import firebaseConfig from '../firebase';
+import { createDatabase, deleteDatabase } from '../firebase';
 
 import Modal from '@mui/material/Modal';
 
@@ -17,12 +16,10 @@ function Idiomas(props) {
   const [open, setOpen] = useState(false);
   const [ openIdioma, setOpenIdioma ] = useState(false)
   const [ idiomaSeleccionado, setIdiomaSeleccionado ] = useState({})
+  const [ activarLoader, setActivarLoader ] = useState(false)
   
   //Todo: Estados Agregar Idioma
   const [ nombreIdioma, setNombreIdioma ] = useState('')
-
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
 
   //Todo: Funciones para abrir y cerrar el modal
   const handleOpen = (variable) => variable(true);
@@ -39,19 +36,20 @@ function Idiomas(props) {
 
   //Todo: Función para eliminar idiomas
   async function eliminarIdioma() {
-    const docRef = doc(db, 'idiomas', idiomaSeleccionado.id)
-    await deleteDoc(docRef)
+    await deleteDatabase('idiomas', idiomaSeleccionado.id)
     notificarEliminacion('Idioma')
   }
 
   //Todo: Función para agregar idiomas
   async function agregarIdioma() {
+    setActivarLoader(true)
+
     const datos = {
       nombre: nombreIdioma
     }
 
-    const collectionRef = collection(db, 'idiomas')
-    const docRef = await addDoc(collectionRef, datos)
+    await createDatabase('idiomas', datos)
+    setActivarLoader(false)
     toast.success('El Idioma ha sido agregado con exito')
   }
 
@@ -105,6 +103,7 @@ function Idiomas(props) {
         </div>
       </div>
       <Modal
+        className='modal__superior'
         open={open}
         onClose={() => {
           resetearIdioma()
@@ -150,6 +149,7 @@ function Idiomas(props) {
         </div>
       </Modal>
       <Modal
+        className='modal__superior'
         open={openIdioma}
         onClose={() => {
           setIdiomaSeleccionado({})
@@ -157,7 +157,7 @@ function Idiomas(props) {
         }}
       >
         <div className='modal__por-defecto modal__contenido'>
-          <h4 className='titulos-3'>Elimiinar Idioma</h4>
+          <h4 className='advertencia__titulo'>!ADVERTENCIA¡</h4>
           <p className='advertencia__texto'>¿Seguro qué quieres eliminar el idioma <strong>{idiomaSeleccionado.nombre}</strong>?</p>
           <div className='contenedor__centrado-separacion'>
             <button 
@@ -182,6 +182,9 @@ function Idiomas(props) {
           </div>
         </div>
       </Modal>
+      <Loader
+        activarLoader={activarLoader}
+      />
       <Toaster 
         position="top-center"
         expand={false}

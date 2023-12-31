@@ -33,7 +33,7 @@ function ActividadAlumno(props) {
     const justiAcep = justificantesAceptados.map(justificante => {
       const objeto = {
         title: 'Justificante Aceptado',
-        date: justificante.fechaJustificante,
+        date: justificante.fechaInternaJustificante,
         backgroundColor: '#DE1E81'
       }
 
@@ -43,7 +43,7 @@ function ActividadAlumno(props) {
     const justiEspera = justificantesEnEspera.map(justificante => {
       const objeto = {
         title: 'Justificante En Espera',
-        date: justificante.fechaJustificante,
+        date: justificante.fechaInternaJustificante,
         backgroundColor: '#DE1E81'
       }
 
@@ -53,7 +53,7 @@ function ActividadAlumno(props) {
     const justiRecha = justificantesRechazados.map(justificante => {
       const objeto = {
         title: 'Justificante Rechazado',
-        date: justificante.fechaJustificante,
+        date: justificante.fechaInternaJustificante,
         backgroundColor: '#DE1E81'
       }
 

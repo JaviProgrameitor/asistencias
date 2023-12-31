@@ -1,0 +1,52 @@
+/* Por qué estudiar en el Centro de Idiomas */
+.por-que-razon__contenido {
+  display: flex;
+  gap: 40px;
+}
+
+.razones {
+  box-sizing: border-box;
+  width: calc(calc(100% - 80px) / 3);
+  background-color: #CCE8C9;
+  padding: 20px 20px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.razones__titulo {
+  margin: 0;
+}
+
+.razones__contenido {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.razones__contenido__icon {
+  font-size: 155px;
+}
+
+.razones__contenido__texto {
+  font-size: var(--fs-texto);
+  font-family: var(--family-poppins);
+}
+
+@media (max-width: 800px) {
+  /* Por qué razon */
+  .por-que-razon__contenido {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .razones {
+    width: 40%;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Por qué razon */
+  .razones {
+    width: 80%;
+  }
+}

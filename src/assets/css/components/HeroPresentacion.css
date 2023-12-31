@@ -1,0 +1,286 @@
+/* caja presentación */
+.caja-presentacion {
+  min-height: calc(100vh - 94px);
+  background-color: #E5E5E5;
+  display: flex;
+}
+
+.caja-presentacion__parte-1 {
+  box-sizing: border-box;
+  width: 45%;
+  padding: 30px 30px 0 30px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.numero-telefono {
+  font-size: 23px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.numero-telefono span {
+  color: #5D1FF2;
+}
+
+.promocional__modalidades {
+  margin: 55px 0 0 0;
+  font-size: 25px;
+  text-align: center;
+}
+
+.promocional__modalidades span {
+  background-color: green;
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.promocional__titulo {
+  margin: 0;
+  text-align: center;
+  font-size: 58px;
+  font-family: "Quicksand", Tofu;
+  font-weight: 500;
+}
+
+.promocional__titulo strong {
+  color: #5D1FF2;
+}
+
+.promocional__subtitulo {
+  font-size: 25px;
+  font-family: var(--family-poppins);
+  text-align: center;
+}
+
+.promocional__idiomas {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+.prom__idioma {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 22px;
+}
+
+.promocional__botones {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 24px;
+}
+
+.icon-servicios {
+  color: green;
+  font-size: 22px;
+}
+
+.caja-presentacion__parte-2 {
+  box-sizing: border-box;
+  width: 55%;
+}
+
+.promocional__imagen {
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 940px) and (max-width: 1200px) {
+  /* Variables */
+  :root {
+    --fs-titulos: 36px;
+    --fs-subtitulos: 24px;
+    --fs-texto: 18px;
+  }
+
+  /* Presentación */
+  .caja-presentacion {
+    height: calc(100vh - 87px);
+  }
+
+  #salto_1, #salto_2 {
+    display: none;
+  }
+
+  .promocional__modalidades {
+    margin: 45px 0 0 0;
+    font-size: 18px;
+  }
+
+  .promocional__titulo {
+    font-size: 45px;
+  }
+
+  .promocional__subtitulo {
+    font-size: 24px;
+  }
+
+  .promocional__idiomas {
+    flex-wrap: wrap;
+    gap: 10px 25px;
+  }
+
+  .prom__idioma {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 940px) {
+  /* Presentación */
+  .caja-presentacion {
+    height: calc(100vh - 87px);
+  }
+
+  .promocional__modalidades {
+    margin: 45px 0 0 0;
+    font-size: 16px;
+  }
+
+  .promocional__titulo {
+    font-size: 45px;
+  }
+
+  #salto_1, #salto_2 {
+    display: none;
+  }
+
+  .promocional__subtitulo {
+    font-size: 22px;
+  }
+
+  .promocional__idiomas {
+    flex-wrap: wrap;
+    gap: 10px 25px;
+  }
+
+  .prom__idioma {
+    font-size: 18px;
+  }
+
+  .boton-presentacion {
+    font-size: 12px;
+  }
+
+  .boton-presentacion .fa {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  /* Presentación */
+  .caja-presentacion {
+    flex-direction: column;
+    min-height: calc(100vh - 89px);
+  }
+
+  .caja-presentacion__parte-1, .caja-presentacion__parte-2 {
+    width: 100%;
+    height: 50%;
+  }
+
+  .promocional__modalidades {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+  }
+
+  .promocional__titulo {
+    font-size: 38px;
+  }
+
+  .promocional__subtitulo {
+    font-size: 15px;
+  }
+
+  .prom__idioma {
+    font-size: 18px;
+  }
+
+  .promocional__botones {
+    justify-content: space-evenly;
+  }
+
+  .boton-presentacion {
+    font-size: 14px;
+  }
+
+  .boton-presentacion .fa {
+    font-size: 14px;
+  }
+
+  #salto_1 {
+    display: none;
+  }
+
+  .promocional__imagen {
+    width: auto;
+    height: 80%;
+  }
+}
+
+@media (max-width: 800px) {
+  /* Presentación */
+  .caja-presentacion__parte-1 {
+    padding: 8px 30px 0 30px;
+  }
+
+  .promocional__titulo {
+    text-wrap: balance;
+  }
+
+  #salto_2 {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Presentación */
+  .caja-presentacion {
+    height: calc(100vh - 55px);
+  }
+
+  .numero-telefono {
+    font-size: 18px;
+  }
+
+  .promocional__modalidades {
+    margin-top: 18px;
+  }
+
+  .promocional__titulo {
+    margin-top: 10px;
+  }
+
+  .promocional__subtitulo {
+    display: none;
+  }
+
+  .promocional__idiomas {
+    margin-top: 12px;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+  }
+
+  .promocional__imagen {
+    height: 90%;
+  }
+}
+
+@media (max-width: 350px) {
+  /* Presentacion */
+  .promocional__modalidades {
+    font-size: 15px;
+  }
+
+  .promocional__titulo {
+    font-size: 32px;
+  }
+
+  .icon-servicios, .boton-presentacion, .boton-presentacion .fa {
+    font-size: 12px;
+  }
+}

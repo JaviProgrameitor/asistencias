@@ -9,10 +9,7 @@ import { FcStackOfPhotos } from 'react-icons/fc'
 
 import FilasPagos from "../components/FilasPagos/FilasPagos";
 
-import { doc, deleteDoc, getFirestore } from "firebase/firestore";
-import { getStorage, ref, deleteObject } from 'firebase/storage'
-import { initializeApp } from "firebase/app";
-import firebaseConfig from '../firebase';
+import { deleteDatabase, deleteStorage } from '../firebase';
 
 import Modal from '@mui/material/Modal';
 
@@ -26,16 +23,9 @@ function TablaPagoAlumno(props) {
 
   const url = useResolvedPath("").pathname
 
-  const app = initializeApp(firebaseConfig)
-  const st = getStorage(app);
-  const db = getFirestore(app);
-
   async function eliminarPago() {
-    const desertRef = ref(st, `pagosMensualidades/${pagoSeleccionado.idComprobantePagoMensualidad}`);
-    await deleteObject(desertRef)
-
-    const docRef = doc(db, 'pagosMensualidades', pagoSeleccionado.id)
-    await deleteDoc(docRef)
+    await deleteStorage(`pagosMensualidades/${pagoSeleccionado.idComprobantePagoMensualidad}`)
+    await deleteDatabase('pagosMensualidades', pagoSeleccionado.id)
     toast.success('El Pago ha sido eliminado con exito')
     setPagoSeleccionado(false)
   }
@@ -44,7 +34,9 @@ function TablaPagoAlumno(props) {
     <div>
       <Toaster position="top-center" richColors />
       <div className='contenedor__todo-principio'>
-        <Link to={'/sistema-asistencias/panel-control/alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
+        <Link to={'/sistema-asistencias/panel-control/alumnos'}>
+          <FaArrowCircleLeft className='flecha-regresar icon-40' />
+        </Link>
       </div>
       <h5 className="titulos-2">Pagos Alumnos</h5>
       <div className="contenedor__todo-final">
@@ -76,7 +68,6 @@ function TablaPagoAlumno(props) {
             <tr>
               <th colSpan='1'>Nombre</th>
               <th colSpan='1'>Apellido</th>
-              <th colSpan='1'>Clave de Estudiante</th>
               <th colSpan='1'>Idioma Pagado</th>
               <th colSpan='1'>Fecha que Pagó</th>
               <th colSpan='1'>Fecha Mensualidad</th>
@@ -85,50 +76,58 @@ function TablaPagoAlumno(props) {
           <tbody className='tabla-cuerpo'>
             {
               pagosMensualidades.map((pago, index) => 
-              <FilasPagos 
-                datos={pago} 
-                posicion={index} 
-                key={index} 
-                pagoSeleccionado={pagoSeleccionado}
-                setPagoSeleccionado={setPagoSeleccionado}
-              />
-            )
+                <FilasPagos 
+                  datos={pago} 
+                  posicion={index} 
+                  key={index} 
+                  pagoSeleccionado={pagoSeleccionado}
+                  setPagoSeleccionado={setPagoSeleccionado}
+                />
+              )
             }
           </tbody>
         </table>
       </div>
       <Modal
+        className='modal__superior'
         open={modalEliminarEstado}
         onClose={() => setmodalEliminarEstado(false)}
       >
-        <div className='modal'>
-          <TiDelete className='modal__icon-salir' onClick={() => setmodalEliminarEstado(false)} />
-          <div className='advertencia__eliminar-alumno'>
-            <h4 className='advertencia__titulo'>!ADVERTENCIA!</h4>
-            <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al alumno 
-              <span className='advertencia__resaltar'>{` ${"hola"}`}</span>
-              ?
-            </p>
-            <div className='contenedor__centro-separacion'>
-              <button className='boton__verde-oscuro' onClick={() => setmodalEliminarEstado(false)}>Cancelar Eliminación</button>
-              <button className='boton__blanco' 
-                onClick={() => {
-                  eliminarPago()
-                  setmodalEliminarEstado(false)
-                }}>Eliminar Pago
-              </button>
-            </div>
+        <div className='modal__por-defecto modal__contenido'>
+          <h4 className='advertencia__titulo'>!ADVERTENCIA!</h4>
+          <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al alumno 
+            <span className='advertencia__resaltar'>{` ${"hola"}`}</span>
+            ?
+          </p>
+          <div className='contenedor__centro-separacion'>
+            <button 
+              className='boton__verde-oscuro' 
+              onClick={() => setmodalEliminarEstado(false)}
+            >
+              Cancelar
+            </button>
+            <button className='boton__blanco' 
+              onClick={() => {
+                eliminarPago()
+                setmodalEliminarEstado(false)
+              }}
+            >
+              Eliminar
+            </button>
           </div>
         </div>
       </Modal>
       <Modal
+        className='modal__superior'
         open={modalFotoEstado}
         onClose={() => setModalFotoEstado(false)}
       >
-        <div className='caja-foto-prueba'>
-          <TiDelete className='foto-prueba__icon' onClick={() => setModalFotoEstado(false)} />
-          <img className='foto-prueba' src={pagoSeleccionado.comprobantePagoMensualidad} alt='Foto de la prueba del justificante' />
-        </div>
+        <img 
+          className='foto-prueba centrar__contenido' 
+          src={pagoSeleccionado.comprobantePagoMensualidad} 
+          alt='Foto de la prueba del justificante'
+          onClick={() => setModalFotoEstado(false)}
+        />
       </Modal>
     </div>
   )

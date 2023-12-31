@@ -7,21 +7,14 @@ import { BsPersonFillAdd } from 'react-icons/bs'
 import { FaEdit } from 'react-icons/fa'
 import { Link, useResolvedPath } from "react-router-dom"
 
-import { doc, deleteDoc, getFirestore } from "firebase/firestore";
-import { initializeApp } from "firebase/app";
-import { getStorage, ref, deleteObject } from 'firebase/storage'
-import firebaseConfig from '../firebase';
+import { deleteDatabase, deleteStorage } from '../firebase';
 
 import FilasAlumnos from '../components/FilasAlumnos/FilasAlumnos'
 import DemostracionColores from '../components/DemostracionColores/DemostracionColores'
-
-import TextField from '@mui/material/TextField';
+import BarraBusquedaOpciones from '../components/BarraBusquedaOpciones/BarraBusquedaOpciones';
+import BarraBusquedaTexto from '../components/BarraBusquedaTexto/BarraBusquedaTexto';
 
 import Modal from '@mui/material/Modal';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 
 import { Toaster, toast } from 'sonner'
 
@@ -47,10 +40,6 @@ function TablaAlumnos(props) {
   const [ filtrarAlumnos, setFiltrarAlumnos ] = useState(filtrarPorIdioma)
   const [ modalEliminarAlumno, setModalEliminarAlumno ] = useState(false)
 
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
-  const st = getStorage(app);
-
   const url = useResolvedPath("").pathname
 
   const coloresAlumno = {
@@ -70,69 +59,53 @@ function TablaAlumnos(props) {
     //Todo: Eliminar todas las asistencias del alumno
     if(asistenciasAlumno.length > 0) {
       for(let i = 0; i < asistenciasAlumno.length; i++) {
-        const docRef = doc(db, 'asistenciasEntrada', asistenciasAlumno[i].id)
-        await deleteDoc(docRef)
+        deleteDatabase('asistenciasEntrada', asistenciasAlumno[i].id)
       }
     }
 
     //Todo: Eliminar justificantes en espera del alumno
     if(justificantesEnEsperaAlumno.length > 0) {
       for(let i = 0; i < justificantesEnEsperaAlumno.length; i++) {
-        const docRef = doc(db, 'justificantesEnEspera', justificantesEnEsperaAlumno[i].id)
-        await deleteDoc(docRef)
-  
-        const desertRef = ref(st, `justificantes/${justificantesEnEsperaAlumno[i].idFotoJustificante}`);
-        await deleteObject(desertRef)
+        deleteDatabase('justificantesEnEspera', justificantesEnEsperaAlumno[i].id)
+        deleteStorage(`justificantes/${justificantesEnEsperaAlumno[i].idFotoJustificante}`)
       }
     }
 
     //Todo: Eliminar justificantes aceptados del alumno
     if(justificantesAceptadosAlumno.length > 0) {
       for(let i = 0; i < justificantesAceptadosAlumno.length; i++) {
-        const docRef = doc(db, 'justificantesAceptados', justificantesAceptadosAlumno[i].id)
-        await deleteDoc(docRef)
-  
-        const desertRef = ref(st, `justificantes/${justificantesAceptadosAlumno[i].idFotoJustificante}`);
-        await deleteObject(desertRef)
+        deleteDatabase('justificantesAceptados', justificantesAceptadosAlumno[i].id)
+        deleteStorage(`justificantes/${justificantesAceptadosAlumno[i].idFotoJustificante}`)
       }
     }
 
     //Todo: Eliminar justificantes rechazados del alumno
     if(justificantesRechazadosAlumno.length > 0) {
       for(let i = 0; i < justificantesRechazadosAlumno.length; i++) {
-        const docRef = doc(db, 'justificantesRechazados', justificantesRechazadosAlumno[i].id)
-        await deleteDoc(docRef)
-  
-        const desertRef = ref(st, `justificantes/${justificantesRechazadosAlumno[i].idFotoJustificante}`);
-        await deleteObject(desertRef)
+        deleteDatabase('justificantesRechazados', justificantesRechazadosAlumno[i].id)
+        deleteStorage(`justificantes/${justificantesRechazadosAlumno[i].idFotoJustificante}`)
       }
     }
 
     //Todo: Eliminar los pagos mensuales del alumno
     if(pagosMensualidadesAlumno.length > 0) {
       for(let i = 0; i < pagosMensualidadesAlumno.length; i++) {
-        const docRef = doc(db, 'pagosMensualidades', pagosMensualidadesAlumno[i].id)
-        await deleteDoc(docRef)
+        deleteDatabase('pagosMensualidades', pagosMensualidadesAlumno[i].id)
+        deleteStorage(`pagosMensualidades/${pagosMensualidadesAlumno[i].idComprobantePagoMensualidad}`)
       }
     }
 
-    const desertRef = ref(st, `alumnos/${alumno.idFoto}`);
-    await deleteObject(desertRef)
+    deleteStorage(`alumnos/${alumno.idFoto}`)
 
-    const desertRef2 = ref(st, `documentos/${alumno.idActaNacimiento}`);
-    await deleteObject(desertRef2)
+    deleteStorage(`documentos/${alumno.idActaNacimiento}`)
 
-    const desertRef3 = ref(st, `documentos/${alumno.idIne}`);
-    await deleteObject(desertRef3)
+    deleteStorage(`documentos/${alumno.idIne}`)
 
-    const desertRef4 = ref(st, `documentos/${alumno.idCurp}`);
-    await deleteObject(desertRef4)
+    deleteStorage(`documentos/${alumno.idCurp}`)
 
-    const desertRef5 = ref(st, `documentos/${alumno.idComprobantePagoInicial}`);
-    await deleteObject(desertRef5)
+    deleteStorage(`documentos/${alumno.idComprobantePagoInicial}`)
 
-    const docRef = doc(db, 'alumnos', alumno.id)
-    await deleteDoc(docRef)
+    deleteDatabase('alumnos', alumno.id)
     toast.success('El Alumno ha sido eliminado con exito')
     setIdAlumno(false)
   }
@@ -191,35 +164,19 @@ function TablaAlumnos(props) {
           <span>Agregar Alumno</span>
         </Link>
       </div>
-      <FormControl margin='dense' fullWidth variant='filled' color='success'>
-        <InputLabel id="demo-simple-select-label">Idioma</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={idiomaSeleccionado}
-          label="Age"
-          onChange={(e) => setIdiomaSeleccionado(e.target.value)}
-        >
-          <MenuItem value={'General'}>General</MenuItem>
-          {
-            idiomasImpartidos.map((idioma, index) => 
-              <MenuItem key={index} value={`${idioma}`}>{idioma}</MenuItem>
-            )
-          }
-        </Select>
-      </FormControl>
-      <TextField 
-        id="filled-basic" 
-        label="Buscar Alumno" 
-        variant="filled"
-        fullWidth
-        color='success'
-        placeholder='Por nombre, apellido o clave de estudiante'
-        margin='dense'
-        value={palabraBusqueda}
-        onChange={(e) => setPalabraBusqueda(e.target.value)}
+      <BarraBusquedaOpciones
+        titulo='Idioma'
+        valor={idiomaSeleccionado}
+        cambiarValor={setIdiomaSeleccionado}
+        opciones={['General', ...idiomasImpartidos]}
       />
-      <div className={`${idAlumno === false ? 'contenedor__todo-principio' : 'contenedor__entre'} contenedor__padding-top`}>
+      <BarraBusquedaTexto
+        titulo='Buscar Alumno'
+        placeholder='Por nombre, apellido o clave de estudiante'
+        valor={palabraBusqueda}
+        cambiarValor={setPalabraBusqueda}
+      />
+      <div className={`${idAlumno === false ? 'contenedor__todo-principio' : 'contenedor__entre'} contenedor__padding-top contenedor__wrap gap-y__10 gap-x__25`}>
         <div className='contenedor__todo-principio'>
           <DemostracionColores 
             color={coloresAlumno.colorFondoPago}
@@ -258,10 +215,8 @@ function TablaAlumnos(props) {
             <tr>
               <th colSpan='1'>Nombre</th>
               <th colSpan='1'>Apellido</th>
-              <th colSpan='1'>Número Telefónico</th>
               <th colSpan='1'>Clave de Estudiante</th>
               <th colSpan='1'>Idioma de Aprendizaje</th>
-              <th colSpan='1'>Modalidad de Estudio</th>
               <th colSpan='1'>Fecha de Pago</th>
               <th colSpan='1'>Estado Mensualidad</th>
             </tr>
@@ -282,24 +237,31 @@ function TablaAlumnos(props) {
         </table>
       </div>
       <Modal
+        className='modal__superior'
         open={modalEliminarAlumno}
         onClose={() => setModalEliminarAlumno(false)}
       >
-        <div className='modal__por-defecto advertencia__eliminar-alumno'>
-          <h4 className='advertencia__titulo'>!ADVERTENCIA!</h4>
+        <div className='modal__por-defecto modal__contenido'>
+          <h4 className='advertencia__titulo'>!ADVERTENCIA¡</h4>
           <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al alumno 
             <span className='advertencia__resaltar'>{` ${perfilAlumno.nombre}`}</span>
             ?
           </p>
           <div className='contenedor__centro-separacion'>
-            <button className='boton__verde-oscuro' onClick={() => setModalEliminarAlumno(false)}>Cancelar Eliminación</button>
-            <button className='boton__blanco' 
+            <button 
+              className='boton__verde-oscuro' 
+              onClick={() => setModalEliminarAlumno(false)}
+            >
+              Cancelar
+            </button>
+            <button 
+              className='boton__blanco' 
               onClick={() => {
                 eliminarAlumnos(perfilAlumno)
                 setModalEliminarAlumno(false)
               }}
             >
-              Eliminar Alumno
+              Eliminar
             </button>
           </div>
         </div>

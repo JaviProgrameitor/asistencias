@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from "react-router-dom"
 import { FaArrowCircleLeft } from 'react-icons/fa'
-import { TiDelete } from 'react-icons/ti'
 
 import FilasJustificantes from "../components/FilasJustificantes/FilasJustificantes"
 
@@ -39,7 +38,7 @@ function JustificantesAceptados(props) {
   }
 
   function cambiarValor(justificante) {
-    justificante != false ? setFotoPrueba(justificante.fotoJustificante) : setFotoPrueba(false)
+    justificante != false ? setFotoPrueba(justificante) : setFotoPrueba(false)
   }
 
   useEffect(() => {
@@ -54,13 +53,6 @@ function JustificantesAceptados(props) {
         </Link>
       </div>
       <h5 className='titulos-2'>Justificantes Aceptados</h5>
-      {
-        fotoPrueba 
-          ? <div className='contenedor__todo-final'>
-              <button className='boton__blanco' onClick={() => setModalEstado(true)}>Ver Prueba</button>
-            </div>
-          : <></>
-      }
       <TextField 
         id="filled-basic" 
         label="Buscar Justificante" 
@@ -71,13 +63,17 @@ function JustificantesAceptados(props) {
         margin='dense'
         onChange={(e) => setPalabraFiltrar(e.target.value)}
       />
+      {
+        fotoPrueba 
+          ? <div className='contenedor__todo-final'>
+              <button className='boton__blanco' onClick={() => setModalEstado(true)}>Ver Prueba</button>
+            </div>
+          : <></>
+      }
       <div className="contenedor__tabla-scroll tamaño-tabla__250">
         <table className='tabla'>
           <thead className='tabla-cabecera tabla-cabecera__tabla-scroll'>
               <tr>
-                <th colSpan='1'>Nombre</th>
-                <th colSpan='1'>Apellido</th>
-                <th colSpan='1'>Clave de Estudiante</th>
                 <th colSpan='1'>Hora de Emisión</th>
                 <th colSpan='1'>Fecha de Emisión</th>
                 <th colSpan='1'>Fecha a Justificar</th>
@@ -94,7 +90,7 @@ function JustificantesAceptados(props) {
                   posicion={index}
                   valor={fotoPrueba}
                   cambiarValor={cambiarValor}
-                  ultimaFila={false}
+                  personal
                 />
               )
             }
@@ -102,13 +98,16 @@ function JustificantesAceptados(props) {
         </table>
       </div>
       <Modal
+        className='modal__superior'
         open={modalEstado}
         onClose={() => setModalEstado(false)}
       >
-        <div className='caja-foto-prueba'>
-          <TiDelete className='foto-prueba__icon' onClick={() => setModalEstado(false)} />
-          <img className='foto-prueba' src={fotoPrueba} alt="" />
-        </div>
+        <img 
+          className='foto-prueba centrar__contenido' 
+          src={fotoPrueba} 
+          alt="Imagen del justificante"
+          onClick={() => setModalEstado(false)}
+        />
       </Modal>
     </div>
   )

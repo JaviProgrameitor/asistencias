@@ -2,7 +2,7 @@
 :root {
   --fs-titulos: 42px;
   --fs-subtitulos: 28px;
-  --fs-texto: 22px;
+  --fs-texto: 18px;
 }
 
 /* Estilos Generales */
@@ -16,7 +16,6 @@
   position: relative;
   color: #062603;
   font-size: var(--fs-titulos);
-  font-family: "Quicksand", Tofu;
   font-weight: 500;
   text-align: center;
   text-wrap: balance;
@@ -46,127 +45,9 @@
   overflow: hidden;
 }
 
-/* navbar */
-.navbar {
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.contenedor-logo__nombre {
-  font-family: 'Playfair Display', serif;
-  font-weight: 600;
-  margin: 0;
-  font-size: 30px;
-}
-
-.contendor-logo__logo {
-  width: 60px;
-}
-
-.navbar__enlaces {
-  list-style: none;
-  font-size: 20px;
-}
-
-.navbar__enlaces li a {
-  text-decoration: none;
-  color: black;
-}
-
-.navbar__enlaces li a:hover {
-  color: green;
-}
-
-/* caja presentación */
-.caja-presentacion {
-  height: calc(100vh - 94px);
-  background-color: #E5E5E5;
-  display: flex;
-}
-
-.caja-presentacion__parte-1 {
-  box-sizing: border-box;
-  width: 45%;
-  padding: 30px 30px 0 30px;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.numero-telefono {
-  font-size: 23px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.numero-telefono span {
-  color: #5D1FF2;
-}
-
-.promocional__modalidades {
-  margin: 55px 0 0 0;
-  font-size: 25px;
-  text-align: center;
-}
-
-.promocional__modalidades span {
-  background-color: green;
-  color: white;
-  padding: 8px;
-  border-radius: 5px;
-}
-
-.promocional__titulo {
-  margin: 0;
-  text-align: center;
-  font-size: 58px;
-  font-family: "Quicksand", Tofu;
-  font-weight: 500;
-}
-
-.promocional__titulo strong {
-  color: #5D1FF2;
-}
-
-.promocional__subtitulo {
-  font-size: 25px;
-  text-align: center;
-}
-
-.promocional__idiomas {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-}
-
-.prom__idioma {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 22px;
-}
-
-.promocional__botones {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 24px;
-}
-
-.icon-servicios {
-  color: green;
-  font-size: 22px;
-}
-
-.caja-presentacion__parte-2 {
-  box-sizing: border-box;
-  width: 55%;
-}
-
-.promocional__imagen {
-  width: 100%;
-  height: 100%;
+/* Contenedor Main */
+.contenedor-promocional__contenido {
+  margin-top: 94px;
 }
 
 /* Quienes Somos */
@@ -196,311 +77,17 @@
 
 .quienes-somos__texto {
   font-size: var(--fs-texto);
-}
-
-/* Por qué estudiar en el Centro de Idiomas */
-.por-que-razon__contenido {
-  display: flex;
-  gap: 40px;
-}
-
-.razones {
-  box-sizing: border-box;
-  width: calc(calc(100% - 80px) / 3);
-  background-color: #CCE8C9;
-  padding: 20px 20px;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-}
-
-.razones__titulo {
-  margin: 0;
-}
-
-.razones__contenido {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.razones__contenido__icon {
-  font-size: 155px;
-}
-
-.razones__contenido__texto {
-  font-size: var(--fs-texto);
-}
-
-/* Nuestros Servicios */
-.caja-nuestros-servicios {
-  background-color: #CCE8C9;
-  padding-bottom: 80px;
-}
-
-.nuestros-servicios__contenedor-titulo {
-  display: flex;
-}
-
-.nuestros-servicios__contenido {
-  display: flex;
-  gap: 40px;
-}
-
-.servicio {
-  box-sizing: border-box;
-  width: calc(calc(100% - 120px) / 4);
-  background-color: white;
-  padding: 15px;
-  border-radius: 15px;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-}
-
-.servicio__imagen {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.servicio__imagen img {
-  width: 70%;
-}
-
-.servicio__texto {
-  text-align: center;
-  font-size: var(--fs-texto);
-}
-
-/* Modalidades */
-.modalidad {
-  box-sizing: border-box;
-  width: 400px;
-  padding: 0 20px 42px;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-}
-
-.caja-modalidades__contenido {
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.modalidad__contenido {
-  display: flex;
-  gap: 8px;
-}
-
-.modalidad__contenido p {
-  font-size: var(--fs-texto);
-}
-
-.modalidad__contenido img {
-  width: 50%;
-}
-
-/* Módulos */
-.modulos__contenedor-titulo {
-  display: flex;
-}
-
-.caja-modulos__contenido {
-  display: flex;
-}
-
-.modulos__informacion {
-  width: 40%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.modulos__informacion__titulo {
-  font-family: "Quicksand", Tofu;
-  font-weight: 500;
-  font-size: 40px;
-  text-align: center;
-  color: #5D1FF2;
-  margin: 0;
-}
-
-.lista-modulos {
-  display: flex;
-  flex-direction: column;
-  gap: 35px;
-  padding: 0;
-
-  list-style: none;
-}
-
-.modulo {
-  font-size: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.modulo__contenido {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.lista-submodulos {
-  list-style: none;
-}
-
-.submodulo__contenido {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.modulos__imagen {
-  width: 60%;
-  height: 400px;
-  background-image: url(../img/modulos2.png);
-  background-size: 100% 100%;
-  background-attachment: fixed;
-  border-radius: 15px;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-}
-
-/* Metodologia */
-.metodologia__contenedor-titulo {
-  display: flex;
-}
-
-.caja-metodologia__contenido {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-}
-
-.metodologia-introduccion { 
-  grid-area: 1 / 1 / 2 / 2;
-
-  font-size: var(--fs-texto);
-}
-
-.metodologia-ejemplos { 
-  grid-area: 1 / 2 / 3 / 3;
-  padding-left: 20px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.ejemplo {
-  display: flex;
-  gap: 10px;
-}
-
-.ejemplo__imagen {
-  width: 100px;
-  height: 100px;
-}
-
-.ejemplo__texto {
-  font-size: var(--fs-texto);
-}
-
-.metodologia-demostracion { 
-  grid-area: 2 / 1 / 3 / 2;
-}
-
-.demostracion__imagen {
-  width: 100%;
-  border-radius: 15px;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-}
-
-/* Contactanos */
-.caja-contacto__contenido {
-  display: flex;
-}
-
-.caja-contacto__contenido-enlaces {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: 40px;
-}
-
-.enlaces-contacto {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.enlaces-contacto__imagen {
-  width: 55px;
-}
-
-.enlaces-contacto__texto {
-  margin: 0;
-  height: auto;
-  background: transparent;
-  padding: 0;
-  border: none;
-}
-
-.enlaces-contacto__texto {
-  --border-right: 6px;
-  --text-stroke-color: rgba(255,255,255,0.6);
-  --animation-color: #37FF8B;
-  --fs-size: 25px;
-  display: inline-block;
-  letter-spacing: 3px;
-  text-decoration: none;
-  font-size: var(--fs-size);
-  font-family: "Arial";
-  position: relative;
-  color: black;
-}
-
-.hover-text {
-  position: absolute;
-  box-sizing: border-box;
-  content: attr(data-text);
-  color: var(--animation-color);
-  width: 0%;
-  inset: 0;
-  border-right: var(--border-right) solid var(--animation-color);
-  overflow: hidden;
-  transition: 0.5s;
-  -webkit-text-stroke: 1px var(--animation-color);
-}
-
-.enlaces-contacto__texto:hover .hover-text, .enlaces-contacto:hover .hover-text {
-  width: 100%;
-  filter: drop-shadow(0 0 23px var(--animation-color))
-}
-
-.caja-contacto__demostracion {
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.caja-contacto__demostracion img {
-  width: 75%;
+  font-family: var(--family-poppins);
 }
 
 /* Footer */
 .contenedor-footer {
-  background-color: green;
-  color: white;
+  box-sizing: border-box;
+  border-top: 2px solid black;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 50px 20px;
+  padding: 20px 20px;
 }
 
 .contenedor-footer__informacion {
@@ -521,7 +108,7 @@
 }
 
 .contenedor-footer__derechos-autor {
-  font-size: 30px;
+  font-size: 20px;
   text-align: center;
 }
 
@@ -581,74 +168,6 @@
     --fs-texto: 18px;
   }
 
-  /* Navbar */
-  .navbar__enlaces {
-    font-size: 18px;
-  }
-
-  .contenedor-logo__nombre {
-    font-size: 27px;
-  }
-
-  .contendor-logo__logo {
-    width: 55px;
-  }
-
-  /* Presentación */
-  .caja-presentacion {
-    height: calc(100vh - 87px);
-  }
-
-  #salto_1, #salto_2 {
-    display: none;
-  }
-
-  .promocional__modalidades {
-    margin: 45px 0 0 0;
-    font-size: 18px;
-  }
-
-  .promocional__titulo {
-    font-size: 45px;
-  }
-
-  .promocional__subtitulo {
-    font-size: 24px;
-  }
-
-  .promocional__idiomas {
-    flex-wrap: wrap;
-    gap: 10px 25px;
-  }
-
-  .prom__idioma {
-    font-size: 18px;
-  }
-
-  /* Modulos */
-  .modulos__informacion__titulo {
-    font-size: 35px;
-  }
-
-  .modulo {
-    font-size: 25px;
-  }
-
-  /* Metodología */
-  .ejemplo__imagen {
-    width: 70px;
-    height: 70px;
-  }
-
-  /* Contactanos */
-  .enlaces-contacto__texto {
-    --fs-size: 20px;
-  }
-
-  .enlaces-contacto__imagen {
-    width: 48px;
-  }
-
   /* Footer */
   .contenedor-footer__informacion h3 {
     font-size: 35px;
@@ -656,10 +175,6 @@
 
   .contenedor-footer__informacion img {
     width: 70px;
-  }
-
-  .contenedor-footer__derechos-autor {
-    font-size: 25px;
   }
 
   /* whatsapp */
@@ -677,101 +192,6 @@
     --fs-texto: 18px;
   }
 
-  /* Navbar */
-  .navbar__enlaces {
-    font-size: 18px;
-  }
-
-  .contenedor-logo__nombre {
-    font-size: 27px;
-  }
-
-  .contendor-logo__logo {
-    width: 55px;
-  }
-
-  /* Presentación */
-  .caja-presentacion {
-    height: calc(100vh - 87px);
-  }
-
-  .promocional__modalidades {
-    margin: 45px 0 0 0;
-    font-size: 16px;
-  }
-
-  .promocional__titulo {
-    font-size: 45px;
-  }
-
-  #salto_1, #salto_2 {
-    display: none;
-  }
-
-  .promocional__subtitulo {
-    font-size: 22px;
-  }
-
-  .promocional__idiomas {
-    flex-wrap: wrap;
-    gap: 10px 25px;
-  }
-
-  .prom__idioma {
-    font-size: 18px;
-  }
-
-  .boton-presentacion {
-    font-size: 12px;
-  }
-
-  .boton-presentacion .fa {
-    font-size: 12px;
-  }
-
-  /* Nuestros Servicios */
-  .nuestros-servicios__contenido {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .servicio {
-    width: 40%;
-  }
-
-  .servicio__imagen img {
-    width: 50%;
-  }
-
-  /* Modalidades */
-  .modalidad {
-    width: 40%;
-  }
-
-  /* Modulos */
-  .modulos__informacion__titulo {
-    font-size: 35px;
-  }
-
-  .modulo {
-    font-size: 25px;
-  }
-
-  /* Metodología */
-  .ejemplo__imagen {
-    width: 70px;
-    height: 70px;
-  }
-
-  /* Contactanos */
-  .enlaces-contacto__texto {
-    --fs-size: 20px;
-  }
-
-  .enlaces-contacto__imagen {
-    width: 48px;
-  }
-
   /* Footer */
   .contenedor-footer__informacion h3 {
     font-size: 35px;
@@ -779,10 +199,6 @@
 
   .contenedor-footer__informacion img {
     width: 70px;
-  }
-
-  .contenedor-footer__derechos-autor {
-    font-size: 25px;
   }
 
   /* whatsapp */
@@ -804,115 +220,6 @@
     --fs-texto: 18px;
   }
 
-  /* Navbar */
-  .navbar {
-    justify-content: center;
-  }
-
-  .navbar__enlaces {
-    display: none;
-  }
-
-  /* Presentación */
-  .caja-presentacion {
-    flex-direction: column;
-    height: calc(100vh - 89px);
-  }
-
-  .caja-presentacion__parte-1, .caja-presentacion__parte-2 {
-    width: 100%;
-    height: 50%;
-  }
-
-  .promocional__modalidades {
-    margin: 0 0 10px 0;
-    font-size: 18px;
-  }
-
-  .promocional__titulo {
-    font-size: 38px;
-  }
-
-  .promocional__subtitulo {
-    font-size: 20px;
-  }
-
-  .prom__idioma {
-    font-size: 18px;
-  }
-
-  .promocional__botones {
-    justify-content: space-evenly;
-  }
-
-  .boton-presentacion {
-    font-size: 14px;
-  }
-
-  .boton-presentacion .fa {
-    font-size: 14px;
-  }
-
-  #salto_1 {
-    display: none;
-  }
-
-  .promocional__imagen {
-    width: auto;
-    height: 80%;
-  }
-
-  /* Nuestros Servicios */
-  .nuestros-servicios__contenido {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .servicio {
-    width: 40%;
-  }
-
-  .servicio__imagen img {
-    width: 50%;
-  }
-
-  /* Modalidades */
-  .modalidad {
-    width: 40%;
-  }
-
-  /* Modulos */
-  .modulos__informacion__titulo {
-    font-size: 35px;
-  }
-
-  .modulo {
-    font-size: 25px;
-  }
-
-  /* Metodología */
-  .ejemplo__imagen {
-    width: 70px;
-    height: 70px;
-  }
-
-  /* Contactanos */
-  .caja-contacto__contenido-enlaces {
-    width: 100%;
-  }
-
-  .enlaces-contacto__texto {
-    --fs-size: 20px;
-  }
-
-  .enlaces-contacto__imagen {
-    width: 48px;
-  }
-
-  .caja-contacto__demostracion {
-    display: none;
-  }
-
   /* Footer */
   .contenedor-footer__informacion h3 {
     font-size: 35px;
@@ -920,10 +227,6 @@
 
   .contenedor-footer__informacion img {
     width: 70px;
-  }
-
-  .contenedor-footer__derechos-autor {
-    font-size: 25px;
   }
 
   /* whatsapp */
@@ -938,19 +241,6 @@
 }
 
 @media (max-width: 800px) {
-  /* Presentación */
-  .caja-presentacion__parte-1 {
-    padding: 8px 30px 0 30px;
-  }
-
-  .promocional__titulo {
-    text-wrap: balance;
-  }
-
-  #salto_2 {
-    display: none;
-  }
-
   /* Quienes Somos */
   .caja-quienes-somos {
     flex-direction: column-reverse;
@@ -968,178 +258,15 @@
     background-attachment: unset;
     background-size: 100%;
   }
-
-  /* Por qué razon */
-  .por-que-razon__contenido {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .razones {
-    width: 40%;
-  }
-
-  /* Nuesros Servicios */
-  .servicio {
-    width: 80%;
-  }
-
-  .servicio__imagen img {
-    width: 25%;
-  }
-
-  /* Modalidades */
-  .caja-modalidades__contenido {
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  .modalidad {
-    width: 80%;
-  }
-
-  .modalidad__contenido {
-    align-items: center;
-  }
-
-  /* Modulos */
-  .caja-modulos__contenido {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .modulos__informacion {
-    width: 100%;
-  }
-
-  .lista-modulos {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-evenly;
-    gap: 0;
-  }
-
-  .modulos__imagen {
-    width: 90%;
-    height: 280px;
-    background-attachment: unset;
-  }
-
-  /* Metodología */
-  .caja-metodologia__contenido {
-    display: block;
-  }
-
-  .ejemplo {
-    align-items: center;
-  }
-
-  .metodologia-demostracion {
-    grid-area: 3 / 1 / 3 / 2;
-  }
 }
 
 @media (max-width: 600px) {
-  /* Navbar */
-  .navbar {
-    padding: 8px 0;
-  }
-
-  .contendor-logo__logo {
-    width: 40px;
-  }
-
-  .contenedor-logo__nombre {
-    font-size: 25px;
-  }
-
-  /* Presentación */
-  .caja-presentacion {
-    height: calc(100vh - 55px);
-  }
-
-  .numero-telefono {
-    font-size: 18px;
-  }
-
-  .promocional__modalidades {
-    margin-top: 18px;
-  }
-
-  .promocional__titulo {
-    margin-top: 10px;
-  }
-
-  .promocional__subtitulo {
-    display: none;
-  }
-
-  .promocional__idiomas {
-    margin-top: 12px;
-    flex-wrap: wrap;
-    gap: 10px 22px;
-  }
-
-  .promocional__imagen {
-    height: 90%;
-  }
-
-  /* Por qué razon */
-  .razones {
-    width: 80%;
-  }
-
-  /* Nuestros Servicios */
-  .nuestros-servicios__contenedor-titulo {
-    justify-content: center;
-  }
-
-  .servicio__imagen img {
-    width: 50%;
-  }
-
-  /* Modalidad */
-  .modalidad__contenido {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .modalidad__contenido p {
-    text-wrap: balance;
-    text-align: center;
-  }
-
-  .modalidad__contenido img {
-    width: 80%;
-  }
-
-  /* Modulos */
-  .modulos__contenedor-titulo {
-    justify-content: center;
-  }
-
-  .lista-modulos {
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-  }
-
-  /* Metodología */
-  .metodologia__contenedor-titulo {
-    justify-content: center;
+  .contenedor-promocional__contenido {
+    margin-top: 64px;
   }
 }
 
 @media (max-width: 500px) {
-  /* Contactanos */
-  .enlaces-contacto__imagen {
-    width: 25px;
-  }
-
-  .enlaces-contacto__texto {
-    font-size: 15px;
-  }
-
   /* Footer */
   .contenedor-footer__informacion img {
     width: 45px;
@@ -1147,10 +274,6 @@
 
   .contenedor-footer__informacion h3 {
     font-size: 25px;
-  }
-
-  .contenedor-footer__derechos-autor {
-    font-size: 20px;
   }
 }
 
@@ -1160,41 +283,5 @@
     --fs-titulos: 28px;
     --fs-subtitulos: 20px;
     --fs-texto: 15px;
-  }
-
-  /* Presentacion */
-  .promocional__modalidades {
-    font-size: 15px;
-  }
-
-  .promocional__titulo {
-    font-size: 32px;
-  }
-
-  .icon-servicios, .boton-presentacion, .boton-presentacion .fa {
-    font-size: 12px;
-  }
-
-  /* Modulos */
-  .modulo {
-    font-size: 20px;
-  }
-
-  /* Contactanos */
-  .enlaces-contacto {
-    gap: 5px;
-  }
-
-  .enlaces-contacto__imagen {
-    width: 20px;
-  }
-
-  .enlaces-contacto__texto {
-    font-size: 10px;
-    letter-spacing: 0;
-  }
-
-  .hover-text {
-    border: 0;
   }
 }

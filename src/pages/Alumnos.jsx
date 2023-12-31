@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Routes, Route } from "react-router-dom"
 
 import TablaAlumnos from './TablaAlumnos';
@@ -79,7 +79,8 @@ function Alumnos(props) {
           element={
             <EditarAlumno 
               idAlumno={idAlumno} 
-              datos={perfilAlumno} 
+              datos={perfilAlumno}
+              actualizarDatosAlumno={actualizarDatos}
               asistenciasEntrada={asistenciasEntrada.filter((asis) => asis.claveEstudianteAsistenciaEntrada == claveEstudiante)}
               justificantesAceptados={justificantesAceptados.filter(justi => justi.claveEstudianteJustificante == claveEstudiante)}
               justificantesEnEspera={justificantesEnEspera.filter(justi => justi.claveEstudianteJustificante == claveEstudiante)}

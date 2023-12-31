@@ -27,9 +27,9 @@ function UsuarioJustificantes(props) {
           <span className='agregar-alumnos__texto'>Crear Justificante</span>
         </Link>
         {
-          fotoPrueba ? 
-            <button className='boton__blanco' onClick={() => setMostrarFotoPrueba(true)}>Ver Prueba</button>
-          : <></>
+          fotoPrueba 
+            ? <button className='boton__blanco' onClick={() => setMostrarFotoPrueba(true)}>Ver Prueba</button>
+            : <></>
         }
       </div>
       <div className='container-botones-usuario-justificantes'>
@@ -63,15 +63,15 @@ function UsuarioJustificantes(props) {
       </div>
       <Modal
         open={mostrarFotoPrueba}
-        onClose={setMostrarFotoPrueba}
-        className={'usuario-justificantes__modal'}
+        onClose={() => setMostrarFotoPrueba(false)}
+        className='modal__superior'
       > 
-        <div className='container-foto-prueba'>
-          <div className='caja-foto-prueba'>
-            <TiDelete className='foto-prueba__icon' onClick={() => setMostrarFotoPrueba(false)} />
-            <img className='foto-prueba' src={fotoPrueba} alt="Foto prueba del justificante" />
-          </div>
-        </div> 
+        <img 
+          className='foto-prueba centrar__contenido' 
+          src={fotoPrueba} 
+          alt="Foto prueba del justificante"
+          onClick={() => setMostrarFotoPrueba(false)}
+        />
       </Modal>
       <div>
         <Routes>

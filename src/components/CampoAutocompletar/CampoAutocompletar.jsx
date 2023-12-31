@@ -1,15 +1,17 @@
+import '../../assets/css/components/CampoMUI.css'
 import '../../assets/css/components/CampoAutocompletar.css'
 
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
 function CampoAutocompletar(props) {
-  const { titulo, placeholder, opciones, valor, cambiarValor } = props
+  const { className='', titulo, placeholder, opciones, valor, cambiarValor } = props
 
   return (
     <div className='container-autocompletar'>
       <label className='titulo-autocompletar'>{titulo}</label>
       <Autocomplete
+        className={`${className}`}
         disablePortal
         fullWidth
         value={valor}

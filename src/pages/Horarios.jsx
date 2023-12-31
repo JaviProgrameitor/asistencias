@@ -54,7 +54,7 @@ function Horarios(props) {
           path='/clases'
           element={
             <Clases
-              idiomasImpartidos={idiomasImpartidos}
+              idiomasImpartidos={idiomasImpartidos.map(idioma => idioma.nombre)}
               clases={clases}
               puestoAdmin={puestoAdmin}
             />

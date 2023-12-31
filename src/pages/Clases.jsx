@@ -5,26 +5,18 @@ import TablaDatos from '../components/TablaDatos/TablaDatos'
 import Campo from '../components/Campo/Campo'
 import ListaOpciones from '../components/ListaOpciones/ListaOpciones'
 import Indicadores from '../components/Indicadores/Indicadores';
+import Loader from '../components/Loader/Loader'
+import CampoHora from '../components/CampoHora/CampoHora';
+import BarraBusquedaOpciones from '../components/BarraBusquedaOpciones/BarraBusquedaOpciones';
 
-
-import { initializeApp } from "firebase/app";
-import { doc, deleteDoc, addDoc, collection, getFirestore  } from "firebase/firestore";
-import firebaseConfig from '../firebase';
+import { createDatabase, deleteDatabase } from '../firebase';
 
 import dayjs from 'dayjs';
 
 import Modal from '@mui/material/Modal';
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 
 import { Toaster, toast } from 'sonner'
 
@@ -39,6 +31,7 @@ function HorariosContenido(props) {
   const [ idClaseSeleccionada,setIdClaseSeleccionada ] = useState('')
   const [ filtrarIdiomas, setFiltrarIdiomas ] = useState(idiomasImpartidos)
   const [ idiomaSeleccionado, setIdiomaSeleccionado] = useState('General');
+  const [ activarLoader, setActivarLoader ] = useState(false)
 
   //Todo: Estados Crear Clase
   const [ nombreClaseNuevo, setNombreClaseNuevo ] = useState('')
@@ -53,11 +46,6 @@ function HorariosContenido(props) {
   const [ diaViernesClase, setDiaViernesClase ] = useState(false)
   const [ diaSabadoClase, setDiaSabadoClase ] = useState(false)
   const [ diaDomingoClase, setDiaDomingoClase ] = useState(false)
-
-  console.log(idiomasImpartidos)
-
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
 
   const opcionesModalidades = [
     'Presencial',
@@ -147,7 +135,7 @@ function HorariosContenido(props) {
     let aux = []
     for(let i = 0; i < idiomasImpartidos.length; i++) {
       try {
-        if(idiomasImpartidos[i].nombre == valor) {
+        if(idiomasImpartidos[i] == valor) {
           aux.push(idiomasImpartidos[i])
         }
       } catch {}
@@ -157,6 +145,8 @@ function HorariosContenido(props) {
 
   //Todo: Función para crear clases
   async function crearClase() {
+    setActivarLoader(true)
+
     //Filtrar los nombres de los días de la clase
     const diasClaseMap = opcionesDiasSemana.map(dia => {
       if(dia.valor === true) return dia.dia
@@ -191,15 +181,14 @@ function HorariosContenido(props) {
       diasNumeroClase
     }
 
-    const collectionRef = collection(db, 'clases')
-    const docRef = await addDoc(collectionRef, datos)
+    await createDatabase('clases', datos)
+    setActivarLoader(false)
     toast.success('La Clase ha sido agregada con exito')
   }
 
   //Todo: Función para eliminar clases
   async function eliminarClase() {
-    const docRef = doc(db, 'clases', idClaseSeleccionada)
-    await deleteDoc(docRef)
+    await deleteDatabase('clases', idClaseSeleccionada)
     toast.success('La Clase ha sido eliminada con exito')
   }
 
@@ -233,31 +222,20 @@ function HorariosContenido(props) {
           </button>
         </div>
         <div className='contenedor__margin-top'>
-          <FormControl margin='dense' fullWidth variant='filled' color='success'>
-            <InputLabel id="demo-simple-select-label">Idioma</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={idiomaSeleccionado}
-              label="Age"
-              onChange={(e) => setIdiomaSeleccionado(e.target.value)}
-            >
-              <MenuItem value={'General'}>General</MenuItem>
-              {
-                idiomasImpartidos.map((idioma, index) => 
-                  <MenuItem key={index} value={`${idioma.nombre}`}>{idioma.nombre}</MenuItem>
-                )
-              }
-            </Select>
-          </FormControl>
+          <BarraBusquedaOpciones
+            titulo='Idioma'
+            valor={idiomaSeleccionado}
+            cambiarValor={setIdiomaSeleccionado}
+            opciones={['General', ...idiomasImpartidos]}
+          />
         </div>
         {
           filtrarIdiomas.map((idioma, index) => 
             <TablaDatos 
               key={index} 
-              idioma={idioma.nombre}
-              encabezados={['Número', 'Clave', 'Nombre', 'Idioma', 'Días', 'Hora de Inicio', 'Hora de Final', 'Modalidad', 'Acciones']}
-              contenidos={clases.filter(clase => clase.idiomaClase == idioma.nombre)}
+              idioma={idioma}
+              encabezados={['Número', 'Nombre', 'Días', 'Hora', 'Modalidad', 'Acciones']}
+              contenidos={clases.filter(clase => clase.idiomaClase == idioma)}
               seleccionarClase={actualizarDatos}
               handleOpen={handleOpen}
               variable={setOPenClase}
@@ -268,6 +246,7 @@ function HorariosContenido(props) {
         }
       </div>
       <Modal
+        className='modal__superior'
         open={open}
         onClose={() => {
           resetearDatosCrear()
@@ -284,7 +263,7 @@ function HorariosContenido(props) {
               handleClose(setOpen)
             }}
           >
-            <div className='contenedor__centrado-separacion'>
+            <div className='contenedor__centrado-separacion contenedor__wrap gap-x__25'>
               <div>
                 <Campo 
                   className='campo-verde-claro'
@@ -321,7 +300,7 @@ function HorariosContenido(props) {
                   placeholder='Selecciona el idioma'
                   valor={idiomaClaseNuevo}
                   cambiarValor={setIdiomaClaseNuevo}
-                  opciones={idiomasImpartidos.map(idioma => idioma.nombre)}
+                  opciones={idiomasImpartidos}
                 />
                 <ListaOpciones 
                   className='lista-opciones__verde-claro'
@@ -331,16 +310,18 @@ function HorariosContenido(props) {
                   cambiarValor={setModalidadClaseNuevo}
                   opciones={opcionesModalidades}
                 />
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Inicio Clase">
-                    <MobileTimePicker value={horaInicioClaseNuevo} onChange={setHoraInicioClaseNuevo} />
-                  </DemoItem>
-                </LocalizationProvider>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Final Clase">
-                    <MobileTimePicker value={horaFinalClaseNuevo} onChange={setHoraFinalClaseNuevo} />
-                  </DemoItem>
-                </LocalizationProvider>
+                <CampoHora
+                  className='input-MUI__verde'
+                  titulo='Inicio de Clase'
+                  valor={horaInicioClaseNuevo}
+                  cambiarValor={setHoraInicioClaseNuevo}
+                />
+                <CampoHora
+                  className='input-MUI__verde'
+                  titulo='Final Clase'
+                  valor={horaFinalClaseNuevo}
+                  cambiarValor={setHoraFinalClaseNuevo}
+                />
               </div>
             </div>
             <div className='contenedor__centrado-separacion contenedor__margin-top'>
@@ -363,6 +344,7 @@ function HorariosContenido(props) {
         </div>
       </Modal>
       <Modal
+        className='modal__superior'
         open={openClase}
         onClose={() => {
           resetearClaseSeleccionada()
@@ -370,7 +352,7 @@ function HorariosContenido(props) {
         }}
       >
         <div className='modal__por-defecto modal__contenido'>
-          <h4 className='titulos-3'>Eliminar Clase</h4>
+          <h4 className='advertencia__titulo'>!ADVERTENCIA¡</h4>
           <p className='advertencia__texto'>¿Seguro qué quieres eliminar la clase?</p>
           <div className='contenedor__wrap'>
             {
@@ -406,6 +388,9 @@ function HorariosContenido(props) {
           </div>
         </div>
       </Modal>
+      <Loader
+        activarLoader={activarLoader}
+      />
     </div>
   )
 }

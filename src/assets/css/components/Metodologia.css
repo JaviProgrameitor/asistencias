@@ -1,0 +1,96 @@
+/* Metodologia */
+.metodologia__contenedor-titulo {
+  display: flex;
+}
+
+.caja-metodologia__contenido {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+
+  font-family: var(--family-poppins);
+}
+
+.metodologia-introduccion { 
+  grid-area: 1 / 1 / 2 / 2;
+
+  font-size: var(--fs-texto);
+}
+
+.metodologia-ejemplos { 
+  grid-area: 1 / 2 / 3 / 3;
+  padding-left: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ejemplo {
+  display: flex;
+  gap: 10px;
+}
+
+.ejemplo__imagen {
+  width: 100px;
+  height: 100px;
+}
+
+.ejemplo__texto {
+  font-size: var(--fs-texto);
+}
+
+.metodologia-demostracion { 
+  grid-area: 2 / 1 / 3 / 2;
+}
+
+.demostracion__imagen {
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+@media (min-width: 900px) and (max-width: 940px) {
+  /* Metodología */
+  .ejemplo__imagen {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 900px) {
+  /* Metodología */
+  .ejemplo__imagen {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 800px) {
+  /* Metodología */
+  .caja-metodologia__contenido {
+    display: block;
+  }
+
+  .ejemplo {
+    align-items: center;
+  }
+
+  .metodologia-demostracion {
+    grid-area: 3 / 1 / 3 / 2;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Metodología */
+  .metodologia__contenedor-titulo {
+    justify-content: center;
+  }
+
+  .ejemplo__imagen {
+    align-self: flex-start;
+  }
+}

@@ -4,7 +4,7 @@
 }
 
 .campo label {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--family-montserrat);
   font-size: 18px;
   font-weight: 600;
   display: block;
@@ -19,7 +19,8 @@
   border: none;
   padding: 20px 20px;
   outline-color: #6278f7;
-  font-size: 16px;
+  font-size: 15px;
+  font-family: var(--family-poppins);
 }
 
 .campo-color input {

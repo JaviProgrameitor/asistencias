@@ -1,0 +1,147 @@
+/* Contactanos */
+.caja-contacto__contenido {
+  display: flex;
+}
+
+.caja-contacto__contenido-enlaces {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 40px;
+}
+
+.enlaces-contacto {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.enlaces-contacto__imagen {
+  width: 55px;
+}
+
+.enlaces-contacto__texto {
+  margin: 0;
+  height: auto;
+  background: transparent;
+  padding: 0;
+  border: none;
+}
+
+.enlaces-contacto__texto {
+  --border-right: 6px;
+  --text-stroke-color: rgba(255,255,255,0.6);
+  --animation-color: #37FF8B;
+  --fs-size: 25px;
+  display: inline-block;
+  letter-spacing: 3px;
+  text-decoration: none;
+  font-size: var(--fs-size);
+  font-family: "Arial";
+  position: relative;
+  color: black;
+}
+
+.hover-text {
+  position: absolute;
+  box-sizing: border-box;
+  content: attr(data-text);
+  color: var(--animation-color);
+  width: 0%;
+  inset: 0;
+  border-right: var(--border-right) solid var(--animation-color);
+  overflow: hidden;
+  transition: 0.5s;
+  -webkit-text-stroke: 1px var(--animation-color);
+}
+
+.enlaces-contacto__texto:hover .hover-text, .enlaces-contacto:hover .hover-text {
+  width: 100%;
+  filter: drop-shadow(0 0 23px var(--animation-color))
+}
+
+.caja-contacto__demostracion {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.caja-contacto__demostracion img {
+  width: 75%;
+}
+
+@media (min-width: 940px) and (max-width: 1200px) {
+  /* Contactanos */
+  .enlaces-contacto__texto {
+    --fs-size: 20px;
+  }
+
+  .enlaces-contacto__imagen {
+    width: 48px;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 940px) {
+  /* Contactanos */
+  .enlaces-contacto__texto {
+    --fs-size: 20px;
+  }
+
+  .enlaces-contacto__imagen {
+    width: 48px;
+  }
+}
+
+@media (max-width: 900px) {
+  /* Contactanos */
+  .caja-contacto__contenido-enlaces {
+    width: 100%;
+  }
+
+  .enlaces-contacto__texto {
+    --fs-size: 20px;
+  }
+
+  .enlaces-contacto__imagen {
+    width: 48px;
+  }
+
+  .caja-contacto__demostracion {
+    display: none;
+  }
+}
+
+@media (max-width: 500px) {
+  /* Contactanos */
+  .enlaces-contacto__imagen {
+    width: 25px;
+  }
+
+  .enlaces-contacto__texto {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 350px) {
+  /* Contactanos */
+  .enlaces-contacto {
+    gap: 5px;
+  }
+
+  .enlaces-contacto__imagen {
+    width: 20px;
+  }
+
+  .enlaces-contacto__texto {
+    font-size: 10px;
+    letter-spacing: 0;
+  }
+
+  .hover-text {
+    border: 0;
+  }
+}

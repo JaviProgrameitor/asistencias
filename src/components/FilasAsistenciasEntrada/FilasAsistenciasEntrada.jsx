@@ -1,44 +1,36 @@
 
-import { useState, useEffect } from "react"
 
 function FilasAsistenciasEntrada(props) {
   const { posicion, personales = false } = props
   const { 
     nombreAsistenciaEntrada, 
-    apellidoAsistenciaEntrada, 
-    claveEstudianteAsistenciaEntrada, 
-    fechaCompletaAsistenciaEntrada,
-    horaAsistenciaEntrada, 
-    diaAsistenciaEntrada, 
-    diasHorarios, 
-    horaHorario, 
-    puntualidadClase, 
-    modalidadClase, 
-    entradaSalidaAsistencia 
+    apellidoAsistenciaEntrada,
+    claveEstudianteAsistenciaEntrada,
+    fechaInternaAsistenciaEntrada,
+    fechaAsistenciaEntrada,
+    diasHorarios,
+    horaHorario,
+    claveHorario,
+    puntualidadClase,
+    modalidadClase,
+    entradaSalidaAsistencia,
+    idiomaAsistenciaEntrada,
   } = props.datos
-  const [tipo, setTipo] = useState()
-  const [activo, setActivo] = useState()
-
-  useEffect(() => {
-    if(posicion === 0 || posicion % 2 === 0) setTipo('elemento-par')
-    else setTipo('elemento-impar')
-  })
 
   return (
-    <tr className={`fila fila-administrador ${tipo} ${activo}`}>
+    <tr className={`fila fila-administrador ${posicion % 2 === 0 ? 'elemento-par' : 'elemento-impar'}`}>
       <td className='td-admin'>{entradaSalidaAsistencia}</td>
       {
         personales
           ? <>
               <td className='td-admin'>{nombreAsistenciaEntrada}</td>
               <td className='td-admin'>{apellidoAsistenciaEntrada}</td>
-              <td className='td-admin'>{claveEstudianteAsistenciaEntrada}</td>
             </>
           : <></>
       }
-      <td className='td-admin'>{fechaCompletaAsistenciaEntrada}</td>
+      <td className='td-admin'>{new Date(fechaAsistenciaEntrada).toLocaleDateString()}</td>
       <td className='td-admin'>
-        <span>{horaAsistenciaEntrada}</span><br />
+        <span>{`${new Date(fechaAsistenciaEntrada).getHours()}:${new Date(fechaAsistenciaEntrada).getMinutes()}`}</span><br />
         <span>{puntualidadClase}</span>
       </td>
       <td className='td-admin'>

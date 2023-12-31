@@ -5,13 +5,9 @@ import { Link } from "react-router-dom"
 import { FaArrowCircleLeft } from 'react-icons/fa'
 
 import GraficoLinea from "../components/GraficoLinea/GraficoLinea"
-import CampoAutocompletar from '../components/CampoAutocompletar/CampoAutocompletar'
+import ListaOpciones from "../components/ListaOpciones/ListaOpciones"
 import CampoNumero from "../components/CampoNumero/CampoNumero";
-
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import BarraBusquedaOpciones from '../components/BarraBusquedaOpciones/BarraBusquedaOpciones';
 
 function ReportesContenido(props) {
   const { asistencias, flechaRegresar, nombreAlumno, clases, idiomasImpartidos } = props
@@ -49,7 +45,20 @@ function ReportesContenido(props) {
   const [ numeroMesSegundoPorClaseEnLinea, setNumeroMesSegundoPorClaseEnLinea ] = useState()
   const [ asistenciasSegundoClasesEnLinea, setAsistenciasSegundoClasesEnLInea ] = useState([])
   
-  let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  let meses = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre"
+  ];
 
   function handleChange(event) {
     setIdiomaSeleccionado(event.target.value);
@@ -144,14 +153,25 @@ function ReportesContenido(props) {
 
     if(idiomaSeleccionado == 'General') {
       for(let i = 0; i < meses.length; i++) {
-        let datos = asistencias.filter((a) => a.mesAsistenciaEntrada == calcularNumeroPorMes(meses[i]) && a.añoAsistenciaEntrada == añoPorMes)
+        let datos = 
+          asistencias.filter(
+            (a) => 
+            new Date(a.fechaAsistenciaEntrada).getMonth() == calcularNumeroPorMes(meses[i]) && 
+            new Date(a.fechaAsistenciaEntrada).getFullYear() == añoPorMes
+          )
         nuevosDatos.push(datos.length)
       }
     }
 
     else {
       for(let i = 0; i < meses.length; i++) {
-        let datos = asistencias.filter((a) => a.mesAsistenciaEntrada == calcularNumeroPorMes(meses[i]) && a.añoAsistenciaEntrada == añoPorMes && a.idiomaAsistenciaEntrada == idiomaSeleccionado)
+        let datos = 
+          asistencias.filter(
+            (a) => 
+            new Date(a.fechaAsistenciaEntrada).getMonth() == calcularNumeroPorMes(meses[i]) && 
+            new Date(a.fechaAsistenciaEntrada).getFullYear() == añoPorMes && 
+            a.idiomaAsistenciaEntrada == idiomaSeleccionado
+          )
         nuevosDatos.push(datos.length)
       }
     }
@@ -164,14 +184,25 @@ function ReportesContenido(props) {
 
     if(idiomaSeleccionado == 'General') {
       for(let i = 0; i < meses.length; i++) {
-        let datos = asistencias.filter((a) => a.mesAsistenciaEntrada == calcularNumeroPorMes(meses[i]) && a.añoAsistenciaEntrada == añoSegundoPorMes)
+        let datos = 
+          asistencias.filter(
+            (a) => 
+            new Date(a.fechaAsistenciaEntrada).getMonth() == calcularNumeroPorMes(meses[i]) && 
+            new Date(a.fechaAsistenciaEntrada).getFullYear() == añoSegundoPorMes
+          )
         nuevosDatos.push(datos.length)
       }
     }
 
     else {
       for(let i = 0; i < meses.length; i++) {
-        let datos = asistencias.filter((a) => a.mesAsistenciaEntrada == calcularNumeroPorMes(meses[i]) && a.añoAsistenciaEntrada == añoSegundoPorMes && a.idiomaAsistenciaEntrada == idiomaSeleccionado)
+        let datos = 
+          asistencias.filter(
+            (a) => 
+            new Date(a.fechaAsistenciaEntrada).getMonth() == calcularNumeroPorMes(meses[i]) && 
+            new Date(a.fechaAsistenciaEntrada).getFullYear() == añoSegundoPorMes &&
+            a.idiomaAsistenciaEntrada == idiomaSeleccionado
+          )
         nuevosDatos.push(datos.length)
       }
     }
@@ -184,7 +215,14 @@ function ReportesContenido(props) {
     let nuevosDatos = []
 
     for(let i = 0; i < clasesFiltradasPresencial.length; i++) {
-      let filtrando = asistencias.filter((a) => a.claveHorario == clasesFiltradasPresencial[i].claveClase && a.mesAsistenciaEntrada == numeroMesPorClase && a.añoAsistenciaEntrada == añoPorClase && a.modalidadClase == 'Presencial')
+      let filtrando = 
+        asistencias.filter(
+          (a) => 
+          a.claveHorario == clasesFiltradasPresencial[i].claveClase && 
+          new Date(a.fechaAsistenciaEntrada).getMonth() == numeroMesPorClase && 
+          new Date(a.fechaAsistenciaEntrada).getFullYear() == añoPorClase && 
+          a.modalidadClase == 'Presencial'
+        )
       nuevosDatos.push(filtrando.length)
     }
 
@@ -195,7 +233,14 @@ function ReportesContenido(props) {
     let nuevosDatos = []
 
     for(let i = 0; i < clasesFiltradasPresencial.length; i++) {
-      let filtrando = asistencias.filter((a) => a.claveHorario == clasesFiltradasPresencial[i].claveClase && a.mesAsistenciaEntrada == numeroMesSegundoPorClase && a.añoAsistenciaEntrada == añoSegundoPorClase && a.modalidadClase == 'Presencial')
+      let filtrando = 
+        asistencias.filter(
+          (a) => 
+          a.claveHorario == clasesFiltradasPresencial[i].claveClase && 
+          new Date(a.fechaAsistenciaEntrada).getMonth() == numeroMesSegundoPorClase && 
+          new Date(a.fechaAsistenciaEntrada).getFullYear() == añoSegundoPorClase && 
+          a.modalidadClase == 'Presencial'
+        )
       nuevosDatos.push(filtrando.length)
     }
 
@@ -207,7 +252,14 @@ function ReportesContenido(props) {
     let nuevosDatos = []
 
     for(let i = 0; i < clasesFiltradasEnLinea.length; i++) {
-      let filtrando = asistencias.filter((a) => a.claveHorario == clasesFiltradasEnLinea[i].claveClase && a.mesAsistenciaEntrada == numeroMesPorClaseEnLinea && a.añoAsistenciaEntrada == añoPorclaseEnLinea && a.modalidadClase == 'En linea')
+      let filtrando = 
+        asistencias.filter(
+          (a) => 
+          a.claveHorario == clasesFiltradasEnLinea[i].claveClase && 
+          new Date(a.fechaAsistenciaEntrada).getMonth() == numeroMesPorClaseEnLinea && 
+          new Date(a.fechaAsistenciaEntrada).getFullYear() == añoPorclaseEnLinea && 
+          a.modalidadClase == 'En linea'
+        )
       nuevosDatos.push(filtrando.length)
     }
 
@@ -218,11 +270,23 @@ function ReportesContenido(props) {
     let nuevosDatos = []
 
     for(let i = 0; i < clasesFiltradasEnLinea.length; i++) {
-      let filtrando = asistencias.filter((a) => a.claveHorario == clasesFiltradasEnLinea[i].claveClase && a.mesAsistenciaEntrada == numeroMesSegundoPorClaseEnLinea && a.añoAsistenciaEntrada == añoSegundoPorclaseEnLinea && a.modalidadClase == 'En linea')
+      let filtrando = 
+        asistencias.filter(
+          (a) => 
+          a.claveHorario == clasesFiltradasEnLinea[i].claveClase && 
+          new Date(a.fechaAsistenciaEntrada).getMonth() == numeroMesSegundoPorClaseEnLinea && 
+          new Date(a.fechaAsistenciaEntrada).getFullYear() == añoSegundoPorclaseEnLinea && 
+          a.modalidadClase == 'En linea'
+        )
       nuevosDatos.push(filtrando.length)
     }
 
     setAsistenciasSegundoClasesEnLInea(nuevosDatos)
+  }
+
+  function actualizarClases() {
+    setClasesFiltradasPresencial(clases.filter(clase => clase.modalidadClase == 'Presencial'))
+    setClasesFiltradasEnLinea(clases.filter(clase => clase.modalidadClase == 'En linea'))
   }
 
   //Todo: Total de asistencias por mes
@@ -234,22 +298,22 @@ function ReportesContenido(props) {
     asistenciasSegundoPorMes()
   }, [añoSegundoPorMes, idiomaSeleccionado])
 
-  //Todo: Asistencias presenciales por clase numero 1 de la fecha numero 1
+  //Todo: Asistencias presenciales por clase de la fecha numero 1
   useEffect(() => {
     asistenciasPorClase()
   },[mesPorClase, añoPorClase, clasesFiltradasPresencial])
 
-  //Todo: Asistencias presenciales por clase numero 1 de la fecha numero 2
+  //Todo: Asistencias presenciales por clase de la fecha numero 2
   useEffect(() => {
     asistenciasSegundoPorClase()
   },[mesSegundoPorClase, añoSegundoPorClase, clasesFiltradasPresencial])
 
-  //Todo: Asistencias en linea por clase numero 2 de la fecha numero 1
+  //Todo: Asistencias en linea por clase de la fecha numero 1
   useEffect(() => {
     asistenciasPorClaseEnLinea()
   },[mesPorClaseEnLinea, añoPorclaseEnLinea, clasesFiltradasEnLinea])
 
-  //Todo: Asistencias en linea por clase numero 2 de la fecha numero 2
+  //Todo: Asistencias en linea por clase de la fecha numero 2
   useEffect(() => {
     asistenciasSegundoPorClaseEnLinea()
   },[mesSegundoPorClaseEnLinea, añoSegundoPorclaseEnLinea, clasesFiltradasEnLinea])
@@ -258,36 +322,34 @@ function ReportesContenido(props) {
     filtrarIdioma()
   }, [idiomaSeleccionado])
 
+  useEffect(() => {
+    actualizarClases()
+  }, [clases])
+
   return ( 
     <div className='container-reportes'>
       {
-        flechaRegresar ? <div className='contenedor__todo-principio'>
-          <Link to={'/sistema-asistencias/panel-control/asistencias/alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
-          </div>
-        : <></>
+        flechaRegresar 
+          ? <div className='contenedor__todo-principio'>
+              <Link 
+                to={'/sistema-asistencias/panel-control/asistencias/alumnos'}
+              >
+                <FaArrowCircleLeft className='flecha-regresar icon-40' />
+              </Link>
+            </div>
+          : <></>
       }
       {
         nombreAlumno ? <h2 className="titulos-2 titulos__verde-oscuro">Asistencias de {nombreAlumno}</h2> : <></>
       }
       <div>
         <h3 className='titulos-2'>Asistencias {idiomaSeleccionado}</h3>
-        <FormControl fullWidth variant='filled' color='success'>
-          <InputLabel id="demo-simple-select-label">Idioma</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={idiomaSeleccionado}
-            label="Age"
-            onChange={handleChange}
-          >
-            <MenuItem value={'General'}>General</MenuItem>
-            {
-              idiomasImpartidos.map((idioma, index) => 
-                <MenuItem key={index} value={`${idioma}`}>{idioma}</MenuItem>
-              )
-            }
-          </Select>
-        </FormControl>
+        <BarraBusquedaOpciones
+          titulo='Idioma'
+          valor={idiomaSeleccionado}
+          cambiarValor={setIdiomaSeleccionado}
+          opciones={['General', ...idiomasImpartidos]}
+        />
       </div>
       <div className='primera-grafica'>
         <h3 className='titulos-2'>Total de Asistencias Por Mes</h3>
@@ -296,6 +358,7 @@ function ReportesContenido(props) {
             <h4 className='titulos-3'>Primera Fecha</h4>
             <div>
               <CampoNumero
+                className='input-MUI__verde'
                 titulo='El año'
                 valor={añoPorMes}
                 cambiarValor={setAñoPorMes}
@@ -303,9 +366,10 @@ function ReportesContenido(props) {
             </div>
           </div>
           <div className='campos-grafica'>
-            <h4 className='titulos-3'>Primera Fecha</h4>
+            <h4 className='titulos-3'>Segunda Fecha</h4>
             <div>
               <CampoNumero
+                className='input-MUI__verde'
                 titulo='El año'
                 valor={añoSegundoPorMes}
                 cambiarValor={setAñoSegundoPorMes}
@@ -327,14 +391,16 @@ function ReportesContenido(props) {
           <div className='campos-grafica'>
             <h4 className='titulos-3'>Primera Fecha</h4>
             <div>
-              <CampoAutocompletar
+              <ListaOpciones 
                 titulo='Mes del Año'
                 placeholder='Selecciona el mes del año'
-                opciones={meses}
                 valor={mesPorClase}
                 cambiarValor={valorMes}
+                opciones={meses}
+                className='lista-opciones__verde-claro'
               />
               <CampoNumero
+                className='input-MUI__verde'
                 titulo='El año'
                 valor={añoPorClase}
                 cambiarValor={setAñoPorClase}
@@ -344,14 +410,16 @@ function ReportesContenido(props) {
           <div className='campos-grafica'>
             <h4 className='titulos-3'>Segunda Fecha</h4>
             <div>
-              <CampoAutocompletar
+              <ListaOpciones 
                 titulo='Mes del Año'
                 placeholder='Selecciona el mes del año'
-                opciones={meses}
                 valor={mesSegundoPorClase}
                 cambiarValor={valorMesSegundo}
+                opciones={meses}
+                className='lista-opciones__verde-claro'
               />
               <CampoNumero
+                className='input-MUI__verde'
                 titulo='El año'
                 valor={añoSegundoPorClase}
                 cambiarValor={setAñoSegundoPorClase}
@@ -374,14 +442,16 @@ function ReportesContenido(props) {
           <div className='campos-grafica'>
             <h4 className='titulos-3'>Primera Fecha</h4>
             <div>
-              <CampoAutocompletar
+              <ListaOpciones 
                 titulo='Mes del Año'
                 placeholder='Selecciona el mes del año'
-                opciones={meses}
                 valor={mesPorClaseEnLinea}
                 cambiarValor={valorMesEnLinea}
+                opciones={meses}
+                className='lista-opciones__verde-claro'
               />
               <CampoNumero
+                className='input-MUI__verde'
                 titulo='El año'
                 valor={añoPorclaseEnLinea}
                 cambiarValor={setAñoPorClaseEnLinea}
@@ -391,14 +461,16 @@ function ReportesContenido(props) {
           <div className='campos-grafica'>
             <h4 className='titulos-3'>Segunda Fecha</h4>
             <div>
-              <CampoAutocompletar
+              <ListaOpciones 
                 titulo='Mes del Año'
                 placeholder='Selecciona el mes del año'
-                opciones={meses}
                 valor={mesSegundoPorClaseEnLinea}
                 cambiarValor={valorMesSegundoEnLinea}
+                opciones={meses}
+                className='lista-opciones__verde-claro'
               />
               <CampoNumero
+                className='input-MUI__verde'
                 titulo='El año'
                 valor={añoSegundoPorclaseEnLinea}
                 cambiarValor={setAñoSegundoPorClaseEnLinea}

@@ -5,57 +5,31 @@ import { Link } from "react-router-dom"
 import { FaArrowCircleLeft } from 'react-icons/fa'
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from 'react-icons/ai'
 
-import CampoAutocompletar from '../components/CampoAutocompletar/CampoAutocompletar';
+import ListaOpciones from "../components/ListaOpciones/ListaOpciones"
 import CampoNumero from '../components/CampoNumero/CampoNumero';
 import CampoLectura from '../components/CampoLectura/CampoLectura';
 import Indicadores from '../components/Indicadores/Indicadores';
 import FotoAlumno from '../components/FotoAlumno/FotoAlumno'
+import Loader from '../components/Loader/Loader';
 
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
-import { initializeApp } from "firebase/app";
-import { addDoc, collection, getFirestore  } from "firebase/firestore";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
-import firebaseConfig from '../firebase';
+import { createDatabase, createStorage, getURLStorage } from '../firebase';
 
 import { Toaster, toast } from 'sonner'
 
 import { v4 as uuid } from 'uuid';
 
 function CrearPago(props) {
-  const { 
-    foto, 
-    actaNacimiento,
-    ine,
-    curp,
-    comprobantePagoInicial,
+  const {
     nombre, 
-    apellido, 
-    numeroTelefono,
-    codigoPostal,
-    pais,
-    estado,
-    municipio,
-    colonia,
-    calle,
-    numeroExterior,
+    apellido,
     claveEstudiante, 
-    idiomaAprendizaje, 
-    modalidadEstudio, 
-    fechaPago, 
-    id, 
-    fechaNacimiento, 
-    correo, 
-    nivelAcademico, 
-    nivelIdioma, 
-    fechaIngreso 
+    idiomaAprendizaje,
+    fechaPago,
   } = props.perfilAlumno
-
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
-  const st = getStorage(app);
 
   const [ pasoExactoPago, setPasoExactoPago ] = useState(0)
   const [ idiomaPagoAlumno, setIdiomaPagoAlumno ] = useState(false)
@@ -68,6 +42,7 @@ function CrearPago(props) {
   const [ comprobantePagoMensualidadAlumno, setComprobantePagoMensualidadAlumno ] = useState()
 
   const [ fotoApoyoComprobantePagoMensualidad, setFotoApoyoComprobantePagoMensualidad ] = useState(false)
+  const [ activarLoader, setActivarLoader ] = useState(false)
 
   const pasosPago = [
     'Selecciona el Idioma del Pago',
@@ -76,41 +51,20 @@ function CrearPago(props) {
     'Confirmación del Pago'
   ]
 
-  const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-
-  const fechasMes = [
-    "1",
-    "2", 
-    "3", 
-    "4", 
-    "5", 
-    "6", 
-    "7", 
-    "8", 
-    "9", 
-    "10", 
-    "11", 
-    "12", 
-    "13", 
-    "14", 
-    "15", 
-    "16", 
-    "17", 
-    "18", 
-    "19", 
-    "20", 
-    "21", 
-    "22", 
-    "23", 
-    "24", 
-    "25", 
-    "26", 
-    "27", 
-    "28", 
-    "29", 
-    "30", 
-    "31"
-  ]
+  const meses = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre"
+  ];
 
   const diasMeses = {
     "Enero" : 31,
@@ -165,124 +119,41 @@ function CrearPago(props) {
   }
 
   function calcularFinMensualidad(tipoRespuesta, fecha, mes, año) {
-    let mesFinal;
-    let añoFinal;
-    let fechaFinal;
+    const mesMilisegundos = 2629800000;
 
-    if(12 == (mes + 1)) {
-      mesFinal = 'Enero'
-      añoFinal = año + 1;
+    const date = new Date()
+    const hora = date.getHours()
+    const minutos = date.getMinutes()
 
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    else if(1 == (mes + 1)) {
-      mesFinal = 'Febrero'
-      añoFinal = año
+    let fechaActual = new Date(`${mes} 15, ${año}`).getTime()
+    let nuevaFecha = new Date(fechaActual + mesMilisegundos)
 
-      if(año % 4 == 0) {
-        if(parseInt(fecha) > diasMeses["FebreroBisiesto"]) fechaFinal = diasMeses["FebreroBisiesto"]
-        else fechaFinal = fecha
-      }
-
-      else {
-        if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-        else fechaFinal = fecha
-      }
-    }
-    else if(2 == (mes + 1)) {
-      mesFinal = 'Marzo'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    else if(3 == (mes + 1)) {
-      mesFinal = 'Abril'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    else if(4 == (mes + 1)) {
-      mesFinal = 'Mayo'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    else if(5 == (mes + 1)) {
-      mesFinal = 'Junio'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    else if(6 == (mes + 1)) {
-      mesFinal = 'Julio'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    else if(7 == (mes + 1)) {
-      mesFinal = 'Agosto'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    else if(8 == (mes + 1)) {
-      mesFinal = 'Septiembre'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    else if(9 == (mes + 1)) {
-      mesFinal = 'Octubre'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    else if(10 == (mes + 1)) {
-      mesFinal = 'Noviembre'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    else if(11 == (mes + 1)) {
-      mesFinal = 'Diciembre'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
+    let mesFinal = nuevaFecha.getMonth() + 1
+    let nombreMesFinal = calcularMesPorNumero(mesFinal -  1)
+    let añoFinal = nuevaFecha.getFullYear()
+    let fechaFinal = diasMeses[nombreMesFinal] < parseInt(fecha) ? diasMeses[nombreMesFinal] : fecha
 
     if(tipoRespuesta == "string") return `${fechaFinal}/${mesFinal}/${añoFinal}`
-    else if(tipoRespuesta == "objeto") return [fechaFinal, calcularNumeroPorMes(mesFinal), añoFinal]
+    else if(tipoRespuesta == "objeto") return `${mesFinal} ${fechaFinal}, ${añoFinal} ${hora}:${minutos}`
   }
 
   async function agregarPago() {
+    setActivarLoader(true)
+
     //Todo: Storage
     const identificadorAleatorio = uuid()
-
-    const metadata = {contentType: comprobantePagoMensualidadAlumno.type};
-    const storageRef = ref(st, `pagosMensualidades/${identificadorAleatorio}`)
-    await uploadBytesResumable(storageRef, comprobantePagoMensualidadAlumno, metadata)
+    const storageRef = `pagosMensualidades/${identificadorAleatorio}`
+    await createStorage(storageRef, comprobantePagoMensualidadAlumno)
 
     const date = new Date()
     const año = date.getFullYear()
     const mes = date.getMonth()
     const fecha = date.getDate()
+    const hora = date.getHours()
+    const minutos = date.getMinutes()
 
     let mesExacto;
     let fechaExacto;
-
-    let fechaPagoExacto;
-    let mesPagoExacto;
 
     //Todo: Calcular exactamente la fecha y la hora
     if((mes + 1) < 10) mesExacto = `0${mes + 1}`
@@ -291,15 +162,7 @@ function CrearPago(props) {
     if(fecha < 10) fechaExacto = `0${fecha}`
     else if(fecha >= 10) fechaExacto = `${fecha}`
 
-    //Todo: Calcular exactamente la mensualidad a pagar
-    if((numeroMesPagoMenActualAlumno + 1) < 10) mesPagoExacto = `0${numeroMesPagoMenActualAlumno + 1}`
-    else if((numeroMesPagoMenActualAlumno + 1) >= 10) mesPagoExacto = `${numeroMesPagoMenActualAlumno + 1}`
-
-    if(fechaPagoMenActualAlumno < 10) fechaPagoExacto = `0${fechaPagoMenActualAlumno}`
-    else if(fechaPagoMenActualAlumno >= 10) fechaPagoExacto = `${fechaPagoMenActualAlumno}`
-
-
-    const comprobantePagoMensualidad = await getDownloadURL(storageRef)
+    const comprobantePagoMensualidad = await getURLStorage(storageRef)
     const idComprobantePagoMensualidad = identificadorAleatorio
 
     const nombrePago = nombre
@@ -308,18 +171,12 @@ function CrearPago(props) {
 
     const idiomaPago = idiomaPagoAlumno
 
-    const añoPagoMenActual = añoPagoMenActualAlumno
-    const numeroMesPagoMenActual = numeroMesPagoMenActualAlumno
-    const fechaPagoMenActual = parseInt(fechaPagoMenActualAlumno)
-    const fechaCompletaPagoMenActual = `${fechaPagoExacto}/${mesPagoExacto}/${añoPagoMenActual}`
+    const inicioMensualidad = new Date(`${numeroMesPagoMenActualAlumno + 1} ${fechaPagoMenActualAlumno}, ${añoPagoMenActualAlumno} ${hora}:${minutos}`).getTime()
 
-    const añoDiaPago = año
-    const mesDiaPago = mes
-    const fechaDiaPago = fecha
-    const fechaCompletaDiaPago = `${fechaExacto}/${mesExacto}/${año}`
     const fechaInternaDiaPago = `${año}-${mesExacto}-${fechaExacto}`
+    const diaPago = new Date(`${mes + 1} ${fecha}, ${año} ${hora}:${minutos}`).getTime()
 
-    const [ fechaFinMensualidad, mesFinMensualidad, añoFinMensualidad ] = calcularFinMensualidad("objeto", fechaPagoMenActualAlumno, numeroMesPagoMenActualAlumno, añoPagoMenActualAlumno)
+    const finalMensualidad = calcularFinMensualidad("objeto", fechaPagoMenActualAlumno, (numeroMesPagoMenActualAlumno + 1), añoPagoMenActualAlumno)
 
     const datos = {
       comprobantePagoMensualidad,
@@ -328,34 +185,21 @@ function CrearPago(props) {
       apellidoPago,
       claveEstudiantePago,
       idiomaPago,
-      añoPagoMenActual,
-      numeroMesPagoMenActual,
-      fechaPagoMenActual,
-      fechaCompletaPagoMenActual,
-      añoDiaPago,
-      mesDiaPago,
-      fechaDiaPago,
-      fechaCompletaDiaPago,
+      inicioMensualidad,
       fechaInternaDiaPago,
-      añoFinMensualidad,
-      mesFinMensualidad,
-      fechaFinMensualidad
+      diaPago,
+      finalMensualidad
     }
 
-    const collectionRef = collection(db, 'pagosMensualidades')
-    const docRef = await addDoc(collectionRef, datos)
+    await createDatabase('pagosMensualidades', datos)
+
+    setActivarLoader(false)
 
     toast.success('El Pago ha sido creado con exito')
 
     setIdiomaPagoAlumno(false)
     setPasoExactoPago(0)
   }
-
-  // console.log(new Date().getTime())
-  // console.log(new Date().getTime() == 1691042400000)
-  // console.log(new Date('August 3, 2023'))
-  // console.log(new Date('8 3, 2023'))
-  // console.log(new Date().getDate())
 
   useEffect(() => {
     setFechaPagoMenActualAlumno(`${idiomaPagoAlumno ? fechaPago[idiomaAprendizaje.indexOf(idiomaPagoAlumno)] : ""}`)
@@ -365,7 +209,9 @@ function CrearPago(props) {
     <div>
       <Toaster position="top-center" richColors />
       <div className='contenedor__todo-principio'>
-        <Link to={'/sistema-asistencias/panel-control/alumnos/pagos-alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
+        <Link to={'/sistema-asistencias/panel-control/alumnos/pagos-alumnos'}>
+          <FaArrowCircleLeft className='flecha-regresar icon-40' />
+        </Link>
       </div>
       <h4 className="titulos-2">Crear Pago</h4>
       <div>
@@ -379,8 +225,8 @@ function CrearPago(props) {
         <div className="contenedor__columna-centro">
           <h5 className='titulos-3'>{pasosPago[pasoExactoPago]}</h5>
           {
-            pasoExactoPago == 0 ?
-              <div className='contenedor__completo contenedor__columna-centro'>
+            pasoExactoPago == 0 
+            ? <div className='contenedor__completo contenedor__columna-centro'>
                 <div className='container-idiomas'>
                   {
                     idiomaAprendizaje.map((idioma, index) => {
@@ -396,7 +242,7 @@ function CrearPago(props) {
                     })
                   }
                 </div>
-                <div className='container-botones contenedor__todo-final'>
+                <div className='container-botones contenedor__centro-separacion'>
                   <button 
                     className='boton__blanco' 
                     onClick={() => {
@@ -412,22 +258,24 @@ function CrearPago(props) {
             : <></>
           }
           {
-            pasoExactoPago == 1 ?
-              <div className='contenedor__completo contenedor__columna-centro'>
+            pasoExactoPago == 1 
+            ? <div className='contenedor__completo contenedor__columna-centro'>
                 <div>
                   <div>
                     <h5 className="titulos-4">Fecha que corresponde el pago</h5>
                     <CampoNumero
+                      className='input-MUI__verde'
                       titulo='Año'
                       valor={añoPagoMenActualAlumno}
                       cambiarValor={setAñoPagoMenActualAlumno}
                     />
-                    <CampoAutocompletar
+                    <ListaOpciones 
                       titulo='Mes'
                       placeholder='Selecciona el mes del año'
-                      opciones={meses}
                       valor={mesPagoMenActualAlumno}
                       cambiarValor={valorMes}
+                      opciones={meses}
+                      className='lista-opciones__verde-claro'
                     />
                     <CampoLectura
                       titulo='Fecha'
@@ -435,7 +283,7 @@ function CrearPago(props) {
                     />
                   </div>
                 </div>
-                <div className='container-botones contenedor__entre'>
+                <div className='container-botones contenedor__centro-separacion'>
                   <button 
                     className='boton__blanco'
                     onClick={() => setPasoExactoPago(0)}
@@ -455,8 +303,8 @@ function CrearPago(props) {
             : <></>
           }
           {
-            pasoExactoPago == 2 ? 
-              <div className='contenedor__completo contenedor__columna-centro'>
+            pasoExactoPago == 2 
+            ? <div className='contenedor__completo contenedor__columna-centro'>
                 <div>
                   <FotoAlumno 
                     titulo='Foto del Comprobante del Pago'
@@ -470,7 +318,7 @@ function CrearPago(props) {
                     classInput='imagen__comprobante-pago-mensualidad'
                   />
                 </div>
-                <div className='container-botones contenedor__entre'>
+                <div className='container-botones contenedor__centro-separacion'>
                   <button 
                     className='boton__blanco'
                     onClick={() => setPasoExactoPago(1)}
@@ -494,8 +342,8 @@ function CrearPago(props) {
             : <></>
           }
           {
-            pasoExactoPago == 3 ? 
-              <div className='contenedor__completo contenedor__columna-centro'>
+            pasoExactoPago == 3 
+            ? <div className='contenedor__completo contenedor__columna-centro'>
                 <div>
                   <Indicadores 
                     titulo='Nombre del Alumno'
@@ -509,16 +357,16 @@ function CrearPago(props) {
                   />
                   <Indicadores 
                     titulo='Fecha que empieza la mensualidad'
-                    respuesta={`${fechaPagoMenActualAlumno}/${mesPagoMenActualAlumno}/${añoPagoMenActualAlumno}`}
+                    respuesta={`${fechaPagoMenActualAlumno}/${numeroMesPagoMenActualAlumno + 1}/${añoPagoMenActualAlumno}`}
                     claseExtra='indicadores__chicos'
                   />
                   <Indicadores 
                     titulo='Fecha que termina la mensualidad'
-                    respuesta={calcularFinMensualidad("string", fechaPagoMenActualAlumno, numeroMesPagoMenActualAlumno,añoPagoMenActualAlumno)}
+                    respuesta={calcularFinMensualidad("string", fechaPagoMenActualAlumno, (numeroMesPagoMenActualAlumno + 1),añoPagoMenActualAlumno)}
                     claseExtra='indicadores__chicos'
                   />
                 </div>
-                <div className='container-botones contenedor__entre'>
+                <div className='container-botones contenedor__centro-separacion'>
                   <button 
                     className='boton__blanco'
                     onClick={() => setPasoExactoPago(2)}
@@ -539,6 +387,9 @@ function CrearPago(props) {
           }
         </div>
       </div>
+      <Loader
+        activarLoader={activarLoader}
+      />
     </div>
   )
 }

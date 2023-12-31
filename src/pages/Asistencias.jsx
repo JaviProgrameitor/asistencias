@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Routes, Route } from "react-router-dom"
 
 import TablaAsistencias from './TablaAsistencias';
@@ -45,10 +45,10 @@ function Asistencias(props) {
           element={
             <TablaAsistencias 
               asistenciasEntrada={
-                asistenciasEntrada.filter(asis => 
-                  asis.añoAsistenciaEntrada == añoActual && 
-                  asis.mesAsistenciaEntrada == mesActual && 
-                  asis.fechaAsistenciaEntrada === fechaActual
+                asistenciasEntrada.filter(asistencia => 
+                  new Date(asistencia.fechaAsistenciaEntrada).getFullYear() == añoActual &&
+                  new Date(asistencia.fechaAsistenciaEntrada).getMonth() == mesActual &&
+                  new Date(asistencia.fechaAsistenciaEntrada).getDate() == fechaActual
                 )
               }
             />

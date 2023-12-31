@@ -9,22 +9,26 @@ import Html5QrcodePlugin from '../components/ScannerReader/ScannerReader';
 import { Toaster, toast } from 'sonner'
 
 function ScannerEnLinea(props) {
-  const { alumnos, clases, setScannerAlumno, setScannerModalidad } = props
+  const { alumnos, clases, setScannerAlumno, setScannerClase } = props
   
   const mesMilisegundos = 2629800000;
   const minutos30 = 1800000;
   const diaMilisegundos = 86400000;
-  const [ fechaActual, setFechaActual ] = useState(calcularFechaActual())
+
+  const [ clasesActivas, setClasesActivas ] = useState(calcularFechaActual())
+  const [ idClaseSeleccionada, setIdClaseSeleccionada ] = useState(null)
+  const [ etapaEscanear, setEtapaEscanear ] = useState(1)
 
   const navigate = useNavigate()
 
   function calcularFechaActual() {
-    const date = new Date(1698384600000);
+    const date = new Date(1700013600000);
     const año = date.getFullYear()
     const mes = new Date(date.getTime() + mesMilisegundos).getMonth()
     const fecha = date.getDate()
     const hora = date.getTime()
     let dia = date.getDay()
+    let clasesAct = []
 
     for(let i = 0; i < clases.length; i++) {
       let horaInicioPrueba = new Date(`${mes} ${fecha}, ${año} ${clases[i].horaInicioClase}`).getTime() - minutos30
@@ -61,17 +65,16 @@ function ScannerEnLinea(props) {
         clases[i].diasNumeroClase.includes(dia) && 
         horaInicio < hora && hora < horaFinal
       ) 
-        return true
+      clasesAct.push(clases[i])
     }
 
-    return false
+    return clasesAct
   }
 
   async function EscanearAlumno(respuestaScanner, decodedResult) {
     let alumno = alumnos.filter((alumno) => alumno.claveEstudiante == respuestaScanner)
 
     if(alumno.length > 0) {
-      await setScannerModalidad('En linea')
       await setScannerAlumno(alumno)
 
       navigate('/sistema-asistencias/scanner-alumno')
@@ -80,10 +83,21 @@ function ScannerEnLinea(props) {
     else toast.error('Alumno no encontrado')
   };
 
+  function seleccionarClase(clase) {
+    if(!clase) {
+      setIdClaseSeleccionada(null)
+      setScannerClase()
+    }
+    else {
+      setIdClaseSeleccionada(clase.id)
+      setScannerClase(clase)
+    }
+  }
+
   useEffect(() => {
     const actualizandoFecha = setInterval(() => {
-      setFechaActual(calcularFechaActual())
-    }, 2000);
+      setClasesActivas(calcularFechaActual())
+    }, 10000);
 
     return () => clearInterval(actualizandoFecha);
   }, []);
@@ -96,18 +110,66 @@ function ScannerEnLinea(props) {
         </Link>
       </div>
       { 
-        fechaActual ?
-          <div>
-            <h2 className='titulos-2 titulo-qr-en-linea'>Escanea el Codigo QR</h2>
-            <div className='caja-qr-en-linea'>
-              <div className='qr-en-linea'>
-                <Html5QrcodePlugin
-                  fps={10}
-                  qrbox={250}
-                  disableFlip={false}
-                  qrCodeSuccessCallback={EscanearAlumno}
-                />
-              </div>
+        clasesActivas.length > 0 
+        ? <div>
+            {
+              etapaEscanear == 1
+              ? <>
+                  <h2 className='titulos-2 titulo-qr-en-linea'>Selecciona la clase</h2>
+                  <div className='contenedor__clases contenedor__columna-centro contenedor__gap-15 padd-top__20'>
+                    {
+                      clasesActivas.map((clase, index) => 
+                        <div 
+                          className={`cajas-clases ${idClaseSeleccionada == clase.id ? 'clase-activo' : ''}`} 
+                          key={index} 
+                          onClick={() => {
+                            idClaseSeleccionada == clase.id 
+                            ? seleccionarClase(false)
+                            : seleccionarClase(clase)
+                          }}
+                        >
+                          <p>Idioma: {clase.idiomaClase}</p>
+                          <p>Clase: {clase.nombreClase}</p>
+                        </div>
+                      )
+                    }
+                  </div>
+                </>
+              : <>
+                  <h2 className='titulos-2 titulo-qr-en-linea'>Escanea el Codigo QR</h2>
+                  <div className='caja-qr-en-linea'>
+                    <div className='qr-en-linea'>
+                      <Html5QrcodePlugin
+                        fps={10}
+                        qrbox={250}
+                        disableFlip={false}
+                        qrCodeSuccessCallback={EscanearAlumno}
+                      />
+                    </div>
+                  </div>
+                </>
+            }
+            <div className='contenedor__centro-separacion padd-top__20'>
+              {
+                etapaEscanear != 1
+                ? <button
+                    className='boton__blanco'
+                    onClick={() => setEtapaEscanear(1)}
+                  >
+                    Regresar
+                  </button>
+                : <button 
+                    className='boton__blanco' 
+                    onClick={() => {
+                      idClaseSeleccionada != null
+                      ? setEtapaEscanear(2)
+                      : toast.error('Selecciona una clase.')
+                    }}
+                  >
+                    Siguiente
+                  </button>
+              }
+            
             </div>
           </div>
         : <div>

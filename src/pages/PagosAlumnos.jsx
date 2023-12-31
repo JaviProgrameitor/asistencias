@@ -1,8 +1,7 @@
 import '../assets/css/PagosAlumnos.css'
 
 import { useState } from "react";
-import { Link, Routes, Route } from "react-router-dom"
-import { FaArrowCircleLeft } from 'react-icons/fa'
+import { Routes, Route } from "react-router-dom"
 
 import CrearPago from './CrearPago';
 import TablaPagoAlumno from './TablaPagoAlumno';

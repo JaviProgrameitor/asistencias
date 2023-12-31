@@ -2,29 +2,32 @@
 import { useState, useEffect } from "react"
 
 function FilasJustificantes(props) {
-  const { posicion, valor, cambiarValor } = props
-
+  const { posicion, valor, cambiarValor, personal = false } = props
   const { 
     nombreJustificante, 
-    apellidoJustificante, 
-    claveEstudianteJustificante, 
-    numeroTelefonoJustificante, 
+    apellidoJustificante,
+    claveEstudianteJustificante,
+    numeroTelefonoJustificante,
+    fechaInternaJustificante,
     fechaEmisionJustificante,
-    horaEmisionJustificante, 
-    fechaJustificante, 
-    motivoJustificante, 
-    explicacionJustificante, 
-    fotoJustificante, 
-    id,
+    fechaJustificante,
+    motivoJustificante,
+    explicacionJustificante,
+    fotoJustificante,
     correoJustificante,
-    idFotoJustificante
+    idFotoJustificante,
+    id
   } = props.datos
-  const [tipo, setTipo] = useState()
   const [activo, setActivo] = useState()
 
-  useEffect(() => {
-    posicion === 0 || posicion % 2 === 0 ? setTipo('elemento-par') : setTipo('elemento-impar')
-  }, [posicion])
+  function actualizar(dato) {
+    if(!dato) cambiarValor(false)
+    else {
+      personal 
+        ? cambiarValor(fotoJustificante)
+        : cambiarValor(props.datos)
+    }
+  }
 
   useEffect(() => {
     valor === fotoJustificante ? setActivo('activo') : setActivo('inactivo')
@@ -32,15 +35,20 @@ function FilasJustificantes(props) {
 
   return (
     <tr 
-      className={`fila fila-administrador ${tipo} ${activo}`} 
-      onClick={() => { activo == 'activo' ? cambiarValor(false) : cambiarValor(props.datos) }}
+      className={`fila fila-administrador ${posicion === 0 || posicion % 2 === 0 ? 'elemento-par' : 'elemento-impar'} ${activo}`} 
+      onClick={() => { activo == 'activo' ? actualizar(false) : actualizar(true) }}
     >
-      <td className='td-admin'>{nombreJustificante}</td>
-      <td className='td-admin'>{apellidoJustificante}</td>
-      <td className='td-admin'>{claveEstudianteJustificante}</td>
-      <td className='td-admin'>{horaEmisionJustificante}</td>
-      <td className='td-admin'>{fechaEmisionJustificante}</td>
-      <td className='td-admin'>{fechaJustificante}</td>
+      {
+        !personal
+          ? <>
+              <td className='td-admin'>{nombreJustificante}</td>
+              <td className='td-admin'>{apellidoJustificante}</td>
+            </>
+          : <></>
+      }
+      <td className='td-admin'>{`${new Date(fechaEmisionJustificante).getHours()}:${new Date(fechaEmisionJustificante).getMinutes()}`}</td>
+      <td className='td-admin'>{new Date(fechaEmisionJustificante).toLocaleDateString()}</td>
+      <td className='td-admin'>{new Date(fechaJustificante).toLocaleDateString()}</td>
       <td className='td-admin'>{motivoJustificante}</td>
       <td className='td-admin'>{explicacionJustificante}</td>
     </tr>

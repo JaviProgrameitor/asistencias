@@ -17,3 +17,44 @@
   align-items: center;
   flex-direction: column;
 }
+
+.modal__personalizado-scanner {
+  width: 60%;
+  height: 70%;
+}
+
+.contenedor__clases {
+  box-sizing: border-box;
+  height: 70%;
+  overflow-y: auto;
+}
+
+.cajas-clases {
+  width: 55%;
+  padding: 10px 0;
+  border-radius: 25px;
+  background-color: #c3f6c0;
+  text-align: center;
+  cursor: pointer;
+}
+
+.clase-activo {
+  background-color: #133210;
+  color: white;
+}
+
+.cajas-clases p {
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .cajas-clases {
+    width: 70%;
+  }
+}
+
+@media (max-width: 550px) {
+  .cajas-clases {
+    width: 100%;
+  }
+}

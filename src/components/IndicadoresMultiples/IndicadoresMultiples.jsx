@@ -8,7 +8,7 @@ function IndicadoresMultiples(props) {
       <h3 className='informacion-personal__indicador'>{titulo}</h3>
       <ul>
         {
-          respuesta.map((idioma, index) => <li key={index}>{idioma}</li>)
+          respuesta.map((idioma, index) => <li className='informacion-personal__respuesta' key={index}>{idioma}</li>)
         }
       </ul>
     </div>

@@ -12,6 +12,8 @@ import { FaClipboardList } from 'react-icons/fa'
 
 import { getAuth, signOut } from "firebase/auth";
 
+import BarraNavegacion from '../components/BarraNavegacion/BarraNavegacion'
+
 import Principal from './Principal'
 import Horarios from './Horarios'
 import Administradores from './Administradores'
@@ -24,7 +26,7 @@ import logo from '../assets/img/logo.png'
 import Page404 from './Page404'
 
 import { initializeApp } from "firebase/app";
-import { collection, onSnapshot, getFirestore  } from "firebase/firestore";
+import { collection, onSnapshot, getFirestore, orderBy, query } from "firebase/firestore";
 import firebaseConfig from '../firebase';
 
 function PanelControl(props) {
@@ -34,6 +36,7 @@ function PanelControl(props) {
   const { admin, setAdmin, alumnos, administradores, clases, asistenciasEntrada, pagosMensualidades } = props
 
   const [ sesion, setSesion ] = useState(false)
+  const [ estadoNavbar, setEstadoNavbar ] = useState(false)
   const [ urlActual, setUrlActual ] = useState(window.location.pathname)
 
   const [ idiomasImpartidos, setIdiomasImpartidos ] = useState([])
@@ -114,11 +117,14 @@ function PanelControl(props) {
 
   //Todo: Función para leer los datos de la base de datos
   useEffect(
-    () => 
-      onSnapshot(collection(db, 'idiomas'),(snapshot) => 
+    () => {
+      const collectionRef = collection(db, 'idiomas')
+      const q = query(collectionRef, orderBy('nombre', 'asc'))
+
+      onSnapshot(q,(snapshot) => 
         setIdiomasImpartidos(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      [db]
+      )
+    },[db]
   )
 
   //Todo: Función para leer los datos de la base de datos
@@ -160,33 +166,14 @@ function PanelControl(props) {
 
   return (
     admin ? 
-      
         <div className="container-panel-control">
-          <aside className="container-panel-control__aside">
-            <div className='perfil-admin'>
-              <img className='foto-perfil-admin' src={admin[0].foto} alt="Foto de Perfil del Admin" />
-              <h3 className='perfil-admin__nombre info-admin'>{admin[0].nombre}</h3>
-              <p className='perfil-admin__correo info-admin'>{admin[0].correo}</p>
-              <p className='perfil-admin__puesto info-admin'>{admin[0].puesto}</p>
-            </div>
-            <div className='panel-control__enlaces'>
-              {
-                enlaces.map((enlace, index) => {
-                  return (
-                    <Link 
-                      className={`enlaces ${comprobarUrl(urlActual, enlace.destino, index) ? "enlaces-activos" : ""}`}
-                      to={enlace.destino} 
-                      key={index}
-                    >
-                      <div>
-                        <enlace.icon />
-                        <span>{enlace.titulo}</span>
-                      </div>
-                    </Link>)
-                })
-              }
-            </div>
-          </aside>
+          <BarraNavegacion
+            estadoNavbar={estadoNavbar}
+            setEstadoNavbar={setEstadoNavbar}
+            datos={admin}
+            enlaces={enlaces}
+            urlActual={urlActual}
+          />
           <section className="container-panel-control__central">
             <div className='central-caja-superior'>
               <div className='central-caja-superior__empresa'>

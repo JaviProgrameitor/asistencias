@@ -1,4 +1,4 @@
-import FilasUsuarioJustificantes from '../components/FilasUsuarioJustificantes/FilasUsuarioJustificantes';
+import FilasJustificantes from '../components/FilasJustificantes/FilasJustificantes';
 
 function UsuarioJustificantesEnEspera(props) {
   const { fotoPrueba, setFotoPrueba, justificantes } = props
@@ -11,7 +11,7 @@ function UsuarioJustificantesEnEspera(props) {
           <thead className='tabla-cabecera'>
               <tr>
                 <th colSpan='1'>Hora de Emisión</th>
-                <th colSpan='1'>Hora de Emisión</th>
+                <th colSpan='1'>Fecha de Emisión</th>
                 <th colSpan='1'>Fecha a Justificar</th>
                 <th colSpan='1'>Motivo</th>
                 <th colSpan='1'>Explicación</th>
@@ -20,12 +20,13 @@ function UsuarioJustificantesEnEspera(props) {
             <tbody className="tabla-cuerpo">
             {
               justificantes.map((alumno, index) => 
-                <FilasUsuarioJustificantes 
+                <FilasJustificantes 
                   datos={alumno} 
                   key={index}
                   posicion={index}
                   valor={fotoPrueba}
                   cambiarValor={setFotoPrueba}
+                  personal
                 />
               )
             }

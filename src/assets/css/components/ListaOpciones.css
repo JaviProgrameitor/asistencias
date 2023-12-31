@@ -14,10 +14,11 @@
   width: 100%;
   background-color: #fff;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, .06);
-  padding: 24px;
+  padding: 20px 24px;
   border: none;
   outline-color: #6278f7;
-  font-size: 16px;
+  font-size: 15px;
+  font-family: var(--family-poppins);
   
   cursor: pointer;
 }

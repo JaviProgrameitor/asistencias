@@ -1,0 +1,93 @@
+/* Nuestros Servicios */
+.caja-nuestros-servicios {
+  background-color: #CCE8C9;
+  padding-bottom: 80px;
+}
+
+.nuestros-servicios__contenedor-titulo {
+  display: flex;
+}
+
+.nuestros-servicios__contenido {
+  display: flex;
+  gap: 40px;
+}
+
+.servicio {
+  box-sizing: border-box;
+  width: calc(calc(100% - 120px) / 4);
+  background-color: white;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.servicio__imagen {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.servicio__imagen img {
+  width: 70%;
+}
+
+.servicio__texto {
+  text-align: center;
+  font-size: var(--fs-texto);
+  font-family: var(--family-poppins);
+}
+
+@media (min-width: 900px) and (max-width: 940px) {
+  /* Nuestros Servicios */
+  .nuestros-servicios__contenido {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .servicio {
+    width: 40%;
+  }
+
+  .servicio__imagen img {
+    width: 50%;
+  }
+}
+
+@media (max-width: 900px) {
+  /* Nuestros Servicios */
+  .nuestros-servicios__contenido {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .servicio {
+    width: 40%;
+  }
+
+  .servicio__imagen img {
+    width: 50%;
+  }
+}
+
+@media (max-width: 800px) {
+  /* Nuesros Servicios */
+  .servicio {
+    width: 80%;
+  }
+
+  .servicio__imagen img {
+    width: 25%;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Nuestros Servicios */
+  .nuestros-servicios__contenedor-titulo {
+    justify-content: center;
+  }
+
+  .servicio__imagen img {
+    width: 50%;
+  }
+}

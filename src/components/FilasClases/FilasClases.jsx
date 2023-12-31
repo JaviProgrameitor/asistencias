@@ -17,10 +17,6 @@ function FilasClases(props) {
 
   let datosCompletos = [
     {
-      titulo: 'Clave',
-      respuesta: claveClase
-    },
-    {
       titulo: 'Nombre',
       respuesta: nombreClase
     },
@@ -54,12 +50,9 @@ function FilasClases(props) {
   return (
     <tr className={`fila fila-administrador`}>
       <td className='td-admin'>{numero}</td>
-      <td className='td-admin'>{claveClase}</td>
       <td className='td-admin'>{nombreClase}</td>
-      <td className='td-admin'>{idiomaClase}</td>
       <td className='td-admin'>{diasClase}</td>
-      <td className='td-admin'>{horaInicioClase}</td>
-      <td className='td-admin'>{horaFinalClase}</td>
+      <td className='td-admin'>{`${horaInicioClase} - ${horaFinalClase}`}</td>
       <td className='td-admin'>{modalidadClase}</td>
       <td className='td-admin'>
         <TiDelete 

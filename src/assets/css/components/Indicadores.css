@@ -2,11 +2,10 @@
   min-width: 250px;
 }
 
-
 .informacion-personal__indicador {
   font-size: 30px;
   margin: 0;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: var(--family-fredoka);
   font-weight: 500;
 }
 
@@ -16,8 +15,10 @@
 }
 
 .informacion-personal__respuesta {
-  font-family: 'Fredoka', sans-serif;
+  font-family: var(--family-poppins);
+  font-weight: 400;
   font-size: 20px;
+  margin-top: 5px;
 }
 
 .indicadores__chicos .informacion-personal__respuesta {

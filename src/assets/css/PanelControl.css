@@ -1,99 +1,11 @@
-.container-panel-control {
-  display: flex;
-}
 
-/* Aside */
-.container-panel-control__aside {
-  width: 20%;
-  height: 100vh;
-  padding: 20px 0;
-  background-color: #133210;
-
-  position: fixed;
-}
-
-.perfil-admin {
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  padding-bottom: 25px;
-  border-bottom: 3px solid white;
-}
-
-.foto-perfil-admin {
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
-  background-color: black;
-  border-radius: 90%;
-  border: 3px solid white;
-}
-
-.info-admin {
-  margin: 0;
-}
-
-.perfil-admin__nombre {
-  margin-top: 5px;
-  font-weight: 400;
-}
-
-.perfil-admin__apellido {
-  margin-top: 5px;
-}
-
-.panel-control__enlaces {
-  display: flex;
-  flex-direction: column;
-  padding-top: 25px;
-}
-
-.enlaces {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 15px 0;
-  color: white;
-  text-decoration: none;
-}
-
-.enlaces:hover {
-  box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.29);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(9.9px);
-  -webkit-backdrop-filter: blur(9.9px);
-}
-
-.enlaces-activos {
-  box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.29);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(9.9px);
-  -webkit-backdrop-filter: blur(9.9px);
-}
-
-.enlaces div {
-  margin-left: calc(100% / 4);
-
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 7px;
-}
-
-.enlaces span {
-  font-size: 18px;
-}
 
 /* Central */
 .container-panel-control__central {
   box-sizing: border-box;
-  width: 80%;
-  min-height: 100vh;
-  margin-left: 20%;
+  height: 100vh;
+  transform: translateX(120px);
+  width: calc(100% - 120px);
   background-color: white;
 }
 
@@ -141,6 +53,25 @@
 .central-contenido {
   box-sizing: border-box;
   width: 100%;
-  height: calc(100% - 60px);
-  padding: 0 20px 100px;
+  height: calc(100% - 65px);
+  padding: 0 20px 50px;
+  overflow-y: auto;
+}
+
+@media (max-width: 800px) {
+  .container-panel-control__central {
+    width: calc(100% - 80px);
+    transform: translateX(80px);
+  }
+}
+
+@media (max-width: 700px) {
+  .container-panel-control__central {
+    width: 100%;
+    transform: translateX(0px);
+  }
+
+  .central-contenido {
+    padding: 0 20px 120px;
+  }
 }

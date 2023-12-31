@@ -8,7 +8,7 @@ function TablaDatos(props) {
   return (
     <div className='contenedor-tabla__2'>
       <h3 className='titulos-3'>{idioma}</h3>
-      <table className='tabla-alumnos'>
+      <table className='tabla'>
         <thead className='tabla-cabecera'>
           <tr>
             {
