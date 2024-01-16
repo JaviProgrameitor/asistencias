@@ -13,6 +13,8 @@ import FilasAlumnos from '../components/FilasAlumnos/FilasAlumnos'
 import DemostracionColores from '../components/DemostracionColores/DemostracionColores'
 import BarraBusquedaOpciones from '../components/BarraBusquedaOpciones/BarraBusquedaOpciones';
 import BarraBusquedaTexto from '../components/BarraBusquedaTexto/BarraBusquedaTexto';
+import Indicadores from '../components/Indicadores/Indicadores'
+import IndicadoresMultiples from '../components/IndicadoresMultiples/IndicadoresMultiples';
 
 import Modal from '@mui/material/Modal';
 
@@ -192,12 +194,20 @@ function TablaAlumnos(props) {
           />
         </div>
         {
-          idAlumno !== false ?
+          idAlumno !== false && (
             <div>
-              <Link to={`${url}/actividad-alumno`}><FcCalendar className='alumno-completo icon-alumno' /></Link>
-              <Link to={`${url}/pagos-alumnos`}><FcCurrencyExchange className='alumno-completo icon-alumno' /></Link>
-              <Link to={`${url}/perfil/${idAlumno}`}><FcContacts className='alumno-completo icon-alumno' /></Link>
-              <Link to={`${url}/editar-alumno`}><FaEdit className="alumno-edit icon-alumno" /></Link>
+              <Link to={`${url}/actividad-alumno`}>
+                <FcCalendar className='alumno-completo icon-alumno' />
+              </Link>
+              <Link to={`${url}/pagos-alumnos`}>
+                <FcCurrencyExchange className='alumno-completo icon-alumno' />
+              </Link>
+              <Link to={`${url}/perfil/${idAlumno}`}>
+                <FcContacts className='alumno-completo icon-alumno' />
+              </Link>
+              <Link to={`${url}/editar-alumno`}>
+                <FaEdit className="alumno-edit icon-alumno" />
+              </Link>
               <AiFillDelete 
                 className='alumno-delete icon-alumno'
                 onClick={() => {
@@ -206,7 +216,7 @@ function TablaAlumnos(props) {
                 }}
               />
             </div>
-          : <></>
+          )
         }
       </div> 
       <div className='contenedor__tabla-scroll tamaño-tabla__250'>
@@ -241,12 +251,61 @@ function TablaAlumnos(props) {
         open={modalEliminarAlumno}
         onClose={() => setModalEliminarAlumno(false)}
       >
-        <div className='modal__por-defecto modal__contenido'>
-          <h4 className='advertencia__titulo'>!ADVERTENCIA¡</h4>
-          <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al alumno 
-            <span className='advertencia__resaltar'>{` ${perfilAlumno.nombre}`}</span>
-            ?
-          </p>
+        <div className='modal__por-defecto modal__contenido scroll-personalizado'>
+          <h4 className='advertencia__titulo'>¡ADVERTENCIA!</h4>
+          <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al alumno ?</p>
+          <div className='contenedor__columna-centro'>
+            <div>
+              <Indicadores 
+                titulo='Nombre'
+                respuesta={perfilAlumno.nombre}
+              />
+              <Indicadores 
+                titulo='Apellido'
+                respuesta={perfilAlumno.apellido}
+              />
+              <Indicadores 
+                titulo='Fecha de Nacimiento'
+                respuesta={perfilAlumno.fechaNacimiento}
+              />
+              <Indicadores 
+                titulo='Correo Electrónico'
+                respuesta={perfilAlumno.correo}
+              />
+              <Indicadores 
+                titulo='Número de Teléfono'
+                respuesta={perfilAlumno.numeroTelefono}
+              />
+              <Indicadores 
+                titulo='Nivel Académico'
+                respuesta={perfilAlumno.nivelAcademico}
+              />
+              <Indicadores 
+                titulo={'Clave del Estudiante'} 
+                respuesta={perfilAlumno.claveEstudiante} 
+              />
+              <IndicadoresMultiples 
+                titulo={'Idiomas de Aprendizaje'} 
+                respuesta={perfilAlumno.idiomaAprendizaje} 
+              />
+              <IndicadoresMultiples 
+                titulo={'Nivel MCERLC'} 
+                respuesta={perfilAlumno.nivelIdioma} 
+              />
+              <IndicadoresMultiples 
+                titulo={'Modalidad de Estudio'} 
+                respuesta={perfilAlumno.modalidadEstudio} 
+              />
+              <IndicadoresMultiples 
+                titulo={'Fecha de Ingreso'} 
+                respuesta={perfilAlumno.fechaIngreso} 
+              />
+              <IndicadoresMultiples 
+                titulo={'Fecha de Pago'} 
+                respuesta={perfilAlumno.fechaPago} 
+              />
+            </div>
+          </div>
           <div className='contenedor__centro-separacion'>
             <button 
               className='boton__verde-oscuro' 

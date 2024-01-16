@@ -1,7 +1,7 @@
 import '../assets/css/AgregarAlumno.css'
 
 import { useState } from 'react'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { FaArrowCircleLeft } from 'react-icons/fa'
 import { IoIosAddCircle } from 'react-icons/io'
 import { TiDelete } from 'react-icons/ti'
@@ -99,6 +99,8 @@ function EditarAlumno(props) {
   const [ fotoApoyoIne, setFotoApoyoIne ] = useState(false)
   const [ fotoApoyoCurp, setFotoApoyoCurp ] = useState(false)
   const [ fotoApoyoComprobantePagoInicial, setFotoApoyoComprobantePagoInicial ] = useState(false)
+
+  const navigate = useNavigate()
   
   const [ activarLoader, setActivarLoader ] = useState(false)
 
@@ -174,6 +176,8 @@ function EditarAlumno(props) {
     e.preventDefault()
 
     setActivarLoader(true)
+
+    try {
 
     let foto;
     let idFoto;
@@ -517,9 +521,18 @@ function EditarAlumno(props) {
     }
 
     await updateDatabase('alumnos', idAlumno, datos)
+
     actualizarDatosAlumno(false)
     setActivarLoader(false)
     toast.success('El Alumno ha sido editado con exito')
+  } catch(error) {
+      console.log(error)
+      setActivarLoader(false)
+    }
+
+    // setTimeout(() => {
+    //   navigate('/sistema-asistencias/panel-control/alumnos')
+    // }, 2000);
   }
 
   return (
@@ -531,7 +544,9 @@ function EditarAlumno(props) {
           richColors
         />
         <div className='contenedor__todo-principio'>
-          <Link to={'/sistema-asistencias/panel-control/alumnos'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
+          <Link to={'/sistema-asistencias/panel-control/alumnos'}>
+            <FaArrowCircleLeft className='flecha-regresar icon-40' />
+          </Link>
         </div>
         <div className='agregar-alumnos__formulario'>
           <form className='formulario' onSubmit={editarAlumnos}>
@@ -676,12 +691,22 @@ function EditarAlumno(props) {
               valor={claveEstudianteAlumno}
               cambiarValor={setClaveEstudianteAlumno}
             />
-            <IoIosAddCircle className='agregar-idiomas__icon' onClick={agregarIdioma} />
+            <div className='agregar-idiomas__icon' onClick={agregarIdioma}>
+              <IoIosAddCircle />
+              Agregar Formulario Sobre El Idioma
+            </div>
             {
               idiomaAprendizajeAlumno.map((idioma, index) => {
                 return (
-                  <div key={index}>
-                    <TiDelete className='idioma__icon-delete' onClick={() => eliminarIdioma(index)} />
+                  <div className='caja__idioma-agregado' key={index}>
+                    <div 
+                      className='contenedor__todo-principio-centrado gap-0 pointer max-content' 
+                      onClick={() => eliminarIdioma(index)}
+                    >
+                      <TiDelete className='idioma__icon-delete' />
+                      Eliminar Formulario
+                    </div>
+                    <h5 className='titulos-4'>Preguntas Sobre El Idioma</h5>
                     <ListaOpciones 
                       titulo='Idioma de Aprendizaje'
                       placeholder='Ingresa el idioma de aprendizaje'

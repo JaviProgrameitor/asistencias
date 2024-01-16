@@ -4,7 +4,8 @@ import { Link, useResolvedPath } from "react-router-dom"
 import { BsPersonFillAdd } from 'react-icons/bs'
 import { AiFillDelete } from 'react-icons/ai'
 
-import FilasAdministradores from '../components/FilasAdministradors/FilasAdministradores'
+import FilasAdministradores from '../components/FilasAdministradors/FilasAdministradores';
+import Indicadores from '../components/Indicadores/Indicadores'
 
 import { deleteDatabase, deleteStorage } from '../firebase';
 
@@ -82,12 +83,29 @@ function TablaAdministradors(props) {
       >
         {
           modalEliminarAdministrador 
-            ? <div className='modal__por-defecto modal__contenido'>
-                <h4 className='advertencia__titulo'>!ADVERTENCIA¡</h4>
-                <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al administrador 
-                  <span className='advertencia__resaltar'>{` ${perfilAdministrador.nombre}`}</span>
-                  ?
-                </p>
+            ? <div className='modal__por-defecto modal__contenido scroll-personalizado'>
+                <h4 className='advertencia__titulo'>¡ADVERTENCIA!</h4>
+                <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al administrador?</p>
+                <div className='contenedor__columna-centro'>
+                  <div>
+                    <Indicadores
+                      titulo="Nombre"
+                      respuesta={perfilAdministrador.nombre}
+                    />
+                    <Indicadores
+                      titulo="Apellido"
+                      respuesta={perfilAdministrador.apellido}
+                    />
+                    <Indicadores
+                      titulo="Correo"
+                      respuesta={perfilAdministrador.correo}
+                    />
+                    <Indicadores
+                      titulo="Puesto"
+                      respuesta={perfilAdministrador.puesto}
+                    />
+                  </div>
+                </div>
                 <div className='contenedor__centro-separacion'>
                   <button 
                     className='boton__verde-oscuro' 

@@ -4,10 +4,10 @@ import { useState } from "react";
 import { FaArrowCircleLeft } from 'react-icons/fa'
 import { Link, useResolvedPath } from "react-router-dom"
 import { AiFillDelete } from 'react-icons/ai'
-import { TiDelete } from 'react-icons/ti'
 import { FcStackOfPhotos } from 'react-icons/fc'
 
 import FilasPagos from "../components/FilasPagos/FilasPagos";
+import Indicadores from '../components/Indicadores/Indicadores';
 
 import { deleteDatabase, deleteStorage } from '../firebase';
 
@@ -66,8 +66,6 @@ function TablaPagoAlumno(props) {
         <table className='tabla'>
           <thead className='tabla-cabecera tabla-cabecera__tabla-scroll'>
             <tr>
-              <th colSpan='1'>Nombre</th>
-              <th colSpan='1'>Apellido</th>
               <th colSpan='1'>Idioma Pagado</th>
               <th colSpan='1'>Fecha que Pagó</th>
               <th colSpan='1'>Fecha Mensualidad</th>
@@ -82,6 +80,7 @@ function TablaPagoAlumno(props) {
                   key={index} 
                   pagoSeleccionado={pagoSeleccionado}
                   setPagoSeleccionado={setPagoSeleccionado}
+                  personal
                 />
               )
             }
@@ -94,11 +93,32 @@ function TablaPagoAlumno(props) {
         onClose={() => setmodalEliminarEstado(false)}
       >
         <div className='modal__por-defecto modal__contenido'>
-          <h4 className='advertencia__titulo'>!ADVERTENCIA!</h4>
-          <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al alumno 
-            <span className='advertencia__resaltar'>{` ${"hola"}`}</span>
-            ?
-          </p>
+          <h4 className='advertencia__titulo'>¡ADVERTENCIA!</h4>
+          <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar el pago?</p>
+          <div className='contenedor__columna-centro'>
+            <div>
+              <Indicadores
+                titulo='Nombre del Alumno'
+                respuesta={`${pagoSeleccionado.nombrePago} ${pagoSeleccionado.apellidoPago}`}
+              />
+              <Indicadores
+                titulo='Clave de Estudiante'
+                respuesta={pagoSeleccionado.claveEstudiantePago}
+              />
+              <Indicadores
+                titulo='Idioma Pagado'
+                respuesta={pagoSeleccionado.idiomaPago}
+              />
+              <Indicadores
+                titulo='Fecha que Pagó'
+                respuesta={new Date(pagoSeleccionado.diaPago).toLocaleDateString()}
+              />
+              <Indicadores
+                titulo='Fecha Mensualidad'
+                respuesta={new Date(pagoSeleccionado.inicioMensualidad).toLocaleDateString()}
+              />
+            </div>
+          </div>
           <div className='contenedor__centro-separacion'>
             <button 
               className='boton__verde-oscuro' 

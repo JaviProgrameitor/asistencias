@@ -5,6 +5,33 @@
   --family-ubuntu: 'Ubuntu', sans-serif;
 }
 
+/* Estilo Scroll */
+.scroll-personalizado::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.scroll-personalizado::-webkit-scrollbar:vertical {
+  width:10px;
+}
+
+.scroll-personalizado::-webkit-scrollbar-button:increment,.scroll-personalizado::-webkit-scrollbar-button {
+  display: none;
+} 
+
+.scroll-personalizado::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+
+.scroll-personalizado::-webkit-scrollbar-thumb {
+  background-color: #797979;
+  border-radius: 20px;
+  border: 2px solid #f1f2f3;
+}
+
+.scroll-personalizado::-webkit-scrollbar-track {
+  border-radius: 10px;  
+}
+
 /* Estilos body */
 .body__pantalla-negra {
   overflow: hidden;
@@ -66,8 +93,21 @@
 }
 
 /* Estilos de los contenedores */
+.max-content {
+  width: max-content;
+}
+
+.b-2px-black {
+  border: 2px solid black;
+}
+
 .contenedor__titulos-1 {
   padding: 10px 0;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
 }
 
 .contenedor__todo-final {
@@ -157,6 +197,14 @@
 
 .gap-x__25 {
   column-gap: 25px;
+}
+
+.gap-0 {
+  gap: 0;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 /* Estilos padding */

@@ -351,19 +351,21 @@ function HorariosContenido(props) {
           handleClose(setOPenClase)
         }}
       >
-        <div className='modal__por-defecto modal__contenido'>
-          <h4 className='advertencia__titulo'>!ADVERTENCIA¡</h4>
+        <div className='modal__por-defecto modal__contenido scroll-personalizado'>
+          <h4 className='advertencia__titulo'>¡ADVERTENCIA!</h4>
           <p className='advertencia__texto'>¿Seguro qué quieres eliminar la clase?</p>
-          <div className='contenedor__wrap'>
-            {
-              claseSeleccionada.map((clase, index) => 
-                <Indicadores 
-                  titulo={clase.titulo} 
-                  respuesta={clase.respuesta} 
-                  key={index}
-                />
-              )
-            }
+          <div className='contenedor__columna-centro'>
+            <div>
+              {
+                claseSeleccionada.map((clase, index) => 
+                  <Indicadores 
+                    titulo={clase.titulo} 
+                    respuesta={clase.respuesta} 
+                    key={index}
+                  />
+                )
+              }
+            </div>
           </div>
           <div className='contenedor__centrado-separacion'>
             <button 

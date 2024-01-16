@@ -137,6 +137,18 @@ function CrearPago(props) {
     else if(tipoRespuesta == "objeto") return `${mesFinal} ${fechaFinal}, ${añoFinal} ${hora}:${minutos}`
   }
 
+  function calcularInicioMensualidad(tipoRespuesta, fecha, mes, año) {
+    const date = new Date()
+    const hora = date.getHours()
+    const minutos = date.getMinutes()
+
+    let nombreMesInicio = calcularMesPorNumero(mes - 1)
+    let fechaInicio = diasMeses[nombreMesInicio] < parseInt(fecha) ? diasMeses[nombreMesInicio] : fecha
+
+    if(tipoRespuesta == "string") return `${fechaInicio}/${mes}/${año}`
+    else if(tipoRespuesta == "objeto") return `${mes} ${fechaInicio}, ${año} ${hora}:${minutos}`
+  }
+
   async function agregarPago() {
     setActivarLoader(true)
 
@@ -171,7 +183,7 @@ function CrearPago(props) {
 
     const idiomaPago = idiomaPagoAlumno
 
-    const inicioMensualidad = new Date(`${numeroMesPagoMenActualAlumno + 1} ${fechaPagoMenActualAlumno}, ${añoPagoMenActualAlumno} ${hora}:${minutos}`).getTime()
+    const inicioMensualidad = calcularInicioMensualidad("objeto", fechaPagoMenActualAlumno, (numeroMesPagoMenActualAlumno + 1), añoPagoMenActualAlumno)
 
     const fechaInternaDiaPago = `${año}-${mesExacto}-${fechaExacto}`
     const diaPago = new Date(`${mes + 1} ${fecha}, ${año} ${hora}:${minutos}`).getTime()
@@ -357,12 +369,12 @@ function CrearPago(props) {
                   />
                   <Indicadores 
                     titulo='Fecha que empieza la mensualidad'
-                    respuesta={`${fechaPagoMenActualAlumno}/${numeroMesPagoMenActualAlumno + 1}/${añoPagoMenActualAlumno}`}
+                    respuesta={calcularInicioMensualidad("string", fechaPagoMenActualAlumno, (numeroMesPagoMenActualAlumno + 1), añoPagoMenActualAlumno)}
                     claseExtra='indicadores__chicos'
                   />
                   <Indicadores 
                     titulo='Fecha que termina la mensualidad'
-                    respuesta={calcularFinMensualidad("string", fechaPagoMenActualAlumno, (numeroMesPagoMenActualAlumno + 1),añoPagoMenActualAlumno)}
+                    respuesta={calcularFinMensualidad("string", fechaPagoMenActualAlumno, (numeroMesPagoMenActualAlumno + 1), añoPagoMenActualAlumno)}
                     claseExtra='indicadores__chicos'
                   />
                 </div>

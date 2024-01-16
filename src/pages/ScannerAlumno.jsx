@@ -1,7 +1,7 @@
 import '../assets/css/PerfilAlumno.css'
 import '../assets/css/ScannerAlumno.css'
 
-import alumnoIcono from '../assets/img/alumno.png'
+import alumnoIcono from '../assets/img/alumno.webp'
 
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom"
@@ -29,7 +29,8 @@ function ScannerAlumno(props) {
     claveEstudiante, 
     idiomaAprendizaje,
     correo,
-    fechaPago
+    estadoMensualidad,
+    clasesMensualidad
   } = props.scannerAlumno[0]
   const informacionAlumno = [
     {
@@ -48,27 +49,6 @@ function ScannerAlumno(props) {
   const minutos30 = 1800000;
   const diaMilisegundos = 86400000;
   const minutoMilisegundos = 60000;
-  const coloresAlumno = {
-    colorFondoCercaPago: 'cerca-pago',
-    colorFondoPago: 'dia-pago',
-    colorFondoDeuda: 'deudas',
-  }
-
-  const diasMeses = {
-    "Enero" : 31,
-    "Febrero" : 28,
-    "FebreroBisiesto" : 29,
-    "Marzo" : 31,
-    "Abril" : 30,
-    "Mayo" : 31,
-    "Junio" : 30,
-    "Julio" : 31,
-    "Agosto" : 31,
-    "Septiembre" : 30,
-    "Octubre" : 31,
-    "Noviembre" : 30,
-    "Diciembre" : 31
-  }
 
   const [ nombreAlumno, setNombreAlumno ] = useState(nombre)
   const [ apellidoAlumno, setApellidoAlumno ] = useState(apellido)
@@ -82,327 +62,11 @@ function ScannerAlumno(props) {
     navigate('/sistema-asistencias')
   }, 10000);
 
-  //Todo: Calcular mensualidad
-
-  function calcularNumeroPorMes(valor) {
-    if(valor === 'Enero') return 0
-    else if(valor === 'Febrero') return 1
-    else if(valor === 'Marzo') return 2
-    else if(valor === 'Abril') return 3
-    else if(valor === 'Mayo') return 4
-    else if(valor === 'Junio') return 5
-    else if(valor === 'Julio') return 6
-    else if(valor === 'Agosto') return 7
-    else if(valor === 'Septiembre') return 8
-    else if(valor === 'Octubre') return 9
-    else if(valor === 'Noviembre') return 10
-    else if(valor === 'Diciembre') return 11
-  }
-
-  function calcularFinMensualidad(tipoRespuesta, fecha, mes, año) {
-    let mesFinal;
-    let añoFinal;
-    let fechaFinal;
-
-    if(12 == (mes + 1)) {
-      mesFinal = 'Enero'
-      añoFinal = año + 1;
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(1 == (mes + 1)) {
-      mesFinal = 'Febrero'
-      añoFinal = año
-
-      if(año % 4 == 0) {
-        if(parseInt(fecha) > diasMeses["FebreroBisiesto"]) fechaFinal = diasMeses["FebreroBisiesto"]
-        else fechaFinal = fecha
-      }
-
-      else {
-        if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-        else fechaFinal = fecha
-      }
-    }
-
-    else if(2 == (mes + 1)) {
-      mesFinal = 'Marzo'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(3 == (mes + 1)) {
-      mesFinal = 'Abril'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(4 == (mes + 1)) {
-      mesFinal = 'Mayo'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(5 == (mes + 1)) {
-      mesFinal = 'Junio'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    else if(6 == (mes + 1)) {
-      mesFinal = 'Julio'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(7 == (mes + 1)) {
-      mesFinal = 'Agosto'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    
-    else if(8 == (mes + 1)) {
-      mesFinal = 'Septiembre'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(9 == (mes + 1)) {
-      mesFinal = 'Octubre'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(10 == (mes + 1)) {
-      mesFinal = 'Noviembre'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(11 == (mes + 1)) {
-      mesFinal = 'Diciembre'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    if(tipoRespuesta == "string") return `${fechaFinal}/${mesFinal}/${añoFinal}`
-    else if(tipoRespuesta == "objeto") return [fechaFinal, calcularNumeroPorMes(mesFinal), añoFinal]
-  }
-
-  function calcularAnteriorMensualidad(tipoRespuesta, fecha, mes, año) {
-    let mesFinal;
-    let añoFinal;
-    let fechaFinal;
-
-    if(0 == (mes - 1)) {
-      mesFinal = 'Enero'
-      añoFinal = año;
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(1 == (mes - 1)) {
-      mesFinal = 'Febrero'
-      añoFinal = año
-
-      if(año % 4 == 0) {
-        if(parseInt(fecha) > diasMeses["FebreroBisiesto"]) fechaFinal = diasMeses["FebreroBisiesto"]
-        else fechaFinal = fecha
-      }
-
-      else {
-        if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-        else fechaFinal = fecha
-      }
-    }
-
-    else if(2 == (mes - 1)) {
-      mesFinal = 'Marzo'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(3 == (mes - 1)) {
-      mesFinal = 'Abril'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(4 == (mes - 1)) {
-      mesFinal = 'Mayo'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(5 == (mes - 1)) {
-      mesFinal = 'Junio'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    else if(6 == (mes - 1)) {
-      mesFinal = 'Julio'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(7 == (mes - 1)) {
-      mesFinal = 'Agosto'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-    
-    else if(8 == (mes - 1)) {
-      mesFinal = 'Septiembre'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(9 == (mes - 1)) {
-      mesFinal = 'Octubre'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(10 == (mes - 1)) {
-      mesFinal = 'Noviembre'
-      añoFinal = año
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    else if(-1 == (mes - 1)) {
-      mesFinal = 'Diciembre'
-      añoFinal = año - 1
-
-      if(parseInt(fecha) > diasMeses[mesFinal]) fechaFinal = diasMeses[mesFinal]
-      else fechaFinal = fecha
-    }
-
-    if(tipoRespuesta == "string") return `${fechaFinal}/${mesFinal}/${añoFinal}`
-    else if(tipoRespuesta == "objeto") return [fechaFinal, calcularNumeroPorMes(mesFinal), añoFinal]
-  }
-
-  function comprobarMensualidad(idioma, idiomaFecha) {
-    let colorMensualidad = false;
-
-    const date = new Date(1699489800000)
-    const año = date.getFullYear()
-    const mes = date.getMonth()
-    const fecha = date.getDate()
-
-    const [ fechaAnterior, mesAnterior, añoAnterior ] = calcularAnteriorMensualidad("objeto", idiomaFecha, mes, año)
-    const [ fechaProximo, mesProximo, añoProximo ] = calcularFinMensualidad("objeto", idiomaFecha, mes, año)
-
-    const pagoAnterior = pagosMensualidades.filter(pago => pago.añoFinMensualidad == año && pago.mesFinMensualidad == mes && pago.idiomaPago == idioma && pago.claveEstudiantePago == claveEstudiante)
-    const pago = pagosMensualidades.filter(pago => pago.añoPagoMenActual == año && pago.numeroMesPagoMenActual == mes && pago.idiomaPago == idioma && pago.claveEstudiantePago == claveEstudiante)
-    const pagoProximo = pagosMensualidades.filter(pago => pago.añoPagoMenActual == añoProximo && pago.numeroMesPagoMenActual == mesProximo && pago.idiomaPago == idioma && pago.claveEstudiantePago == claveEstudiante)
-
-    if(pagoAnterior.length <= 0) {
-      const hoyMili = new Date(`${mes + 1} ${fecha}, ${año}`)
-      const pagoMili = new Date(`${mesAnterior + 1} ${fechaAnterior}, ${añoAnterior}`)
-      const resto = Math.round((hoyMili - pagoMili) / diaMilisegundos)
-
-      if(colorMensualidad === false) colorMensualidad = coloresAlumno.colorFondoDeuda
-
-      return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Retraso de ${resto} días`}</span>
-    }
-
-    else if(pago.length > 0) {
-      if(pagoProximo.length > 0) {
-        return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Sin Deudas`}</span>
-      }
-      
-      else {
-        const hoyMili = new Date(`${mes + 1} ${fecha}, ${año}`)
-        const pagoMili = new Date(`${mesProximo + 1} ${fechaProximo}, ${añoProximo}`)
-        const resto = Math.round((pagoMili - hoyMili) / diaMilisegundos)
-
-        if(resto <= 5) {
-          if(colorMensualidad === false) colorMensualidad = coloresAlumno.colorFondoCercaPago
-
-          return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Faltan ${resto} días`}</span>
-        }
-
-        return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Sin Deudas`}</span>
-      }
-    }
-
-    else {
-      const hoyMili = new Date(`${mes + 1} ${fecha}, ${año}`)
-      const pagoMili = new Date(`${mes + 1} ${idiomaFecha}, ${año}`)
-
-      if(idiomaFecha == fecha) {
-        if(colorMensualidad === false) colorMensualidad = coloresAlumno.colorFondoPago
-
-        return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Día de Pago`}</span>
-      }
-
-      else if(pagoMili > hoyMili) {
-        const resto = Math.round((pagoMili - hoyMili) / diaMilisegundos)
-
-        if(resto <= 5) {
-          if(colorMensualidad === false) colorMensualidad = coloresAlumno.colorFondoCercaPago
-
-          return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Faltan ${resto} días`}</span>
-        }
-
-        return <span className={`${colorMensualidad}`}>{`Mensualidad del Idioma ${idioma}: Sin Deudas`}</span>
-      }
-
-      else {
-        const resto = Math.round((hoyMili - pagoMili) / diaMilisegundos)
-
-        if(colorMensualidad === false) colorMensualidad = coloresAlumno.colorFondoDeuda
-
-        return <span className={`${colorMensualidad} comprobante-mensualidad`}>{`Mensualidad del Idioma ${idioma}: Retraso de ${resto} días`}</span>
-      }
-    }
-  }
-
   //Todo: Calcular Asistencia
 
   //Función para calcular la puntualidad
   function puntualidadAlumno(accion, hora) {
-    const date = new Date(1700013600000);
+    const date = new Date();
     const año = date.getFullYear()
     const mes = new Date(date.getTime() + mesMilisegundos).getMonth()
     const fecha = date.getDate()
@@ -485,7 +149,7 @@ function ScannerAlumno(props) {
   //Función para saber si es entrada o salida del alumno
   function entradaSalidaAlumno(hora) {
     let asistencia = []
-    const date = new Date(1700013600000);
+    const date = new Date();
     const año = date.getFullYear()
     const mes = new Date(date.getTime() + mesMilisegundos).getMonth()
     const fecha = date.getDate()
@@ -522,16 +186,16 @@ function ScannerAlumno(props) {
 
     asistencia = asistenciasEntrada.filter((a) => 
       a.claveEstudianteAsistenciaEntrada == claveEstudianteAlumno && 
-      horaInicio < a.horaAsistenciaMilisegundos && a.horaAsistenciaMilisegundos < horaFinal &&
+      horaInicio < a.fechaAsistenciaEntrada && a.fechaAsistenciaEntrada < horaFinal &&
       a.claveHorario == scannerClase.claveClase
     )
 
-    return asistencia.length % 2 == 0 ? 'Entrada' :  'Salida'
+    return asistencia.length % 2 == 0 ? 'Entrada' : 'Salida'
   }
 
   //Función para saber la hora de la entrada del alumno
   function horaEntrada() {
-    const date = new Date(1700013600000);
+    const date = new Date();
     const horaExacta = date.getTime()
 
     let nombreClase;
@@ -549,7 +213,7 @@ function ScannerAlumno(props) {
 
   //Función para agregar la asistencia del alumno
   async function asistenciaEntrada() {
-    const date = new Date(1700013600000);
+    const date = new Date();
     const año = date.getFullYear()//Saber el año
     const mes = date.getMonth()//Saber el mes
     const fecha = date.getDate()//Saber la fecha
@@ -593,8 +257,8 @@ function ScannerAlumno(props) {
       {
         nombre !== false ? 
           <div className='container-perfil-alumno'>
-            <div className='personal__fondo scanner-alumno-fondo'>
-              <img className='perfil-foto-alumno perfil-foto-scanner-alumno' src={foto} alt="Foto de Perfil del Alumno" />
+            <div className='personal__fondo'>
+              <img className='perfil-foto-alumno' src={foto} alt="Foto de Perfil del Alumno" />
             </div>
             <div className='container-bienvenida'>
               <h2 className='bienvenida__titulo'>Bienvenidos Queridos Alumnos</h2>
@@ -602,14 +266,14 @@ function ScannerAlumno(props) {
             <div className='container__hora-entrada'>
               {horaEntrada()}
             </div>
-            <div className='contenedor__centrado-separacion'>
+            <div className='contenedor__centrado-separacion center contenedor__wrap gap-x__25 gap-y__10'>
               {
                 idiomaAprendizaje.map((idioma, index) => 
                   <span 
-                    className='comprobante-mensualidad padd__20' 
+                    className={`comprobante-mensualidad padd__20 b-2px-black ${clasesMensualidad[index]}`} 
                     key={index}
                   >
-                    {comprobarMensualidad(idioma, fechaPago[index])}
+                    {`Mensualidad del Idioma ${idioma}: ${estadoMensualidad[index]}`} 
                   </span>
                 )
               }
@@ -617,20 +281,24 @@ function ScannerAlumno(props) {
             <div className='container-perfil-alumno__informacion'>
               <div className='perfil-alumno__personal perfil-scaner-alumno__personal'>
                 <h2 className='titulos-2'>Información Personal</h2>
-                {
-                  informacionAlumno.map((info, index) => 
-                    <Indicadores 
-                      titulo={info.titulo} 
-                      respuesta={info.valor} 
-                      key={index} 
-                    />
-                  )
-                }
+                <div>
+                  {
+                    informacionAlumno.map((info, index) => 
+                      <Indicadores 
+                        titulo={info.titulo} 
+                        respuesta={info.valor} 
+                        key={index} 
+                      />
+                    )
+                  }
+                </div>
               </div>
               <div className='perfil-alumno__centro-idiomas perfil-scaner-alumno__centro-idiomas'>
                 <h2 className='titulos-2'>Información Centro de Idiomas</h2>
-                <Indicadores titulo={'Clave del Estudiante'} respuesta={claveEstudiante} />
-                <IndicadoresMultiples titulo={'Idiomas de Aprendizaje'} respuesta={idiomaAprendizaje} />
+                <div>
+                  <Indicadores titulo={'Clave del Estudiante'} respuesta={claveEstudiante} />
+                  <IndicadoresMultiples titulo={'Idiomas de Aprendizaje'} respuesta={idiomaAprendizaje} />
+                </div>
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@ import '../assets/css/Home.css'
 
 import { useEffect, useState } from 'react'
 
-import logo from '../assets/img/logo.png'
+import logo from '../assets/img/logo.webp'
 
 import SideBar from '../components/SideBar/SideBar'
 import BarraNavegacionPromocional from '../components/BarraNavegacionPromocional/BarraNavegacionPromocional'
@@ -84,7 +84,7 @@ function Home() {
       {/* Footer */}
       <footer className='contenedor-footer cajas__promocionales'>
         <picture className='contenedor-footer__informacion'>
-          <img src={logo} alt="" />
+          <img src={logo} alt="Logo del Centro de Idiomas" />
           <h3>Centro de Idiomas</h3>
         </picture>
         <p className='contenedor-footer__derechos-autor'>Todos los derechos reservados.</p>
@@ -95,7 +95,7 @@ function Home() {
         <a
           className="whatsapp" 
           target="_blank"
-          href="https://api.whatsapp.com/send?phone=+527681017928&text=Informaci%C3%B3n" 
+          href="https://wa.me/message/22D2YLDSWOARF1?fbclid=IwAR1PShHXFVNqj_7P2yhhxVwkJsoiGZ7E_cdp9dMPHhShaKRwNUc4v98kXQM"
         > 
           <i className="fa fa-whatsapp whatsapp-icon"></i>
         </a>

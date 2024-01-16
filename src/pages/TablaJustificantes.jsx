@@ -216,7 +216,7 @@ function TablaJustificantes(props) {
         cambiarValor={setPalabraFiltrar}
       />
       {
-        fotoPrueba ?
+        fotoPrueba && (
           <div className='contenedor__todo-final contenedor__filas-centrado-vertical contenedor__padding-top'>
             <FcStackOfPhotos
               className='alumno-delete icon-alumno'
@@ -234,7 +234,7 @@ function TablaJustificantes(props) {
               }
             />
           </div>
-        : <></>
+        )
       }
       <div className='contenedor__tabla-scroll tamaño-tabla__350'>
         <table className='tabla'>
@@ -274,7 +274,7 @@ function TablaJustificantes(props) {
           src={fotoPrueba} 
           alt="Imagen del justificante"
           onClick={() => setModalEstado(false)}
-          />
+        />
       </Modal>
       <Loader
         activarLoader={activarLoader}

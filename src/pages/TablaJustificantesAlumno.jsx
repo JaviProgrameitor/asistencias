@@ -48,12 +48,22 @@ function TablaJustificantesAlumno(props) {
       </div>
       <h4 className='titulos-2'>Selecciona un alumno para ver sus justificantes</h4>
       {
-        idAlumno ? 
+        idAlumno && (
           <div className='contenedor__todo-final'>
-            <Link to={`${url}/justificantes-aceptados`} className='boton__verde-oscuro'>Justificantes Aceptados</Link>
-            <Link to={`${url}/justificantes-rechazados`} className='boton__blanco'>Justificantes Rechazados</Link>
-          </div> 
-        : <></>
+            <Link 
+              to={`${url}/justificantes-aceptados`} 
+              className='boton__verde-oscuro'
+            >
+              Justificantes Aceptados
+            </Link>
+            <Link 
+              to={`${url}/justificantes-rechazados`} 
+              className='boton__blanco'
+            >
+              Justificantes Rechazados
+            </Link>
+          </div>
+        )
       }
       <BarraBusquedaTexto
         titulo='Buscar Alumno'

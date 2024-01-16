@@ -1,7 +1,6 @@
 import '../assets/css/Scanner.css'
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
-import { TiDelete } from 'react-icons/ti'
 
 import CampoContrasena from '../components/CampoContrasena/CampoContrasena';
 
@@ -11,12 +10,10 @@ function Scanner(props) {
   const { 
     alumnos,
     clases,
-    activarScanner, 
-    setActivarScanner,
     setScannerAlumno,
     setScannerClase,
   } = props
-  
+
   const mesMilisegundos = 2629800000;
   const minutos30 = 1800000;
   const [ clasesActivas, setClasesActivas ] = useState(calcularFechaActual())
@@ -41,7 +38,7 @@ function Scanner(props) {
   }
 
   function calcularFechaActual() {
-    const date = new Date(1699489800000);
+    const date = new Date();
     const año = date.getFullYear()
     const mes = new Date(date.getTime() + mesMilisegundos).getMonth()
     const fecha = date.getDate()
@@ -78,18 +75,14 @@ function Scanner(props) {
   useEffect(() => {
     const actualizandoFecha = setInterval(() => {
       setClasesActivas(calcularFechaActual())
-    }, 10000);
+    }, 3000);
 
     return () => clearInterval(actualizandoFecha);
-  }, []);
+  }, [clasesActivas]);
 
   return (
-    <div className='container-qr-code__contenido'>
+    <>
       <Toaster position="top-center" richColors />
-      <TiDelete 
-        className='foto-prueba__icon' 
-        onClick={() => {setActivarScanner(!activarScanner)}}
-      />
       <div className='modal__por-defecto modal__contenido modal__personalizado-scanner'>
       {
         clasesActivas.length > 0 
@@ -155,12 +148,12 @@ function Scanner(props) {
             </div>
           </>
         : <div>
-            <h4 className='titulos-2 titulos__blanco'>El scanner se desactivó temporalmente.</h4>
-            <h4 className='titulos-2 titulos__blanco'>Se activará automaticamente cuando haya una clase activa.</h4>
+            <h4 className='titulos-2'>El scanner se desactivó temporalmente.</h4>
+            <h4 className='titulos-2'>Se activará automaticamente cuando haya una clase activa.</h4>
           </div>
       }
       </div>
-    </div>
+    </>
   )
 }
 

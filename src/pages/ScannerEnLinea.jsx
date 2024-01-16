@@ -22,7 +22,7 @@ function ScannerEnLinea(props) {
   const navigate = useNavigate()
 
   function calcularFechaActual() {
-    const date = new Date(1700013600000);
+    const date = new Date();
     const año = date.getFullYear()
     const mes = new Date(date.getTime() + mesMilisegundos).getMonth()
     const fecha = date.getDate()
@@ -97,10 +97,10 @@ function ScannerEnLinea(props) {
   useEffect(() => {
     const actualizandoFecha = setInterval(() => {
       setClasesActivas(calcularFechaActual())
-    }, 10000);
+    }, 3000);
 
     return () => clearInterval(actualizandoFecha);
-  }, []);
+  }, [clasesActivas]);
 
   return (
     <div className='container-qr-code-en-linea'>

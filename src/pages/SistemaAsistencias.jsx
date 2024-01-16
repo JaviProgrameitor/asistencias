@@ -16,7 +16,7 @@ import { Routes, Route } from 'react-router-dom'
 
 function SistemaAsistencias(props) {
   const [ admin, setAdmin ] = useState(false)
-  const [ usuario, setUsuario ] = useState(false)
+  const [ idUsuario, setIdUsuario ] = useState(false)
   const [ scannerAlumno, setScannerAlumno ] = useState()
   const [ scannerClase, setScannerClase ] = useState()
 
@@ -470,13 +470,13 @@ function SistemaAsistencias(props) {
         path='/' 
         element={
           <Inicio
-            alumnos={alumnos}
+            alumnos={alumnosCompleto}
             clases={clases.filter(clase => clase.modalidadClase == 'Presencial')}
             administradores={administradores}
             setAdmin={setAdmin} 
             admin={admin} 
-            setUsuario={setUsuario} 
-            usuario={usuario}
+            setIdUsuario={setIdUsuario} 
+            idUsuario={idUsuario}
             setScannerAlumno={setScannerAlumno}
             setScannerClase={setScannerClase}
           />
@@ -500,8 +500,8 @@ function SistemaAsistencias(props) {
         path='/perfil-alumno/*' 
         element={
           <Usuario 
-            datos={usuario} 
-            setUsuario={setUsuario} 
+            datos={idUsuario === false ? false : alumnosCompleto.filter(alumno => alumno.id == idUsuario)} 
+            setUsuario={setIdUsuario} 
             asistenciasEntrada={asistenciasEntrada}
             pagosMensualidades={pagosMensualidades}
           />
@@ -511,7 +511,7 @@ function SistemaAsistencias(props) {
         path='/scanner-en-linea' 
         element={
           <ScannerEnLinea 
-            alumnos={alumnos}
+            alumnos={alumnosCompleto}
             clases={clases.filter(clase => clase.modalidadClase == 'En linea')}
             setScannerAlumno={setScannerAlumno}
             setScannerClase={setScannerClase}

@@ -18,7 +18,9 @@ function PerfilUsuario(props) {
     correo, 
     nivelAcademico, 
     nivelIdioma, 
-    fechaIngreso 
+    fechaIngreso,
+    clasesMensualidad,
+    estadoMensualidad
   } = props.datos[0]
   const informacionAlumno = [
     {
@@ -49,6 +51,18 @@ function PerfilUsuario(props) {
         <div className='perfil-alumno__personal'>
           <div className='personal__fondo'>
             <img className='perfil-foto-alumno' src={foto} alt="Foto de Perfil del Alumno" />
+          </div>
+          <div className='contenedor__centrado-separacion center contenedor__wrap gap-x__25 gap-y__10'>
+            {
+              idiomaAprendizaje.map((idioma, index) => 
+                <span 
+                  className={`comprobante-mensualidad padd__20 b-2px-black ${clasesMensualidad[index]}`} 
+                  key={index}
+                >
+                  {`Mensualidad del Idioma ${idioma}: ${estadoMensualidad[index]}`} 
+                </span>
+              )
+            }
           </div>
           <h2 className='perfil-titulo titulos-2'>Información Personal</h2>
           <div>

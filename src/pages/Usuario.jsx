@@ -1,7 +1,7 @@
 import '../assets/css/Usuario.css'
 
 import { useEffect, useState } from 'react';
-import { Link, useResolvedPath, useNavigate, Routes, Route } from "react-router-dom"
+import { useResolvedPath, useNavigate, Routes, Route } from "react-router-dom"
 import { FiPower } from 'react-icons/fi'
 
 import { AiFillHome } from 'react-icons/ai'
@@ -12,7 +12,7 @@ import { FaMoneyCheckDollar } from "react-icons/fa6";
 import { getAuth, signOut } from "firebase/auth";
 
 import { initializeApp } from "firebase/app";
-import { collection, onSnapshot, getFirestore  } from "firebase/firestore";
+import { collection, onSnapshot, getFirestore, orderBy, query } from "firebase/firestore";
 import firebaseConfig from '../firebase';
 
 import BarraNavegacion from '../components/BarraNavegacion/BarraNavegacion';
@@ -24,11 +24,9 @@ import UsuarioPago from './UsuarioPago';
 import CrearJustificante from './CrearJustificante';
 import Page404 from './Page404';
 
-import Modal from '@mui/material/Modal';
-
 import { Toaster, toast } from 'sonner'
 
-import Logo from '../assets/img/logo.png'
+import Logo from '../assets/img/logo.webp'
 
 function Usuario(props) {
   const { datos, setUsuario, asistenciasEntrada, pagosMensualidades } = props
@@ -100,29 +98,38 @@ function Usuario(props) {
 
   //Todo: Función para leer los datos de la base de datos
   useEffect(
-    () => 
-      onSnapshot(collection(db, 'justificantesEnEspera'),(snapshot) => 
+    () => {
+      const collectionRef = collection(db, 'justificantesEnEspera')
+      const q = query(collectionRef, orderBy('fechaEmisionJustificante', 'desc'))
+
+      onSnapshot(q,(snapshot) => 
         setJustificantesEnEspera(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      [db]
+      )
+    },[db]
   )
 
   //Todo: Función para leer los datos de la base de datos
   useEffect(
-    () => 
-      onSnapshot(collection(db, 'justificantesAceptados'),(snapshot) => 
+    () => {
+      const collectionRef = collection(db, 'justificantesAceptados')
+      const q = query(collectionRef, orderBy('fechaEmisionJustificante', 'desc'))
+
+      onSnapshot(q,(snapshot) => 
         setJustificantesAceptados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      [db]
+      )
+    },[db]
   )
 
   //Todo: Función para leer los datos de la base de datos
   useEffect(
-    () => 
-      onSnapshot(collection(db, 'justificantesRechazados'),(snapshot) => 
+    () => {
+      const collectionRef = collection(db, 'justificantesRechazados')
+      const q = query(collectionRef, orderBy('fechaEmisionJustificante', 'desc'))
+
+      onSnapshot(q,(snapshot) => 
         setJustificantesRechazados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      [db]
+      )
+    },[db]
   )
 
   return (
@@ -183,7 +190,7 @@ function Usuario(props) {
                   element={
                     <UsuarioAsistencias
                       asistenciasEntrada={
-                        asistenciasEntrada.filter(asistencia => asistencia.nombreAsistenciaEntrada === datos[0].claveEstudiante)
+                        asistenciasEntrada.filter(asistencia => asistencia.claveEstudianteAsistenciaEntrada === datos[0].claveEstudiante)
                       }
                     />
                   }

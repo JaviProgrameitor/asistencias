@@ -28,11 +28,6 @@ function CrearJustificante(props) {
   const [ explicacion, setExplicacion ] = useState('')
   const [ fotoPrueba, setFotoPrueba ] = useState('')
 
-  const [ nombreAlumno, setNombreAlumno ] = useState(nombre)
-  const [ apellidoAlumno, setApellidoAlumno ] = useState(apellido)
-  const [ numeroTelefonoAlumno, setNumeroTelefonoAlumno ] = useState(numeroTelefono)
-  const [ claveEstudianteAlumno, setClaveEstudianteAlumno ] = useState(claveEstudiante)
-
   const [ fotoApoyo, setFotoApoyo ] = useState(false)
   const [ activarLoader, setActivarLoader ] = useState(false)
 
@@ -52,10 +47,10 @@ function CrearJustificante(props) {
     const storageRef = `justificantes/${identificadorAleatorio}`
     await createStorage(storageRef, fotoPrueba,)
 
-    const nombreJustificante = nombreAlumno
-    const apellidoJustificante = apellidoAlumno
-    const claveEstudianteJustificante = claveEstudianteAlumno
-    const numeroTelefonoJustificante = numeroTelefonoAlumno
+    const nombreJustificante = nombre
+    const apellidoJustificante = apellido
+    const claveEstudianteJustificante = claveEstudiante
+    const numeroTelefonoJustificante = numeroTelefono
     const correoJustificante = correo
     let fechaInternaJustificante;
     const fechaEmisionJustificante = date.getTime()

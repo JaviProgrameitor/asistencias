@@ -1,6 +1,6 @@
 import '../../assets/css/components/BarraNavegacionPromocional.css'
 
-import logo from '../../assets/img/logo.png'
+import logo from '../../assets/img/logo.webp'
 
 import { Link } from 'react-router-dom'
 

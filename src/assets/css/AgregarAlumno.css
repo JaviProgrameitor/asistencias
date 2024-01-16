@@ -24,12 +24,46 @@
 }
 
 .agregar-idiomas__icon {
-  font-size: 40px;
+  font-size: 20px;
   cursor: pointer;
+  margin-bottom: 50px;
+
+  width: max-content;
+  display: flex;
+  align-items: center;
+}
+
+.caja__idioma-agregado {
+  padding: 20px 0 20px 20px;
+  margin-bottom: 50px;
+  border-left: 2px solid black;
+
+  position: relative;
+}
+
+.caja__idioma-agregado::before {
+  content: '';
+  width: 50px;
+  height: 2px;
+  background-color: black;
+  
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.caja__idioma-agregado::after {
+  content: '';
+  width: 50px;
+  height: 2px;
+  background-color: black;
+  
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 
 .idioma__icon-delete {
   color: red;
   font-size: 25px;
-  cursor: pointer;
 }

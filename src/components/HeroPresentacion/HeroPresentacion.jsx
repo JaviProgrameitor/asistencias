@@ -4,7 +4,13 @@ import { BsTelephoneFill } from 'react-icons/bs'
 import { FcOk } from 'react-icons/fc'
 import { FaLanguage } from 'react-icons/fa'
 
-import ImagenMancha from '../../assets/img/mancha.png'
+import ImagenMancha from '../../assets/img/mancha.webp'
+import ImagenWhatsapp from '../../assets/img/whatsapp.webp'
+import ImagenCorreo from '../../assets/img/gmail.webp'
+import ImagenLinkedin from '../../assets/img/linkedin.webp'
+import ImagenFacebook from '../../assets/img/facebook.webp'
+import ImagenInstagram from '../../assets/img/instagram.webp'
+import ImagenTiktok from '../../assets/img/tik-tok.webp'
 
 function HeroPresentacion() {
   return (
@@ -14,12 +20,16 @@ function HeroPresentacion() {
         data-aos="fade-right"
         data-aos-duration="1500"
       >
-        <div className='numero-telefono'>
+        <a 
+          className='numero-telefono'
+          href='tel:+527681017928' 
+          target='_blank'
+        >
           <BsTelephoneFill />
           <span>+527681017928</span>
-        </div>
+        </a>
         <div className='promocional__modalidades'>
-          <span>Presencial y Online</span>
+          <span>Presencial y En Línea</span>
         </div>
         <h1 className='promocional__titulo'>
           Te enseñamos
@@ -34,21 +44,25 @@ function HeroPresentacion() {
           impulsandote a desarrollar competencia plena en la lengua meta de tu elección.
         </p>
         <div className='promocional__idiomas'>
-          <div className='prom__idioma'>
-            <FcOk />
-            Inglés
+          <div className='caja__prom__idioma'>
+            <div className='prom__idioma'>
+              <FcOk />
+              Inglés
+            </div>
+            <div className='prom__idioma'>
+              <FcOk />
+              Francés
+            </div>
           </div>
-          <div className='prom__idioma'>
-            <FcOk />
-            Francés
-          </div>
-          <div className='prom__idioma'>
-            <FcOk />
-            Español
-          </div>
-          <div className='prom__idioma'>
-            <FcOk />
-            Alemán
+          <div className='caja__prom__idioma'>
+            <div className='prom__idioma'>
+              <FcOk />
+              Español
+            </div>
+            <div className='prom__idioma'>
+              <FcOk />
+              Alemán
+            </div>
           </div>
         </div>
         <div className='promocional__botones'>
@@ -61,10 +75,53 @@ function HeroPresentacion() {
           </a>
           <a 
             className='boton-presentacion boton__verde-oscuro contenedor__centrado-vertical' 
-            href="https://api.whatsapp.com/send?phone=+527681017928&text=Informaci%C3%B3n"
+            href="https://wa.me/message/22D2YLDSWOARF1?fbclid=IwAR1PShHXFVNqj_7P2yhhxVwkJsoiGZ7E_cdp9dMPHhShaKRwNUc4v98kXQM"
+            target='_blank'
           >
             <i className="fa fa-whatsapp whatsapp-icon"></i>
             Más Información
+          </a>
+        </div>
+        <div className='promocional__links'>
+          <a
+            className='prom__link'
+            target="_blank"
+            href="https://wa.me/message/22D2YLDSWOARF1?fbclid=IwAR1PShHXFVNqj_7P2yhhxVwkJsoiGZ7E_cdp9dMPHhShaKRwNUc4v98kXQM"
+          >
+            <img src={ImagenWhatsapp} alt="Icono de Whatsapp" />
+          </a>
+          <a
+            className='prom__link'
+            target='_blank'
+            href='https://www.facebook.com/cidiomasmex'
+          >
+            <img src={ImagenFacebook} alt="Icono de Facebook" />
+          </a>
+          <a
+            className='prom__link'
+            target='_blank'
+            href='https://www.instagram.com/cidiomasmex/'
+          >
+            <img src={ImagenInstagram} alt="Icono de Instagram" />
+          </a>
+          <a
+            className='prom__link'
+            target='_blank'
+            href='https://www.tiktok.com/@centrodeidiomas_?_t=8ik0ks73CVx&_r=1'
+          >
+            <img src={ImagenTiktok} alt="Icono de Tik tok" />
+          </a>
+          <a
+            className='prom__link'
+            target='_blank'
+            href='https://www.linkedin.com/company/cinvmex/'
+          >
+            <img src={ImagenLinkedin} alt="Icono de Linkedin" />
+          </a>
+          <a
+            className='prom__link'
+          >
+            <img src={ImagenCorreo} alt="Icono de Correo" />
           </a>
         </div>
       </div>
@@ -73,7 +130,7 @@ function HeroPresentacion() {
         data-aos="fade-left"
         data-aos-duration="1500"
       >
-        <img className='promocional__imagen' src={ImagenMancha} />
+        <img className='promocional__imagen' src={ImagenMancha} alt='Imagen representativa al Centro de Idiomas' />
       </div>
     </div>
   )

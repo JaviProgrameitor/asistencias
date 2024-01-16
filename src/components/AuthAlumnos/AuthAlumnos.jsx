@@ -17,7 +17,7 @@ function AuthAlumnos(props) {
 
   const url = useResolvedPath("").pathname
   
-  const { alumnos, setUsuario, usuario, activarScanner, setActivarScanner } = props
+  const { alumnos, setIdUsuario, idUsuario, activarScanner, setActivarScanner } = props
 
   const [ email, setEmail ] = useState("")
   const [ password, setPassword ] = useState("")
@@ -30,7 +30,7 @@ function AuthAlumnos(props) {
     if(nuevoAlumno.length > 0) {
       bcrypt.compare(password, nuevoAlumno[0].contrasena, async(error, match) => {
         if(match) {
-          await setUsuario(nuevoAlumno)
+          await setIdUsuario(nuevoAlumno[0].id)
           setSesion(true)
         }
         else if(!match) toast.error('La contraseña es incorrecta')
@@ -39,7 +39,7 @@ function AuthAlumnos(props) {
   }
 
   useEffect(() => {
-    if(usuario.length > 0 && sesion) {
+    if(idUsuario != false && sesion) {
       navigate(`${url}/perfil-alumno`)
     }
   })

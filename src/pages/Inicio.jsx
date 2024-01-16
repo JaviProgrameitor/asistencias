@@ -8,9 +8,9 @@ import Scanner from './Scanner';
 
 import { Link } from 'react-router-dom'
 
-import logo from '../assets/img/logo.png'
-import banderas from '../assets/img/banderas.png'
-import franja from '../assets/img/franja.png'
+import logo from '../assets/img/logo.webp'
+import banderas from '../assets/img/banderas.webp'
+import franja from '../assets/img/franja.webp'
 
 import Modal from '@mui/material/Modal';
 
@@ -21,8 +21,8 @@ const Inicio = (props) => {
     administradores,
     setAdmin, 
     admin, 
-    setUsuario, 
-    usuario,
+    setIdUsuario, 
+    idUsuario,
     setScannerAlumno,
     setScannerClase
   } = props
@@ -60,21 +60,21 @@ const Inicio = (props) => {
               Administradores
             </button>
             {
-              tipoFormulario === true 
-              ? <AuthAlumnos
-                  alumnos={alumnos}
-                  setUsuario={setUsuario} 
-                  usuario={usuario} 
-                  activarScanner={activarScanner} 
-                  setActivarScanner={setActivarScanner} 
-                /> 
-              : <AuthAdmin 
-                  administradores={administradores}
-                  setAdmin={setAdmin} 
-                  admin={admin} 
-                  activarScanner={activarScanner} 
-                  setActivarScanner={setActivarScanner} 
-                /> 
+              tipoFormulario
+                ? <AuthAlumnos
+                    alumnos={alumnos}
+                    setIdUsuario={setIdUsuario} 
+                    idUsuario={idUsuario} 
+                    activarScanner={activarScanner} 
+                    setActivarScanner={setActivarScanner} 
+                  /> 
+                : <AuthAdmin 
+                    administradores={administradores}
+                    setAdmin={setAdmin} 
+                    admin={admin} 
+                    activarScanner={activarScanner} 
+                    setActivarScanner={setActivarScanner} 
+                  /> 
             }
           </div>
         </div>
@@ -87,8 +87,6 @@ const Inicio = (props) => {
           <Scanner 
             alumnos={alumnos}
             clases={clases}
-            activarScanner={activarScanner} 
-            setActivarScanner={setActivarScanner}
             setScannerAlumno={setScannerAlumno}
             setScannerClase={setScannerClase}
           /> 

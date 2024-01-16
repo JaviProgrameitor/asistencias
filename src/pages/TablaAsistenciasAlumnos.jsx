@@ -42,15 +42,28 @@ function TablaAsistenciasAlumnos(props) {
   return (
     <div>
       <div className='contenedor__todo-principio'>
-        <Link to={'/sistema-asistencias/panel-control/asistencias'}><FaArrowCircleLeft className='flecha-regresar icon-40' /></Link>
+        <Link to={'/sistema-asistencias/panel-control/asistencias'}>
+          <FaArrowCircleLeft className='flecha-regresar icon-40' />
+        </Link>
       </div>
       <h4 className="titulos-2">Selecciona el alumno para ver todas sus asistencias</h4>
       {
-        idAlumno ? <div className="contenedor__todo-final">
-          <Link to={`${url}/asistencias-personales`} className='boton__verde-oscuro'>Asistencias</Link>
-          <Link to={`${url}/graficas-asistencias-personales`} className='boton__blanco'>Gráficas Asistencias</Link>
-        </div> 
-        : <></>
+        idAlumno && (
+          <div className="contenedor__todo-final">
+            <Link 
+              to={`${url}/asistencias-personales`} 
+              className='boton__verde-oscuro'
+            >
+              Asistencias
+            </Link>
+            <Link 
+              to={`${url}/graficas-asistencias-personales`} 
+              className='boton__blanco'
+            >
+              Gráficas Asistencias
+            </Link>
+          </div>
+        )
       }
       <BarraBusquedaTexto
         titulo='Buscar Alumno'

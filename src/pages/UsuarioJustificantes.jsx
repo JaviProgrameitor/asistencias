@@ -3,7 +3,6 @@ import '../assets/css/UsuarioJustificantes.css'
 import { useState } from 'react';
 import { Routes, Route } from "react-router-dom"
 import { Link, useResolvedPath } from "react-router-dom"
-import { TiDelete } from 'react-icons/ti'
 
 import UsuarioJustificantesEnEspera from './UsuarioJustificantesEnEspera';
 import UsuarioJustificantesAceptados from './UsuarioJustificantesAceptados';
@@ -27,9 +26,14 @@ function UsuarioJustificantes(props) {
           <span className='agregar-alumnos__texto'>Crear Justificante</span>
         </Link>
         {
-          fotoPrueba 
-            ? <button className='boton__blanco' onClick={() => setMostrarFotoPrueba(true)}>Ver Prueba</button>
-            : <></>
+          fotoPrueba && (
+            <button 
+              className='boton__blanco' 
+              onClick={() => setMostrarFotoPrueba(true)}
+            >
+              Ver Prueba
+            </button>
+          )
         }
       </div>
       <div className='container-botones-usuario-justificantes'>

@@ -8,20 +8,18 @@
 .caja-presentacion__parte-1 {
   box-sizing: border-box;
   width: 45%;
-  padding: 30px 30px 0 30px;
+  padding: 30px;
 
   display: flex;
   flex-direction: column;
 }
 
 .numero-telefono {
-  font-size: 23px;
   display: flex;
+  font-size: 23px;
   align-items: center;
   gap: 5px;
-}
-
-.numero-telefono span {
+  text-decoration: none;
   color: #5D1FF2;
 }
 
@@ -62,6 +60,13 @@
   gap: 50px;
 }
 
+.caja__prom__idioma {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 50px;
+}
+
 .prom__idioma {
   display: flex;
   align-items: center;
@@ -85,6 +90,17 @@
   width: 55%;
 }
 
+.promocional__links {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.prom__link img {
+  height: 35px;
+}
+
 .promocional__imagen {
   width: 100%;
   height: 100%;
@@ -99,10 +115,6 @@
   }
 
   /* Presentación */
-  .caja-presentacion {
-    height: calc(100vh - 87px);
-  }
-
   #salto_1, #salto_2 {
     display: none;
   }
@@ -121,7 +133,6 @@
   }
 
   .promocional__idiomas {
-    flex-wrap: wrap;
     gap: 10px 25px;
   }
 
@@ -132,10 +143,6 @@
 
 @media (min-width: 900px) and (max-width: 940px) {
   /* Presentación */
-  .caja-presentacion {
-    height: calc(100vh - 87px);
-  }
-
   .promocional__modalidades {
     margin: 45px 0 0 0;
     font-size: 16px;
@@ -155,7 +162,7 @@
 
   .promocional__idiomas {
     flex-wrap: wrap;
-    gap: 10px 25px;
+    gap: 10px 55px;
   }
 
   .prom__idioma {

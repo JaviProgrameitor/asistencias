@@ -14,14 +14,14 @@ function Modalidades() {
           <h3 className='modalidad__titulo subtitulos__promocionales'>Presencial</h3>
           <div className='modalidad__contenido'>
             <p>Estudia presencialmente en el Centro de Idiomas</p>
-            <img src={ImagenModalidadPresencial} alt="" />
+            <img src={ImagenModalidadPresencial} alt="Imagen representando las clases presenciales" />
           </div>
         </div>
         <div className='modalidad' data-aos="zoom-in">
-          <h3 className='modalidad__titulo subtitulos__promocionales'>Online</h3>
+          <h3 className='modalidad__titulo subtitulos__promocionales'>En Línea</h3>
           <div className='modalidad__contenido'>
             <p>Estudia de manera online con maestros en vivo</p>
-            <img src={ImagenModalidadOnline} alt="" />
+            <img src={ImagenModalidadOnline} alt="Imagen representando las clases en línea" />
           </div>
         </div>
       </div>

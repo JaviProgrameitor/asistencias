@@ -1,9 +1,9 @@
 import '../../assets/css/components/Metodologia.css'
 
-import ImagenGrupo from '../../assets/img/grupo.png'
-import ImagenManos from '../../assets/img/manos.png'
-import ImagenEquipo from '../../assets/img/equipo.png'
-import ImagenMetodologia from '../../assets/img/metodología.png'
+import ImagenGrupo from '../../assets/img/grupo.webp'
+import ImagenManos from '../../assets/img/manos.webp'
+import ImagenEquipo from '../../assets/img/equipo.webp'
+import ImagenMetodologia from '../../assets/img/metodología.webp'
 
 function Metodologia() {
   return (
@@ -24,21 +24,21 @@ function Metodologia() {
         </div>
         <div className="metodologia-ejemplos" data-aos="fade-left">
           <div className='ejemplo'>
-            <img className='ejemplo__imagen' src={ImagenGrupo} alt="" />
+            <img className='ejemplo__imagen' src={ImagenGrupo} alt="Imagen de un grupo social" />
             <p className='ejemplo__texto'>
               Juntos en la misma aula física o virtual, compartiendo las responsabilidades de 
               enseñar diferentes aspectos del plan de estudios.
             </p>
           </div>
           <div className='ejemplo'>
-            <img className='ejemplo__imagen' src={ImagenManos} alt="" />
+            <img className='ejemplo__imagen' src={ImagenManos} alt="Imagen de unas manos" />
             <p className='ejemplo__texto'>
               Permite una diversidad de estilos de enseñanza, experiencia y perspectivas, 
               lo que beneficia a los estudiantes al proporcionarles una experiencia de aprendizaje más enriquecedora.
             </p>
           </div>
           <div className='ejemplo'>
-            <img className='ejemplo__imagen' src={ImagenEquipo} alt="" />
+            <img className='ejemplo__imagen' src={ImagenEquipo} alt="Imagen de un equipo" />
             <p className='ejemplo__texto'>
               Apoyo individualizado a nuestros pupilos en función de sus necesidades y estilo de aprendizaje.
               <br />
@@ -49,7 +49,7 @@ function Metodologia() {
           </div>
         </div>
         <div className="metodologia-demostracion div3" data-aos="fade-right">
-          <img className='demostracion__imagen' src={ImagenMetodologia} alt="" />
+          <img className='demostracion__imagen' src={ImagenMetodologia} alt="Imagen de la metodología del Centro de Idiomas" />
         </div>
       </div>
     </div>

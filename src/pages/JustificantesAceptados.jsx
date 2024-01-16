@@ -1,49 +1,21 @@
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from "react-router-dom"
 import { FaArrowCircleLeft } from 'react-icons/fa'
 
 import FilasJustificantes from "../components/FilasJustificantes/FilasJustificantes"
 
-import TextField from '@mui/material/TextField';
 import Modal from '@mui/material/Modal';
 
 function JustificantesAceptados(props) {
   const { justificantesAceptados } = props
 
   const [ fotoPrueba, setFotoPrueba ] = useState(false)
-  const [ palabraFiltrar, setPalabraFiltrar ] = useState('')
-  const [ filtrarJustificantes, setFiltrarJustificantes ] = useState(justificantesAceptados)
   const [ modalEstado, setModalEstado ] = useState(false)
-
-  //Todo: Función para buscar JUSTIFICANTES por medio de nombres o apellidos
-  async function busqueda(valor) {
-    if(!valor) {
-      setFiltrarJustificantes(justificantesAceptados)
-      return
-    }
-
-    let aux = []
-    for(let i = 0; i < justificantesAceptados.length; i++) {
-      try {
-        if(
-          justificantesAceptados[i].fechaEmisionJustificante.includes(valor) ||
-          justificantesAceptados[i].fechaJustificante.includes(valor)
-        ) {
-          aux.push(justificantesAceptados[i])
-        }
-      } catch {}
-    }
-    setFiltrarJustificantes(aux)
-  }
 
   function cambiarValor(justificante) {
     justificante != false ? setFotoPrueba(justificante) : setFotoPrueba(false)
   }
-
-  useEffect(() => {
-    busqueda(palabraFiltrar)
-  },[palabraFiltrar, justificantesAceptados])
 
   return (
     <div>
@@ -53,22 +25,17 @@ function JustificantesAceptados(props) {
         </Link>
       </div>
       <h5 className='titulos-2'>Justificantes Aceptados</h5>
-      <TextField 
-        id="filled-basic" 
-        label="Buscar Justificante" 
-        variant="filled"
-        fullWidth
-        color='success'
-        placeholder='Por fecha de emisión o fecha a justificar'
-        margin='dense'
-        onChange={(e) => setPalabraFiltrar(e.target.value)}
-      />
       {
-        fotoPrueba 
-          ? <div className='contenedor__todo-final'>
-              <button className='boton__blanco' onClick={() => setModalEstado(true)}>Ver Prueba</button>
-            </div>
-          : <></>
+        fotoPrueba && (
+          <div className='contenedor__todo-final'>
+            <button 
+              className='boton__blanco' 
+              onClick={() => setModalEstado(true)}
+            >
+              Ver Prueba
+            </button>
+          </div>
+        )
       }
       <div className="contenedor__tabla-scroll tamaño-tabla__250">
         <table className='tabla'>
@@ -83,7 +50,7 @@ function JustificantesAceptados(props) {
           </thead>
           <tbody className="tabla-cuerpo">
             {
-              filtrarJustificantes.map((alumno, index) => 
+              justificantesAceptados.map((alumno, index) => 
                 <FilasJustificantes 
                   datos={alumno} 
                   key={index}

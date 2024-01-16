@@ -1,6 +1,6 @@
 import '../assets/css/PanelControl.css'
 import { useState, useEffect } from 'react'
-import { useNavigate, Link, Routes, Route, useResolvedPath } from "react-router-dom"
+import { useNavigate, Routes, Route, useResolvedPath } from "react-router-dom"
 
 import { AiFillHome } from 'react-icons/ai'
 import { BsFillPeopleFill, BsCalendarWeekFill } from 'react-icons/bs'
@@ -22,7 +22,7 @@ import Asistencias from './Asistencias'
 import Justificantes from './Justificantes'
 import Reportes from './Reportes'
 
-import logo from '../assets/img/logo.png'
+import logo from '../assets/img/logo.webp'
 import Page404 from './Page404'
 
 import { initializeApp } from "firebase/app";
@@ -93,18 +93,6 @@ function PanelControl(props) {
     }
   ]
 
-  function comprobarUrl(urlAct, urlCom, index) {
-    if(index === 0) {
-      if(urlAct == urlCom) return true
-      else return false
-    }
-
-    else {
-      if(urlAct.includes(urlCom)) return true
-      else return false
-    }
-  }
-  
   function cerrarSesion() {
     signOut(auth).then(() => {
       // Sign-out successful.
@@ -129,29 +117,38 @@ function PanelControl(props) {
 
   //Todo: Función para leer los datos de la base de datos
   useEffect(
-    () => 
-      onSnapshot(collection(db, 'justificantesEnEspera'),(snapshot) => 
-      setJustificantesEnEspera(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      [db]
+    () => {
+      const collectionRef = collection(db, 'justificantesEnEspera')
+      const q = query(collectionRef, orderBy('fechaEmisionJustificante', 'desc'))
+
+      onSnapshot(q,(snapshot) => 
+        setJustificantesEnEspera(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+      )
+    },[db]
   )
 
   //Todo: Función para leer los datos de la base de datos
   useEffect(
-    () => 
-      onSnapshot(collection(db, 'justificantesRechazados'),(snapshot) => 
-      setJustificantesRechazados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      [db]
+    () => {
+      const collectionRef = collection(db, 'justificantesRechazados')
+      const q = query(collectionRef, orderBy('fechaEmisionJustificante', 'desc'))
+
+      onSnapshot(q,(snapshot) => 
+        setJustificantesRechazados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+      )
+    },[db]
   )
 
   //Todo: Función para leer los datos de la base de datos
   useEffect(
-    () => 
-      onSnapshot(collection(db, 'justificantesAceptados'),(snapshot) => 
-      setJustificantesAceptados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      [db]
+    () => {
+      const collectionRef = collection(db, 'justificantesAceptados')
+      const q = query(collectionRef, orderBy('fechaEmisionJustificante', 'desc'))
+
+      onSnapshot(q,(snapshot) => 
+        setJustificantesAceptados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+      )
+    },[db]
   )
   
   useEffect(() => {
@@ -187,7 +184,7 @@ function PanelControl(props) {
                 </div>
               </div>
             </div>
-            <div className='central-contenido'>
+            <div className='central-contenido scroll-personalizado'>
               <Routes>
                 <Route 
                   path='/' 

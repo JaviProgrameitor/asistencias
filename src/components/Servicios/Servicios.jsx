@@ -1,9 +1,9 @@
 import '../../assets/css/components/Servicios.css'
 
-import ImagenClasesGrupales from '../../assets/img/clases-grupales.png'
-import ImagenClasesIndividuales from '../../assets/img/clases-individuales2.png'
-import ImagenInterpretacion from '../../assets/img/interpretación.jpg'
-import ImagenTraduccion from '../../assets/img/traducción.png'
+import ImagenClasesGrupales from '../../assets/img/clases-grupales.webp'
+import ImagenClasesIndividuales from '../../assets/img/clases-individuales2.webp'
+import ImagenInterpretacion from '../../assets/img/interpretación.webp'
+import ImagenTraduccion from '../../assets/img/traducción.webp'
 
 function Servicios() {
   return (
@@ -14,7 +14,7 @@ function Servicios() {
       <div className='nuestros-servicios__contenido'>
         <div className='servicio' data-aos="zoom-in">
           <div className='servicio__imagen'>
-            <img src={ImagenClasesGrupales} alt="" />
+            <img src={ImagenClasesGrupales} alt="Icono de un grupo social" />
           </div>
           <h4 className='servicio__titulo subtitulos__promocionales'>Clases Grupales</h4>
           <p className='servicio__texto'>
@@ -23,7 +23,7 @@ function Servicios() {
         </div>
         <div className='servicio' data-aos="zoom-in">
           <div className='servicio__imagen'>
-            <img src={ImagenClasesIndividuales} alt="" />
+            <img src={ImagenClasesIndividuales} alt="Icono representando clases individuales" />
           </div>
           <h4 className='servicio__titulo subtitulos__promocionales'>Clases Individuales</h4>
           <p className='servicio__texto'>
@@ -35,7 +35,7 @@ function Servicios() {
         </div>
         <div className='servicio' data-aos="zoom-in">
           <div className='servicio__imagen'>
-            <img src={ImagenInterpretacion} alt="" />
+            <img src={ImagenInterpretacion} alt="Icono representando el servicio de la Interpretación" />
           </div>
           <h4 className='servicio__titulo subtitulos__promocionales'>Interpretación Simultánea en Tiempo Real</h4>
           <p className='servicio__texto'>
@@ -46,7 +46,7 @@ function Servicios() {
         </div>
         <div className='servicio' data-aos="zoom-in">
           <div className='servicio__imagen'>
-            <img src={ImagenTraduccion} alt="" />
+            <img src={ImagenTraduccion} alt="Icono representando el servicio de la Traducción" />
           </div>
           <h4 className='servicio__titulo subtitulos__promocionales'>Traducción de Textos</h4>
           <p className='servicio__texto'>
