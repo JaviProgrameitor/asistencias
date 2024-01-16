@@ -25,6 +25,7 @@ function TablaAdministradors(props) {
     await deleteDatabase('administradores', id)
     await deleteStorage(`administradores/${perfilAdministrador.idFoto}`)
     setIdAdministrador(false)
+    toast.success('El Administrador ha sido eliminado con éxito.')
   }
 
   return(

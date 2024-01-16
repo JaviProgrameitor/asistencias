@@ -33,7 +33,7 @@ function AgregarAdministrador(props) {
 
   const opcionesPuestos = [
     'Director',
-    'Empleado'
+    'Administrador'
   ]
 
   async function agregarAdmin(e) {

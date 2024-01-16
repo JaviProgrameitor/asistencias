@@ -114,7 +114,7 @@ function TablaJustificantes(props) {
     await createDatabase('justificantesAceptados', datos)
     cambiarValor(false)
     setActivarLoader(false)
-    toast.success('El Justificante ha sido aceptado con exito.')
+    toast.success('El Justificante ha sido aceptado con éxito.')
   }
 
   async function rechazarJustificacion() {
@@ -177,7 +177,7 @@ function TablaJustificantes(props) {
     await createDatabase('justificantesRechazados', datos)
     cambiarValor(false)
     setActivarLoader(false)
-    toast.success('El Justificante ha sido rechazado con exito.')
+    toast.success('El Justificante ha sido rechazado con éxito.')
   }
 
   function cambiarValor(justificante) {

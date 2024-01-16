@@ -183,13 +183,13 @@ function HorariosContenido(props) {
 
     await createDatabase('clases', datos)
     setActivarLoader(false)
-    toast.success('La Clase ha sido agregada con exito')
+    toast.success('La Clase ha sido agregada con éxito.')
   }
 
   //Todo: Función para eliminar clases
   async function eliminarClase() {
     await deleteDatabase('clases', idClaseSeleccionada)
-    toast.success('La Clase ha sido eliminada con exito')
+    toast.success('La Clase ha sido eliminada con éxito.')
   }
 
   function accesoDenegado() {
