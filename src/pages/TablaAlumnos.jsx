@@ -211,8 +211,8 @@ function TablaAlumnos(props) {
               <AiFillDelete 
                 className='alumno-delete icon-alumno'
                 onClick={() => {
-                  if(puestoAdmin === 'Director') setModalEliminarAlumno(true)
-                  else toast.error('No tienes acceso a eliminar alumnos.')
+                  if(puestoAdmin === 'Director(a)') setModalEliminarAlumno(true)
+                  else toast.error('No tienes acceso a esta función.')
                 }}
               />
             </div>
@@ -253,7 +253,7 @@ function TablaAlumnos(props) {
       >
         <div className='modal__por-defecto modal__contenido scroll-personalizado'>
           <h4 className='advertencia__titulo'>¡ADVERTENCIA!</h4>
-          <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al alumno ?</p>
+          <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al alumno?</p>
           <div className='contenedor__columna-centro'>
             <div>
               <Indicadores 

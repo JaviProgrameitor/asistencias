@@ -1,11 +1,13 @@
 import '../../assets/css/components/BarraNavegacion.css'
 
-import { Link } from "react-router-dom"
+import { Link, useResolvedPath } from "react-router-dom"
 
 import Modal from '@mui/material/Modal';
 
 function BarraNavegacion(props) {
-  const { estadoNavbar, setEstadoNavbar, datos, enlaces, urlActual } = props
+  const { estadoNavbar, setEstadoNavbar, datos, enlaces, urlActual, panelControl=false } = props
+
+  const url = useResolvedPath("").pathname
 
   function comprobarUrl(urlAct, urlCom, index) {
     if(index === 0) {
@@ -33,10 +35,20 @@ function BarraNavegacion(props) {
         onMouseLeave={() => setEstadoNavbar(false)}
       >
         <div className='perfil-admin contenedor__margin-top'>
-          <img className='foto-perfil-admin' src={datos[0].foto} alt="Foto de Perfil del Admin" />
+          <img className='foto-perfil-admin' src={datos[0].foto} alt="Foto de Perfil" />
           <h3 className='perfil-admin__nombre info-admin'>{datos[0].nombre}</h3>
           <p className='perfil-admin__correo info-admin'>{datos[0].correo}</p>
           <p className='perfil-admin__puesto info-admin'>{datos[0].puesto}</p>
+          {
+            panelControl && (
+              <Link 
+                to={`${url}/administradores/perfil-administrador`} 
+                className='boton__blanco info-admin'
+              >
+                Ver Perfil
+              </Link>
+            )
+          }
         </div>
         <div className='panel-control__enlaces'>
           {
@@ -76,6 +88,18 @@ function BarraNavegacion(props) {
               </Link>
             )
           })
+        }
+        {
+          panelControl && (
+            <Link 
+              className='enlaces-moviles'
+              to={`${url}/administradores/perfil-administrador`} 
+            >
+              <div>
+                <img src={datos[0].foto} alt="Foto de Perfil" />
+              </div>
+            </Link>
+          )
         }
       </nav>
     </>

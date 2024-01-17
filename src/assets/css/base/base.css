@@ -231,6 +231,10 @@
   padding-bottom: 20px;
 }
 
+.padd-b__10 {
+  padding-bottom: 10px;
+}
+
 /* Estilos de la tabla */
 .contenedor__tabla-scroll {
   overflow-y: scroll;
@@ -355,7 +359,7 @@
   cursor: pointer;
   display: inline-block;
   padding: 10px 20px;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
   text-transform: uppercase;
   color: #fff;
@@ -510,11 +514,11 @@
 
 /* Stepper Mui */
 
-.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active, .css-4ff9q7.Mui-active {
   color: green !important;
 }
 
-.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed, .css-4ff9q7.Mui-completed {
   color: green !important;
 }
 

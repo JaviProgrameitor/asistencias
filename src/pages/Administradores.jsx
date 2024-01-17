@@ -3,9 +3,11 @@ import { Routes, Route } from "react-router-dom"
 
 import TablaAdministradors from './TablaAdministradores'
 import AgregarAdministrador from './AgregarAdministrador';
+import PerfilAdministrador from './PerfilAdministrador';
+import ActualizarAdministrador from './ActualizarAdministrador';
 
 function Administradores(props) {
-  const { puestoAdmin, administradores } = props
+  const { puestoAdmin, administradores, adminActivo } = props
 
   const [ perfilAdministrador, setPerfilAdministrador ] = useState()
   const [ idAdministrador, setIdAdministrador ] = useState(false)
@@ -47,6 +49,22 @@ function Administradores(props) {
           element={
             <AgregarAdministrador 
               administradores={administradores} 
+            />
+          } 
+        />
+        <Route 
+          path='/perfil-administrador' 
+          element={
+            <PerfilAdministrador 
+              adminActivo={adminActivo}
+            />
+          } 
+        />
+        <Route 
+          path='/actualizar-administrador' 
+          element={
+            <ActualizarAdministrador 
+              adminActivo={adminActivo}
             />
           } 
         />

@@ -34,7 +34,7 @@ function TablaAdministradors(props) {
       <div className="contenedor__todo-final">
         <Link to={`${url}/agregar-administrador`} className='boton__blanco' >
           <BsPersonFillAdd />
-          <span>Agregar Administrador</span>
+          <span>Agregar Administrador(a)</span>
         </Link>
       </div>
       {
@@ -43,9 +43,9 @@ function TablaAdministradors(props) {
               <AiFillDelete 
                 className='alumno-delete icon-alumno'
                 onClick={() => {
-                  puestoAdmin === 'Director' 
+                  puestoAdmin === 'Director(a)' 
                     ? setModalEliminarAdministrador(true) 
-                    : toast.error('No tienes acceso a eliminar alumnos.')
+                    : toast.error('No tienes acceso a esta función.')
                 }}
               />
             </div> 
@@ -59,6 +59,7 @@ function TablaAdministradors(props) {
               <th colSpan='1'>Apellido</th>
               <th colSpan='1'>Correo</th>
               <th colSpan='1'>Puesto</th>
+              <th colSpan='1'>Clave del Personal</th>
             </tr>
           </thead>
           <tbody className='tabla-cuerpo'>
@@ -86,7 +87,7 @@ function TablaAdministradors(props) {
           modalEliminarAdministrador 
             ? <div className='modal__por-defecto modal__contenido scroll-personalizado'>
                 <h4 className='advertencia__titulo'>¡ADVERTENCIA!</h4>
-                <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al administrador?</p>
+                <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al administrador(a)?</p>
                 <div className='contenedor__columna-centro'>
                   <div>
                     <Indicadores

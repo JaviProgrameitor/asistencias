@@ -525,14 +525,15 @@ function EditarAlumno(props) {
     actualizarDatosAlumno(false)
     setActivarLoader(false)
     toast.success('El Alumno ha sido editado con exito')
+
+    setTimeout(() => {
+      navigate('/sistema-asistencias/panel-control/alumnos')
+    }, 2000);
+
   } catch(error) {
       console.log(error)
       setActivarLoader(false)
     }
-
-    // setTimeout(() => {
-    //   navigate('/sistema-asistencias/panel-control/alumnos')
-    // }, 2000);
   }
 
   return (
@@ -718,8 +719,8 @@ function EditarAlumno(props) {
                       funcion={setIdiomaAprendizajeAlumno}
                     />
                     <ListaOpciones 
-                      titulo='Nivel MCERLC'
-                      placeholder='Ingresa el nivel de MCERLC'
+                      titulo='Nivel MCERL'
+                      placeholder='Ingresa el nivel de MCERL'
                       valor={nivelIdiomaAlumno[index]}
                       cambiarValor={actualizarDatos}
                       opciones={opcionesNiveles}

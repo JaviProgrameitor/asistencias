@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 
 function FilasAdministradores(props) {
   const { posicion, idAdministrador, actualizarDatos, datos } = props
-  const { nombre, apellido, correo, puesto, id } = props.datos
+  const { nombre, apellido, correo, puesto, id, clavePersonal } = props.datos
   const [ tipo, setTipo ] = useState()
   const [ activo, setActivo ] = useState()
 
@@ -31,6 +31,7 @@ function FilasAdministradores(props) {
       <td className='td-admin' >{apellido}</td>
       <td className='td-admin' >{correo}</td>
       <td className='td-admin' >{puesto}</td>
+      <td className='td-admin' >{clavePersonal}</td>
     </tr>
   )
 }

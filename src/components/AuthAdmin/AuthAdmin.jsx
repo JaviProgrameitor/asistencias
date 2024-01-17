@@ -29,7 +29,7 @@ function AuthAdmin(props) {
     if(nuevoAdmin.length > 0) {
       bcrypt.compare(password, nuevoAdmin[0].contrasena, async(error, match) => {
         if(match) {
-          await setAdmin(nuevoAdmin)
+          await setAdmin(nuevoAdmin[0].id)
           setSesion(true)
         }
         else if(!match) toast.error('La contraseña es incorrecta')

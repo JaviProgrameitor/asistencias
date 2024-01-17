@@ -425,7 +425,7 @@ function AgregarAlumno(props) {
             />
             <div className='agregar-idiomas__icon' onClick={agregarIdioma}>
               <IoIosAddCircle />
-              Agregar Formulario Sobre El Idioma
+              Agregar Idioma
             </div>
             {
               idiomaAprendizajeAlumno.map((idioma, index) => {
@@ -450,8 +450,8 @@ function AgregarAlumno(props) {
                       funcion={setIdiomaAprendizajeAlumno}
                     />
                     <ListaOpciones 
-                      titulo='Nivel MCERLC'
-                      placeholder='Ingresa el nivel de MCERLC'
+                      titulo='Nivel MCERL'
+                      placeholder='Ingresa el nivel de MCERL'
                       valor={nivelIdiomaAlumno[index]}
                       cambiarValor={actualizarDatos}
                       opciones={opcionesNiveles}

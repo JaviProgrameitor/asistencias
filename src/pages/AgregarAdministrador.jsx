@@ -27,13 +27,14 @@ function AgregarAdministrador(props) {
   const [ correoAdministrador, setCorreoAdministrador ] = useState('')
   const [ contrasenaAdministrador, setContraenaAdministrador ] = useState('')
   const [ puestoAdministrador, setPuestoAdministrador ] = useState('')
+  const [ clavePersonalAdministrador, setClavePersonalAdministrador ] = useState('')
 
   const [ fotoApoyo, setFotoApoyo ] = useState(false)
   const [ activarLoader, setActivarLoader ] = useState(false)
 
   const opcionesPuestos = [
-    'Director',
-    'Administrador'
+    'Director(a)',
+    'Administrador(a)'
   ]
 
   async function agregarAdmin(e) {
@@ -55,6 +56,7 @@ function AgregarAdministrador(props) {
       const correo = correoAdministrador
       const contrasena = bcrypt.hashSync(contrasenaAdministrador)
       const puesto = puestoAdministrador
+      const clavePersonal = clavePersonalAdministrador
   
       const datos = {
         foto,
@@ -63,13 +65,14 @@ function AgregarAdministrador(props) {
         apellido,
         correo,
         contrasena,
-        puesto
+        puesto,
+        clavePersonal
       }
 
       await createDatabase('administradores', datos)
       setActivarLoader(false)
       reiniciarDatos()
-      toast.success('El Administrador ha sido creado con exito')
+      toast.success('El Administrador(a) ha sido creado(a) con exito')
     }
 
     else toast.error('El correo electrónico ya ha sido utilizado.')
@@ -100,9 +103,9 @@ function AgregarAdministrador(props) {
         </div>
         <div className='agregar-alumnos__formulario'>
           <form className='formulario' onSubmit={agregarAdmin}>
-            <h3 className='formulario__titulo'>Agregar Administrador</h3>
+            <h3 className='formulario__titulo'>Agregar Administrador(a)</h3>
             <FotoAlumno 
-              titulo='Foto Perfil Administrador'
+              titulo='Foto Perfil Administrador(a)'
               valor={fotoPerfilAdministrador}
               cambiarValor={setFotoPerfilAdministrador}
               tipo={false}
@@ -135,6 +138,12 @@ function AgregarAdministrador(props) {
               valor={contrasenaAdministrador}
               cambiarValor={setContraenaAdministrador}
             />
+            <Campo 
+              titulo='Clave del Personal'
+              placeholder='Ingresa el apellido del administrador'
+              cambiarValor={setClavePersonalAdministrador}
+              valor={clavePersonalAdministrador}
+            />
             <ListaOpciones 
               titulo='Puesto'
               placeholder='Selecciona el puesto del administrador'
@@ -142,7 +151,7 @@ function AgregarAdministrador(props) {
               cambiarValor={setPuestoAdministrador}
               opciones={opcionesPuestos}
             />
-            <button className='boton__azul' >Agregar Alumno</button>
+            <button className='boton__azul' >Agregar Administrador(a)</button>
           </form>
         </div>
       </div>

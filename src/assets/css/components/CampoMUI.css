@@ -1,7 +1,7 @@
 /* Estilos generales */
 .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input,
 .css-wvuepv-MuiInputBase-root-MuiOutlinedInput-root,
-.input-MUI__verde .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+.input-MUI__verde .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input, .css-1x5jdmq {
   font-family: var(--family-poppins) !important;
 }
 
@@ -14,8 +14,16 @@
   z-index: 10001 !important;
 }
 
+.css-pzkzrv {
+  border: 0;
+}
+
 /* Estilos fondo blanco */
 .input-MUI__blanco .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  background-color: white !important;
+}
+
+.input-MUI__blanco .css-1x5jdmq {
   background-color: white !important;
 }
 
@@ -30,10 +38,6 @@
 
 .input-MUI__verde .css-1x5jdmq {
   background-color: #c3f6c0 !important;
-}
-
-.input-MUI__blanco .css-1x5jdmq {
-  background-color: white !important;
 }
 
 .input-MUI__blanco .css-i44wyl {

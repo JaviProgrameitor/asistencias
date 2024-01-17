@@ -54,8 +54,8 @@ function TablaPagoAlumno(props) {
             <AiFillDelete 
               className='alumno-delete icon-alumno'
               onClick={() => {
-                  if(puestoAdmin == 'Director') setmodalEliminarEstado(true)
-                  else toast.error('No tienes acceso a eliminar alumnos.')
+                  if(puestoAdmin == 'Director(a)') setmodalEliminarEstado(true)
+                  else toast.error('No tienes acceso a esta función.')
                 }
               }
             />

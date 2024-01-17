@@ -486,7 +486,7 @@ function SistemaAsistencias(props) {
         path='/panel-control/*' 
         element={
           <PanelControl 
-            admin={admin} 
+            admin={admin === false ? false : administradores.filter(administrador => administrador.id == admin)}
             setAdmin={setAdmin}
             alumnos={alumnosCompleto}
             administradores={administradores}

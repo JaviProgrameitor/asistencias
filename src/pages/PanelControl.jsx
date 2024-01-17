@@ -170,6 +170,7 @@ function PanelControl(props) {
             datos={admin}
             enlaces={enlaces}
             urlActual={urlActual}
+            panelControl
           />
           <section className="container-panel-control__central">
             <div className='central-caja-superior'>
@@ -198,6 +199,7 @@ function PanelControl(props) {
                   path='/administradores/*' 
                   element={
                     <Administradores 
+                      adminActivo={admin}
                       puestoAdmin={admin[0].puesto}
                       administradores={administradores} 
                     />

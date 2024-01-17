@@ -69,6 +69,10 @@
   margin-top: 5px;
 }
 
+.perfil-admin__puesto {
+  margin-bottom: 15px;
+}
+
 .panel-control__enlaces {
   display: flex;
   flex-direction: column;
@@ -176,5 +180,14 @@
 
   .enlaces-moviles div span {
     display: none;
+  }
+
+  .enlaces-moviles div img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+
+    border-radius: 100%;
+    border: 1px solid white;
   }
 }
