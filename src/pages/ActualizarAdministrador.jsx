@@ -21,7 +21,6 @@ function ActualizarAdministrador(props) {
   const [ correoAdministrador, setCorreoAdministrador ] = useState(correo)
   const [ contrasenaAdministrador, setContraenaAdministrador ] = useState(contrasena)
   const [ puestoAdministrador, setPuestoAdministrador ] = useState(puesto)
-  
   const [ clavePersonalAdministrador, setClavePersonalAdministrador ] = useState(clavePersonal)
 
   const [ idFotoPerfil, setIdFotoPerfil ] = useState(idFoto)
@@ -57,6 +56,7 @@ function ActualizarAdministrador(props) {
     const correo = correoAdministrador
     const contrasena = contrasenaAdministrador
     const puesto = puestoAdministrador
+    const clavePersonal = clavePersonalAdministrador
 
     const datos = {
       foto,
@@ -65,7 +65,8 @@ function ActualizarAdministrador(props) {
       apellido,
       correo,
       contrasena,
-      puesto
+      puesto,
+      clavePersonal
     }
 
     await updateDatabase('administradores', id, datos)
@@ -74,7 +75,7 @@ function ActualizarAdministrador(props) {
 
     setTimeout(() => {
       navigate('/sistema-asistencias/panel-control/administradores/perfil-administrador')
-    }, 2000);
+    }, 1000);
   }
 
   return (

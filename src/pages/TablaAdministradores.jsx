@@ -43,9 +43,9 @@ function TablaAdministradors(props) {
               <AiFillDelete 
                 className='alumno-delete icon-alumno'
                 onClick={() => {
-                  puestoAdmin === 'Director(a)' 
-                    ? setModalEliminarAdministrador(true) 
-                    : toast.error('No tienes acceso a esta función.')
+                  if(perfilAdministrador.puesto === 'Director(a)') toast.error('No es posible eliminar a los Directores.')
+                  else if(puestoAdmin === 'Director(a)') setModalEliminarAdministrador(true) 
+                  else toast.error('No tienes acceso a esta función.')
                 }}
               />
             </div> 

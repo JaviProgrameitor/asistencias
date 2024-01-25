@@ -87,6 +87,8 @@ function AgregarAlumno(props) {
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
   ]
 
+  const diaMilisegundos = 86400000;
+
   function agregarIdioma() {
     setIdiomaAprendizajeAlumno([...idiomaAprendizajeAlumno, ''])
     setNivelIdiomaAlumno([...nivelIdiomaAlumno, ''])
@@ -216,7 +218,12 @@ function AgregarAlumno(props) {
       const idiomaAprendizaje = idiomaAprendizajeAlumno
       const nivelIdioma = nivelIdiomaAlumno
       const modalidadEstudio = modalidadEstudioAlumno
-      const fechaIngreso = fechaIngresoAlumno
+      const fechaIngreso = fechaIngresoAlumno.map(fecha => {
+        const date = new Date(fecha).getTime()
+        const lastDate = date + diaMilisegundos;
+
+        return lastDate
+      })
       const fechaPago = fechaPagoAlumno
   
       const datos = {

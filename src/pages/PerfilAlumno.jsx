@@ -104,19 +104,43 @@ function PerfilAlumno(props) {
           <h2 className='titulos-2'>Información Personal</h2>
           <div>
             {
-              informacionAlumno.map((info, index) => <Indicadores titulo={info.titulo} respuesta={info.valor} key={index} />)
+              informacionAlumno.map((info, index) => 
+                <Indicadores 
+                  titulo={info.titulo} 
+                  respuesta={info.valor} 
+                  key={index} 
+                />
+              )
             }
           </div>
         </div>
         <div className='perfil-alumno__centro-idiomas'>
           <h2 className='titulos-2'>Información Centro de Idiomas</h2>
           <div>
-            <Indicadores titulo={'Clave del Estudiante'} respuesta={claveEstudiante} />
-            <IndicadoresMultiples titulo={'Idiomas de Aprendizaje'} respuesta={idiomaAprendizaje} />
-            <IndicadoresMultiples titulo={'Nivel MCERLC'} respuesta={nivelIdioma} />
-            <IndicadoresMultiples titulo={'Modalidad de Estudio'} respuesta={modalidadEstudio} />
-            <IndicadoresMultiples titulo={'Fecha de Ingreso'} respuesta={fechaIngreso} />
-            <IndicadoresMultiples titulo={'Fecha de Pago'} respuesta={fechaPago} />
+            <Indicadores 
+              titulo={'Clave del Estudiante'} 
+              respuesta={claveEstudiante} 
+            />
+            <IndicadoresMultiples 
+              titulo={'Idiomas de Aprendizaje'} 
+              respuesta={idiomaAprendizaje} 
+            />
+            <IndicadoresMultiples 
+              titulo={'Nivel MCERLC'} 
+              respuesta={nivelIdioma} 
+            />
+            <IndicadoresMultiples 
+              titulo={'Modalidad de Estudio'} 
+              respuesta={modalidadEstudio} 
+            />
+            <IndicadoresMultiples 
+              titulo={'Fecha de Ingreso'} 
+              respuesta={fechaIngreso} 
+            />
+            <IndicadoresMultiples 
+              titulo={'Fecha de Pago'} 
+              respuesta={fechaPago} 
+            />
           </div>
         </div>
         <div className='contenedor__columna-centro'>
