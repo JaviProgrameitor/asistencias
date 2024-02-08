@@ -12,7 +12,7 @@ import BarraBusquedaTexto from '../components/BarraBusquedaTexto/BarraBusquedaTe
 
 import Modal from '@mui/material/Modal';
 
-import { createDatabase, deleteDatabase } from '../firebase'
+import { createDatabase, deleteDatabase, updateDatabase } from '../firebase'
 
 import emailjs from '@emailjs/browser';
 
@@ -57,20 +57,21 @@ function TablaJustificantes(props) {
   async function aceptarJustificacion() {
     setActivarLoader(true)
 
-    await deleteDatabase('justificantesEnEspera', justificanteSeleccionado.id)
-
-    const nombreJustificante = justificanteSeleccionado.nombreJustificante
-    const apellidoJustificante = justificanteSeleccionado.apellidoJustificante
-    const claveEstudianteJustificante = justificanteSeleccionado.claveEstudianteJustificante
-    const numeroTelefonoJustificante = justificanteSeleccionado.numeroTelefonoJustificante
-    const correoJustificante = justificanteSeleccionado.correoJustificante
-    const fechaInternaJustificante = justificanteSeleccionado.fechaInternaJustificante
-    const fechaEmisionJustificante = justificanteSeleccionado.fechaEmisionJustificante
-    const fechaJustificante = justificanteSeleccionado.fechaJustificante
-    const motivoJustificante = justificanteSeleccionado.motivoJustificante
-    const explicacionJustificante = justificanteSeleccionado.explicacionJustificante
-    const fotoJustificante = justificanteSeleccionado.fotoJustificante
-    const idFotoJustificante = justificanteSeleccionado.idFotoJustificante
+    const{ 
+      nombreJustificante,
+      apellidoJustificante ,
+      claveEstudianteJustificante,
+      numeroTelefonoJustificante,
+      correoJustificante,
+      fechaInternaJustificante,
+      fechaEmisionJustificante,
+      fechaJustificante,
+      motivoJustificante,
+      explicacionJustificante,
+      fotoJustificante,
+      idFotoJustificante,
+      idPropietario
+    } = justificanteSeleccionado
 
     const datosMensaje = {
       nombre__alumno: `${nombreJustificante} ${apellidoJustificante}`,
@@ -97,7 +98,9 @@ function TablaJustificantes(props) {
       explicacionJustificante,
       fotoJustificante,
       correoJustificante,
-      idFotoJustificante
+      idFotoJustificante,
+      idPropietario,
+      estado: 'Aceptado'
     }
 
     if(correoJustificante.includes('@hotmail.com')) serviceId = 'service_s03txqx'
@@ -111,7 +114,7 @@ function TablaJustificantes(props) {
     //     console.log(error.text);
     //   });
 
-    await createDatabase('justificantesAceptados', datos)
+    await updateDatabase('justificantes', justificanteSeleccionado.id, datos)
     cambiarValor(false)
     setActivarLoader(false)
     toast.success('El Justificante ha sido aceptado con éxito.')
@@ -120,20 +123,21 @@ function TablaJustificantes(props) {
   async function rechazarJustificacion() {
     setActivarLoader(true)
 
-    await deleteDatabase('justificantesEnEspera', justificanteSeleccionado.id)
-
-    const nombreJustificante = justificanteSeleccionado.nombreJustificante
-    const apellidoJustificante = justificanteSeleccionado.apellidoJustificante
-    const claveEstudianteJustificante = justificanteSeleccionado.claveEstudianteJustificante
-    const numeroTelefonoJustificante = justificanteSeleccionado.numeroTelefonoJustificante
-    const correoJustificante = justificanteSeleccionado.correoJustificante
-    const fechaInternaJustificante = justificanteSeleccionado.fechaInternaJustificante
-    const fechaEmisionJustificante = justificanteSeleccionado.fechaEmisionJustificante
-    const fechaJustificante = justificanteSeleccionado.fechaJustificante
-    const motivoJustificante = justificanteSeleccionado.motivoJustificante
-    const explicacionJustificante = justificanteSeleccionado.explicacionJustificante
-    const fotoJustificante = justificanteSeleccionado.fotoJustificante
-    const idFotoJustificante = justificanteSeleccionado.idFotoJustificante
+    const{ 
+      nombreJustificante,
+      apellidoJustificante ,
+      claveEstudianteJustificante,
+      numeroTelefonoJustificante,
+      correoJustificante,
+      fechaInternaJustificante,
+      fechaEmisionJustificante,
+      fechaJustificante,
+      motivoJustificante,
+      explicacionJustificante,
+      fotoJustificante,
+      idFotoJustificante,
+      idPropietario
+    } = justificanteSeleccionado
 
     const datosMensaje = {
       nombre__alumno: `${nombreJustificante} ${apellidoJustificante}`,
@@ -160,7 +164,9 @@ function TablaJustificantes(props) {
       explicacionJustificante,
       fotoJustificante,
       correoJustificante,
-      idFotoJustificante
+      idFotoJustificante,
+      idPropietario,
+      estado: 'Rechazado'
     }
 
     if(correoJustificante.includes('@hotmail.com')) serviceId = 'service_s03txqx'
@@ -174,7 +180,7 @@ function TablaJustificantes(props) {
     //       console.log(error.text);
     //   });
 
-    await createDatabase('justificantesRechazados', datos)
+    await updateDatabase('justificantes', justificanteSeleccionado.id, datos)
     cambiarValor(false)
     setActivarLoader(false)
     toast.success('El Justificante ha sido rechazado con éxito.')

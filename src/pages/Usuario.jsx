@@ -40,9 +40,7 @@ function Usuario(props) {
 
   const [ estadoNavbar, setEstadoNavbar ] = useState(false)
   const [ sesion, setSesion ] = useState(false)
-  const [ justificantesEnEspera, setJustificantesEnEspera ] = useState([])
-  const [ justificantesAceptados, setJustificantesAceptados ] = useState([])
-  const [ justificantesRechazados, setJustificantesRechazados ] = useState([])
+  const [ justificantes, setJustificantes ] = useState([])
   const [ urlActual, setUrlActual ] = useState(window.location.pathname)
 
   const enlaces = [
@@ -99,35 +97,11 @@ function Usuario(props) {
   //Todo: Función para leer los datos de la base de datos
   useEffect(
     () => {
-      const collectionRef = collection(db, 'justificantesEnEspera')
+      const collectionRef = collection(db, 'justificantes')
       const q = query(collectionRef, orderBy('fechaEmisionJustificante', 'desc'))
 
       onSnapshot(q,(snapshot) => 
-        setJustificantesEnEspera(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      )
-    },[db]
-  )
-
-  //Todo: Función para leer los datos de la base de datos
-  useEffect(
-    () => {
-      const collectionRef = collection(db, 'justificantesAceptados')
-      const q = query(collectionRef, orderBy('fechaEmisionJustificante', 'desc'))
-
-      onSnapshot(q,(snapshot) => 
-        setJustificantesAceptados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      )
-    },[db]
-  )
-
-  //Todo: Función para leer los datos de la base de datos
-  useEffect(
-    () => {
-      const collectionRef = collection(db, 'justificantesRechazados')
-      const q = query(collectionRef, orderBy('fechaEmisionJustificante', 'desc'))
-
-      onSnapshot(q,(snapshot) => 
-        setJustificantesRechazados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+        setJustificantes(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
       )
     },[db]
   )
@@ -174,13 +148,13 @@ function Usuario(props) {
                     <UsuarioJustificantes
                       urlActual={urlActual}
                       justificantesEnEspera={
-                        justificantesEnEspera.filter(justi => justi.claveEstudianteJustificante === datos[0].claveEstudiante)
+                        justificantes.filter(justi => justi.claveEstudianteJustificante === datos[0].claveEstudiante && justi.estado == 'EnEspera')
                       }
                       justificantesAceptados={
-                        justificantesAceptados.filter(justi => justi.claveEstudianteJustificante === datos[0].claveEstudiante)
+                        justificantes.filter(justi => justi.claveEstudianteJustificante === datos[0].claveEstudiante && justi.estado == 'Aceptado')
                       }
                       justificantesRechazados={
-                        justificantesRechazados.filter(justi => justi.claveEstudianteJustificante === datos[0].claveEstudiante)
+                        justificantes.filter(justi => justi.claveEstudianteJustificante === datos[0].claveEstudiante && justi.estado == 'Rechazado')
                       }
                     />
                   } 

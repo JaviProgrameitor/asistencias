@@ -29,9 +29,7 @@ function TablaAlumnos(props) {
     puestoAdmin, 
     perfilAlumno, 
     asistenciasEntrada, 
-    justificantesAceptados, 
-    justificantesEnEspera, 
-    justificantesRechazados,
+    justificantes,
     pagosMensualidades,
     idiomasImpartidos
   } = props
@@ -53,9 +51,7 @@ function TablaAlumnos(props) {
   //Todo: Función para eliminar alumnos de la base de datos
   async function eliminarAlumnos(alumno) {
     const asistenciasAlumno = asistenciasEntrada.filter((asis) => asis.claveEstudianteAsistenciaEntrada == alumno.claveEstudiante)
-    const justificantesEnEsperaAlumno = justificantesEnEspera.filter(justi => justi.claveEstudianteJustificante == alumno.claveEstudiante)
-    const justificantesAceptadosAlumno = justificantesAceptados.filter(justi => justi.claveEstudianteJustificante == alumno.claveEstudiante)
-    const justificantesRechazadosAlumno = justificantesRechazados.filter(justi => justi.claveEstudianteJustificante == alumno.claveEstudiante)
+    const justificantesEnEsperaAlumno = justificantes.filter(justi => justi.claveEstudianteJustificante == alumno.claveEstudiante)
     const pagosMensualidadesAlumno = pagosMensualidades.filter(pago => pago.claveEstudiantePago == alumno.claveEstudiante)
 
     //Todo: Eliminar todas las asistencias del alumno
@@ -70,22 +66,6 @@ function TablaAlumnos(props) {
       for(let i = 0; i < justificantesEnEsperaAlumno.length; i++) {
         deleteDatabase('justificantesEnEspera', justificantesEnEsperaAlumno[i].id)
         deleteStorage(`justificantes/${justificantesEnEsperaAlumno[i].idFotoJustificante}`)
-      }
-    }
-
-    //Todo: Eliminar justificantes aceptados del alumno
-    if(justificantesAceptadosAlumno.length > 0) {
-      for(let i = 0; i < justificantesAceptadosAlumno.length; i++) {
-        deleteDatabase('justificantesAceptados', justificantesAceptadosAlumno[i].id)
-        deleteStorage(`justificantes/${justificantesAceptadosAlumno[i].idFotoJustificante}`)
-      }
-    }
-
-    //Todo: Eliminar justificantes rechazados del alumno
-    if(justificantesRechazadosAlumno.length > 0) {
-      for(let i = 0; i < justificantesRechazadosAlumno.length; i++) {
-        deleteDatabase('justificantesRechazados', justificantesRechazadosAlumno[i].id)
-        deleteStorage(`justificantes/${justificantesRechazadosAlumno[i].idFotoJustificante}`)
       }
     }
 

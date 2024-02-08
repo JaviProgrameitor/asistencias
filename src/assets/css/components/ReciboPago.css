@@ -1,0 +1,110 @@
+.documento {
+  width: 752px;
+  height: 456px;
+  
+  position: relative;
+  
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 310px 42px 1fr;
+}
+
+.fondo__documento {
+  width: 100%;
+  height: 100%;
+
+  position: absolute;
+  z-index: -1;
+}
+
+.logo__documento {
+  width: 300px;
+}
+
+.segundo-contenedor {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 125px 1fr 185px;
+  grid-template-rows: 60px 1fr;
+
+  padding-top: 20px;
+}
+
+.info__numero-referencia {
+  text-align: center;
+}
+
+.titulo__numero-referencia {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.numero-referencia {
+  color: red;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.fecha__documento {
+  grid-column: 3 / 4;
+}
+
+.info__pago {
+  grid-column: 1 / 4;
+  padding-right: 5px;
+}
+
+.info__pago-texto {
+  line-height: 25px;
+}
+
+.tercer-contenedor {
+  grid-column: 1/3;
+
+  display: flex;
+  justify-content: end;
+  gap: 5px;
+
+  padding-right: 52px;
+}
+
+.caja__firma-documento {
+  padding: 0 15px;
+  border-bottom: 3px solid black;
+}
+
+.firma__documento {
+  width: 90px;
+}
+
+.texto__firma-documento {
+  align-self: flex-end;
+  font-weight: bold;
+}
+
+.cuarto-contenedor {
+  grid-column: 1/3;
+  padding-left: 42px;
+}
+
+.logo__cambridge {
+  width: 164px;
+}
+
+.logo__siele {
+  width: 59px;
+  filter: grayscale(1);
+}
+
+.logo__delf {
+  width: 94px;
+  margin-left: 14px;
+  filter: grayscale(1);
+}
+
+.logo__osd {
+  width: 90px;
+  margin-left: 15px;
+  filter: grayscale(1);
+}

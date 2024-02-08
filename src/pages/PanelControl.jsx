@@ -40,9 +40,7 @@ function PanelControl(props) {
   const [ urlActual, setUrlActual ] = useState(window.location.pathname)
 
   const [ idiomasImpartidos, setIdiomasImpartidos ] = useState([])
-  const [ justificantesEnEspera, setJustificantesEnEspera ] = useState([])
-  const [ justificantesRechazados, setJustificantesRechazados ] = useState([])
-  const [ justificantesAceptados, setJustificantesAceptados ] = useState([])
+  const [ justificantes, setJustificantes ] = useState([])
 
   const app = initializeApp(firebaseConfig)
   const db = getFirestore(app);
@@ -118,39 +116,15 @@ function PanelControl(props) {
   //Todo: Función para leer los datos de la base de datos
   useEffect(
     () => {
-      const collectionRef = collection(db, 'justificantesEnEspera')
+      const collectionRef = collection(db, 'justificantes')
       const q = query(collectionRef, orderBy('fechaEmisionJustificante', 'desc'))
 
       onSnapshot(q,(snapshot) => 
-        setJustificantesEnEspera(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+        setJustificantes(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
       )
     },[db]
   )
 
-  //Todo: Función para leer los datos de la base de datos
-  useEffect(
-    () => {
-      const collectionRef = collection(db, 'justificantesRechazados')
-      const q = query(collectionRef, orderBy('fechaEmisionJustificante', 'desc'))
-
-      onSnapshot(q,(snapshot) => 
-        setJustificantesRechazados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      )
-    },[db]
-  )
-
-  //Todo: Función para leer los datos de la base de datos
-  useEffect(
-    () => {
-      const collectionRef = collection(db, 'justificantesAceptados')
-      const q = query(collectionRef, orderBy('fechaEmisionJustificante', 'desc'))
-
-      onSnapshot(q,(snapshot) => 
-        setJustificantesAceptados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      )
-    },[db]
-  )
-  
   useEffect(() => {
     setUrlActual(window.location.pathname)
   })
@@ -214,9 +188,7 @@ function PanelControl(props) {
                       alumnos={alumnos}
                       asistenciasEntrada={asistenciasEntrada}
                       idiomasImpartidos={idiomasImpartidos}
-                      justificantesEnEspera={justificantesEnEspera}
-                      justificantesRechazados={justificantesRechazados}
-                      justificantesAceptados={justificantesAceptados}
+                      justificantes={justificantes}
                       pagosMensualidades={pagosMensualidades}
                     />
                   } 
@@ -237,9 +209,9 @@ function PanelControl(props) {
                   element={
                     <Justificantes 
                       alumnos={alumnos}
-                      justificantesEnEspera={justificantesEnEspera}
-                      justificantesRechazados={justificantesRechazados}
-                      justificantesAceptados={justificantesAceptados}
+                      justificantesEnEspera={justificantes.filter(j => j.estado == 'EnEspera')}
+                      justificantesRechazados={justificantes.filter(j => j.estado == 'Rechazado')}
+                      justificantesAceptados={justificantes.filter(j => j.estado == 'Aceptado')}
                     />
                   } 
                 />

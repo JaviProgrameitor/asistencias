@@ -43,7 +43,7 @@ function SistemaAsistencias() {
 
     //Variables de la fecha de este mes
     const mesActualNombre = calcularMesPorNumero(mes)
-    const fechaPagoMes = diasMeses[mesActualNombre]
+    const fechaPagoMes = diasMeses[mesActualNombre] >= idiomaFecha ? idiomaFecha : diasMeses[mesActualNombre]
 
     //Variables fecha de ingreso
     const fechaIngresoMilisegundos = new Date(fechaIngreso).getTime() + diaMilisegundos

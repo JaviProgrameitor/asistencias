@@ -20,10 +20,8 @@ import { Toaster, toast } from 'sonner'
 function EditarAlumno(props) {
   const { 
     idAlumno, 
-    asistenciasEntrada, 
-    justificantesAceptados, 
-    justificantesEnEspera, 
-    justificantesRechazados, 
+    asistenciasEntrada,
+    justificantes,
     pagosMensualidades, 
     actualizarDatosAlumno
   } = props
@@ -284,7 +282,8 @@ function EditarAlumno(props) {
         modalidadClase,
         entradaSalidaAsistencia,
         idiomaAsistenciaEntrada,
-        id
+        id,
+        idPropietario
       } = asistenciasEntrada[i]
 
       nombreAsistenciaEntrada = nombreAlumno
@@ -303,14 +302,15 @@ function EditarAlumno(props) {
         puntualidadClase,
         modalidadClase,
         entradaSalidaAsistencia,
-        idiomaAsistenciaEntrada
+        idiomaAsistenciaEntrada,
+        idPropietario
       }
 
       await updateDatabase('asistenciasEntrada', id, datos)
     }
 
     //Todo: Editar el nombre, apellido y clave de estudiante de los justificantes en espera del alumno
-    for(let i = 0; i < justificantesEnEspera.length; i++) {
+    for(let i = 0; i < justificantes.length; i++) {
       let {
         nombreJustificante, 
         apellidoJustificante,
@@ -324,8 +324,10 @@ function EditarAlumno(props) {
         fotoJustificante,
         correoJustificante,
         idFotoJustificante,
-        id
-      } = justificantesEnEspera[i]
+        id,
+        idPropietario,
+        estado
+      } = justificantes[i]
 
       nombreJustificante = nombreAlumno
       apellidoJustificante = apellidoAlumno
@@ -343,90 +345,12 @@ function EditarAlumno(props) {
         explicacionJustificante,
         fotoJustificante,
         correoJustificante,
-        idFotoJustificante
-      }
-
-      await updateDatabase('justificantesEnEspera', id, datos)
-    }
-
-    //Todo: Editar el nombre, apellido y clave de estudiante de los justificantes aceptados del alumno
-    for(let i = 0; i < justificantesAceptados.length; i++) {
-      let {
-        nombreJustificante, 
-        apellidoJustificante,
-        claveEstudianteJustificante,
-        numeroTelefonoJustificante,
-        fechaInternaJustificante,
-        fechaEmisionJustificante,
-        fechaJustificante,
-        motivoJustificante,
-        explicacionJustificante,
-        fotoJustificante,
-        correoJustificante,
         idFotoJustificante,
-        id
-      } = justificantesAceptados[i]
-
-      nombreJustificante = nombreAlumno
-      apellidoJustificante = apellidoAlumno
-      claveEstudianteJustificante = claveEstudianteAlumno
-
-      const datos = {
-        nombreJustificante, 
-        apellidoJustificante,
-        claveEstudianteJustificante,
-        numeroTelefonoJustificante,
-        fechaInternaJustificante,
-        fechaEmisionJustificante,
-        fechaJustificante,
-        motivoJustificante,
-        explicacionJustificante,
-        fotoJustificante,
-        correoJustificante,
-        idFotoJustificante
+        idPropietario,
+        estado
       }
 
-      await updateDatabase('justificantesAceptados', id, datos)
-    }
-
-    //Todo: Editar el nombre, apellido y clave de estudiante de los justificantes rechazados del alumno
-    for(let i = 0; i < justificantesRechazados.length; i++) {
-      let {
-        nombreJustificante, 
-        apellidoJustificante,
-        claveEstudianteJustificante,
-        numeroTelefonoJustificante,
-        fechaInternaJustificante,
-        fechaEmisionJustificante,
-        fechaJustificante,
-        motivoJustificante,
-        explicacionJustificante,
-        fotoJustificante,
-        correoJustificante,
-        idFotoJustificante,
-        id
-      } = justificantesRechazados[i]
-
-      nombreJustificante = nombreAlumno
-      apellidoJustificante = apellidoAlumno
-      claveEstudianteJustificante = claveEstudianteAlumno
-
-      const datos = {
-        nombreJustificante, 
-        apellidoJustificante,
-        claveEstudianteJustificante,
-        numeroTelefonoJustificante,
-        fechaInternaJustificante,
-        fechaEmisionJustificante,
-        fechaJustificante,
-        motivoJustificante,
-        explicacionJustificante,
-        fotoJustificante,
-        correoJustificante,
-        idFotoJustificante
-      }
-
-      await updateDatabase('justificantesRechazados', id, datos)
+      await updateDatabase('justificantes', id, datos)
     }
 
     //Todo: Editar el nombre, apellido y clave de estudiante de los pagos mensuales
@@ -442,7 +366,8 @@ function EditarAlumno(props) {
         fechaInternaDiaPago,
         diaPago,
         finalMensualidad,
-        id
+        id,
+        idPropietario
       } = pagosMensualidades[i]
 
       nombrePago = nombreAlumno
@@ -459,7 +384,8 @@ function EditarAlumno(props) {
         inicioMensualidad,
         fechaInternaDiaPago,
         diaPago,
-        finalMensualidad
+        finalMensualidad,
+        idPropietario
       }
 
       await updateDatabase('pagosMensualidades', id, datos)

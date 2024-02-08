@@ -29,6 +29,7 @@ function CrearPago(props) {
     claveEstudiante, 
     idiomaAprendizaje,
     fechaPago,
+    id
   } = props.perfilAlumno
 
   const [ pasoExactoPago, setPasoExactoPago ] = useState(0)
@@ -200,7 +201,8 @@ function CrearPago(props) {
       inicioMensualidad,
       fechaInternaDiaPago,
       diaPago,
-      finalMensualidad
+      finalMensualidad,
+      idPropietario: id
     }
 
     await createDatabase('pagosMensualidades', datos)

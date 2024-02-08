@@ -3,11 +3,12 @@ import '../assets/css/PagosAlumnos.css'
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom"
 
-import CrearPago from './CrearPago';
 import TablaPagoAlumno from './TablaPagoAlumno';
+import CrearPago from './CrearPago';
+import CrearRecibo from './CrearRecibo';
 
 function PagosAlumnos(props) {
-  const { perfilAlumno, pagosMensualidades, puestoAdmin } = props
+  const { perfilAlumno, pagosMensualidades, puestoAdmin, alumnos } = props
   const [ pagoSeleccionado, setPagoSeleccionado ] = useState(false)
 
   return (
@@ -30,6 +31,14 @@ function PagosAlumnos(props) {
           element={
             <CrearPago 
               perfilAlumno={perfilAlumno}
+            />
+          }
+        />
+        <Route 
+          path='/crear-recibo'
+          element={
+            <CrearRecibo
+              alumnos={alumnos}
             />
           }
         />

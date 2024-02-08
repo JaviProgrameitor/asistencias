@@ -18,7 +18,7 @@ import dayjs from 'dayjs';
 
 function CrearJustificante(props) {
   const { notificarJustificanteEnviado } = props
-  const { nombre, apellido, numeroTelefono, claveEstudiante, correo } = props.datos[0]
+  const { nombre, apellido, numeroTelefono, claveEstudiante, correo, id } = props.datos[0]
 
   const navigate = useNavigate()
   const actual = new Date()
@@ -59,11 +59,20 @@ function CrearJustificante(props) {
     const explicacionJustificante = explicacion
     const fotoJustificante = await getURLStorage(storageRef)
     const idFotoJustificante = identificadorAleatorio
+    const estado = 'EnEspera'
 
-    if((fechaJustificar.$M + 1) < 10) fechaInternaJustificante = `${fechaJustificar.$y}-0${fechaJustificar.$M + 1}-${fechaJustificar.$D}`
-    else if((fechaJustificar.$M + 1) >= 10) fechaInternaJustificante = `${fechaJustificar.$y}-${fechaJustificar.$M + 1}-${fechaJustificar.$D}`
+    let fechaFinalJustificar;
+    let mesFinalJustificar;
 
+    if((fechaJustificar.$M + 1) < 10) mesFinalJustificar = `0${fechaJustificar.$M + 1}`
+    else if((fechaJustificar.$M + 1) >= 10) mesFinalJustificar = `${fechaJustificar.$M + 1}`
+
+    if((fechaJustificar.$D + 1) < 10) fechaFinalJustificar = `0${fechaJustificar.$D}`
+    else if((fechaJustificar.$D+ 1) >= 10) fechaFinalJustificar = `${fechaJustificar.$D}`
+
+    fechaInternaJustificante = `${fechaJustificar.$y}-${mesFinalJustificar}-${fechaFinalJustificar}`
     const datos = {
+      idPropietario: id,
       nombreJustificante, 
       apellidoJustificante,
       claveEstudianteJustificante,
@@ -75,10 +84,11 @@ function CrearJustificante(props) {
       explicacionJustificante,
       fotoJustificante,
       correoJustificante,
-      idFotoJustificante
+      idFotoJustificante,
+      estado
     }
 
-    await createDatabase('justificantesEnEspera', datos)
+    await createDatabase('justificantes', datos)
     setActivarLoader(false)
     notificarJustificanteEnviado()
     navigate('/sistema-asistencias/perfil-alumno/usuario-justificantes')

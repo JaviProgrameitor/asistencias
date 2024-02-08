@@ -30,7 +30,8 @@ function ScannerAlumno(props) {
     idiomaAprendizaje,
     correo,
     estadoMensualidad,
-    clasesMensualidad
+    clasesMensualidad,
+    id
   } = props.scannerAlumno[0]
   const informacionAlumno = [
     {
@@ -245,6 +246,7 @@ function ScannerAlumno(props) {
       modalidadClase: scannerClase.modalidadClase,
       entradaSalidaAsistencia: entradaSalida,
       idiomaAsistenciaEntrada: scannerClase.idiomaClase,
+      idPropietario: id
     }
 
     //enviarMensaje(entradaSalidaAlumno())

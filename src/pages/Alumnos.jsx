@@ -15,9 +15,7 @@ function Alumnos(props) {
     alumnos, 
     asistenciasEntrada, 
     idiomasImpartidos, 
-    justificantesEnEspera,
-    justificantesRechazados,
-    justificantesAceptados,
+    justificantes,
     pagosMensualidades
   } = props
 
@@ -57,9 +55,7 @@ function Alumnos(props) {
               idAlumno={idAlumno} 
               setIdAlumno={setIdAlumno} 
               asistenciasEntrada={asistenciasEntrada}
-              justificantesAceptados={justificantesAceptados}
-              justificantesEnEspera={justificantesEnEspera}
-              justificantesRechazados={justificantesRechazados}
+              justificantes={justificantes}
               pagosMensualidades={pagosMensualidades}
               idiomasImpartidos={idiomasImpartidos.map(idioma => idioma.nombre)}
             />
@@ -82,9 +78,7 @@ function Alumnos(props) {
               datos={perfilAlumno}
               actualizarDatosAlumno={actualizarDatos}
               asistenciasEntrada={asistenciasEntrada.filter((asis) => asis.claveEstudianteAsistenciaEntrada == claveEstudiante)}
-              justificantesAceptados={justificantesAceptados.filter(justi => justi.claveEstudianteJustificante == claveEstudiante)}
-              justificantesEnEspera={justificantesEnEspera.filter(justi => justi.claveEstudianteJustificante == claveEstudiante)}
-              justificantesRechazados={justificantesRechazados.filter(justi => justi.claveEstudianteJustificante == claveEstudiante)}
+              justificantes={justificantes.filter(justi => justi.claveEstudianteJustificante == claveEstudiante)}
               pagosMensualidades={pagosMensualidades.filter(pago => pago.claveEstudiantePago == claveEstudiante)}
             />
           } 
@@ -102,6 +96,7 @@ function Alumnos(props) {
           path='/pagos-alumnos/*' 
           element={
             <PagosAlumnos 
+              alumnos={alumnos.map(alumno => `${alumno.nombre} ${alumno.apellido}`)}
               perfilAlumno={perfilAlumno} 
               pagosMensualidades={pagosMensualidades.filter(pago => pago.claveEstudiantePago == claveEstudiante)}
               puestoAdmin={puestoAdmin}
@@ -114,9 +109,9 @@ function Alumnos(props) {
             <ActividadAlumno 
               pagosMensualidades={pagosMensualidades.filter(pago => pago.claveEstudiantePago == claveEstudiante)}
               asistenciasEntrada={asistenciasEntrada.filter((asis) => asis.claveEstudianteAsistenciaEntrada == claveEstudiante && asis.entradaSalidaAsistencia == 'Entrada')}
-              justificantesAceptados={justificantesAceptados.filter(justi => justi.claveEstudianteJustificante == claveEstudiante)}
-              justificantesEnEspera={justificantesEnEspera.filter(justi => justi.claveEstudianteJustificante == claveEstudiante)}
-              justificantesRechazados={justificantesRechazados.filter(justi => justi.claveEstudianteJustificante == claveEstudiante)}
+              justificantesAceptados={justificantes.filter(justi => justi.claveEstudianteJustificante == claveEstudiante && justi.estado == 'Aceptado')}
+              justificantesEnEspera={justificantes.filter(justi => justi.claveEstudianteJustificante == claveEstudiante && justi.estado == 'EnEspera')}
+              justificantesRechazados={justificantes.filter(justi => justi.claveEstudianteJustificante == claveEstudiante && justi.estado == 'Rechazado')}
             />
           } 
         />

@@ -92,6 +92,10 @@
   text-wrap: balance;
 }
 
+.underline {
+  text-decoration: underline;
+}
+
 /* Estilos de los contenedores */
 .max-content {
   width: max-content;
