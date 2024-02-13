@@ -65,7 +65,7 @@ function Idiomas(props) {
           <button 
             className='boton__verde-oscuro' 
             onClick={() => {
-              puestoAdmin == 'Director(a)' 
+              puestoAdmin == "Director(a)" 
               ? handleOpen(setOpen) 
               : accesoDenegado()
             }}

@@ -17,7 +17,7 @@ function FilasIdiomas(props) {
         <TiDelete 
           className="icon-justificante icon-rechazar" 
           onClick={() => 
-            puestoAdmin == 'Director'
+            puestoAdmin == 'Director(a)'
             ? seleccionar()
             : accesoDenegado()
           }

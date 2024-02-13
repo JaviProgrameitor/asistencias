@@ -2,12 +2,12 @@
 import { useEffect, useState } from 'react'
 import { FaArrowCircleLeft } from 'react-icons/fa'
 import { Link } from "react-router-dom"
-import { usePDF } from 'react-to-pdf';
 import { TiDelete } from 'react-icons/ti'
 
 import Campo from '../components/Campo/Campo'
 import CampoAutocompletar from '../components/CampoAutocompletar/CampoAutocompletar';
 import ReciboPago from '../components/ReciboPago/ReciboPago';
+import { Modal } from '@mui/material';
 
 import { calcularMesPorNumero } from '../utils/functions/fechas';
 
@@ -22,7 +22,7 @@ function CrearRecibo({alumnos}) {
   const [ listaAlumnosPago, setListaAlumnosPago ] = useState([])
   const [ fechaRecibo, setFechaRecibo ] = useState(agregarFecha())
 
-  const { toPDF, targetRef } = usePDF({filename: `reciboPago__${Array.prototype.join.call(listaAlumnosPago, "-")}.pdf`});
+  const [ estadoModalRecibo, setEstadoModalRecibo ] = useState(false)
 
   function listarAlumnos() {
     if(alumnoPago != null) setListaAlumnosPago([...listaAlumnosPago, alumnoPago])
@@ -44,7 +44,7 @@ function CrearRecibo({alumnos}) {
     let fechaExacta;
 
     if((fecha + 1) < 10) fechaExacta = `0${fecha}`
-    else if((fecha+ 1) >= 10) fechaExacta = `${fecha}`
+    else if((fecha + 1) >= 10) fechaExacta = `${fecha}`
 
     return `${fechaExacta} - ${nombreMes} - ${año}`
   }
@@ -111,35 +111,40 @@ function CrearRecibo({alumnos}) {
                       {
                         listaAlumnosPago.map((alumno, index) =>
                           <li 
+                            className='contenedor__todo-principio-centrado'
                             key={index}
                           >
                             {alumno} 
-                            <TiDelete 
+                            <TiDelete
+                              className='idioma__icon-delete pointer' 
                               onClick={e => desListarAlumnos(index)}
                             />
                           </li>
                         )
                       }
                     </ul>
-                  : <p>No hay alumnos agregados</p>
+                  : <p>No hay alumnos seleccionados</p>
               }
           </div>
-          <button className='boton__azul' onClick={() => toPDF()}>Descargar PDF</button>
+          <button className='boton__azul' onClick={() => setEstadoModalRecibo(true)}>Descargar PDF</button>
         </div>
       </div>
-      <div>
-      <ReciboPago 
-        targetRef={targetRef}
-        numeroReferencia={numeroReferencia}
-        personaPago={personaPago}
-        listaAlumnosPago={listaAlumnosPago}
-        lengua={lengua}
-        modalidad={modalidad}
-        cantidadPagadaNumero={cantidadPagadaNumero}
-        cantidadPagadaEscrita={cantidadPagadaEscrita}
-        fechaRecibo={fechaRecibo}
-      />
-      </div>
+      <Modal
+        className='modal__superior contenedor__ambos-lados_centrado'
+        open={estadoModalRecibo}
+        onClose={() => setEstadoModalRecibo(false)}
+      >
+        <ReciboPago
+          numeroReferencia={numeroReferencia}
+          personaPago={personaPago}
+          listaAlumnosPago={listaAlumnosPago}
+          lengua={lengua}
+          modalidad={modalidad}
+          cantidadPagadaNumero={cantidadPagadaNumero}
+          cantidadPagadaEscrita={cantidadPagadaEscrita}
+          fechaRecibo={fechaRecibo}
+        />
+      </Modal>
     </div>
   )
 }
