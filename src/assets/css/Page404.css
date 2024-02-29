@@ -8,18 +8,16 @@
   justify-content: space-evenly;
 }
 
-.page_404 h2 {
-  font-size:120px;
-  text-align: center;
-  margin: 0;
+.page_404-contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 200px;
 }
 
-.four_zero_four_bg {
-  background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
-  background-repeat: no-repeat;
-  height: 400px;
-  background-position: center;
-} 
+.page_404-logo {
+  width: 255px;
+}
 
 .contant_box_404 { 
   margin-top:0px;
@@ -39,23 +37,17 @@
 }
 
 @media (max-width: 750px) {
-
-  .four_zero_four_bg {
-    height: 300px;
-  } 
-
   .contant_box_404 p {
     font-size: 20px;
   }
 }
 
 @media (max-width: 600px) {
-  .page_404 h2 {
+  .page_404-contenedor {
     font-size: 100px;
   }
-
-  .four_zero_four_bg {
-    height: 200px;
-    background-size: 100%;
-  } 
+  
+  .page_404-logo {
+    width: 110px;
+  }
 }

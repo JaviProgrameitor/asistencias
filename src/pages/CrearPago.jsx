@@ -278,7 +278,7 @@ function CrearPago(props) {
                   <div>
                     <h5 className="titulos-4">Fecha que corresponde el pago</h5>
                     <CampoNumero
-                      className='input-MUI__verde'
+                      className='input-MUI input-MUI__fondo-verde'
                       titulo='Año'
                       valor={añoPagoMenActualAlumno}
                       cambiarValor={setAñoPagoMenActualAlumno}
@@ -292,6 +292,7 @@ function CrearPago(props) {
                       className='lista-opciones__verde-claro'
                     />
                     <CampoLectura
+                      className='input-MUI input-MUI__fondo-gris input-MUI__not-allowed'
                       titulo='Fecha'
                       valor={fechaPagoMenActualAlumno}
                     />

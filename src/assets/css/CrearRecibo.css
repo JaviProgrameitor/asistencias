@@ -1,0 +1,13 @@
+.boton__mobil {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .boton__mobil {
+    display: inline-block;
+  }
+
+  .boton__desktop {
+    display: none;
+  }
+}

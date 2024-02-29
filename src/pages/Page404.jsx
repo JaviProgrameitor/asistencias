@@ -1,17 +1,18 @@
 import '../assets/css/Page404.css'
+import Logo from '../assets/img/logo.webp'
 
 import { Link } from 'react-router-dom'
 
 function Page404() {
   return (
     <section className="page_404">
-      <h2 className="text-center ">404</h2>
-      <div className="four_zero_four_bg">
-        
+      <div className='page_404-contenedor'>
+        4
+        <img className='page_404-logo' src={Logo} alt="Logo del Centro de Idiomas" />
+        4
       </div>
-        
       <div className="contant_box_404">
-        <h3>OOPS!</h3>
+        <h3>¡OOPS!</h3>
         
         <p className='padd-x__20'>Esta página no existe o no has iniciado sesión todavía!</p>
         

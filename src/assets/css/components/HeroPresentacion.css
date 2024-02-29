@@ -246,9 +246,6 @@
 
 @media (max-width: 600px) {
   /* Presentación */
-  .caja-presentacion {
-    height: calc(100vh - 55px);
-  }
 
   .numero-telefono {
     font-size: 18px;
@@ -273,7 +270,7 @@
   }
 
   .promocional__imagen {
-    height: 90%;
+    width: 90%;
   }
 }
 

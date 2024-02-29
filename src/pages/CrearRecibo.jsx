@@ -1,3 +1,4 @@
+import '../assets/css/CrearRecibo.css'
 
 import { useEffect, useState } from 'react'
 import { FaArrowCircleLeft } from 'react-icons/fa'
@@ -107,26 +108,35 @@ function CrearRecibo({alumnos}) {
           <div>
               {
                 listaAlumnosPago.length >= 1
-                  ? <ul>
-                      {
-                        listaAlumnosPago.map((alumno, index) =>
-                          <li 
-                            className='contenedor__todo-principio-centrado'
-                            key={index}
-                          >
-                            {alumno} 
-                            <TiDelete
-                              className='idioma__icon-delete pointer' 
-                              onClick={e => desListarAlumnos(index)}
-                            />
-                          </li>
-                        )
-                      }
-                    </ul>
+                  ? <>
+                      <h3>Alumnos Seleccionados</h3>
+                      <ul>
+                        {
+                          listaAlumnosPago.map((alumno, index) =>
+                            <li 
+                              key={index}
+                            >
+                              <div className='contenedor__todo-principio-centrado'>
+                                {alumno} 
+                                <TiDelete
+                                  className='idioma__icon-delete pointer' 
+                                  onClick={e => desListarAlumnos(index)}
+                                />
+                              </div>
+                            </li>
+                          )
+                        }
+                      </ul>
+                    </>
                   : <p>No hay alumnos seleccionados</p>
               }
           </div>
-          <button className='boton__azul' onClick={() => setEstadoModalRecibo(true)}>Descargar PDF</button>
+          <button 
+            className='boton__azul boton__desktop' 
+            onClick={() => setEstadoModalRecibo(true)}
+          >
+            Descargar PDF
+          </button>
         </div>
       </div>
       <Modal

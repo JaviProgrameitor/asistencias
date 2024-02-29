@@ -96,6 +96,10 @@
   text-decoration: underline;
 }
 
+.style-inside {
+  list-style: inside;
+}
+
 /* Estilos de los contenedores */
 .max-content {
   width: max-content;
@@ -197,6 +201,10 @@
 
 .gap-y__10 {
   row-gap: 10px;
+}
+
+.gap-y__25 {
+  row-gap: 25px;
 }
 
 .gap-x__25 {
@@ -359,6 +367,7 @@
 }
 
 .boton__azul {
+  box-sizing: border-box;
   width: 100%;
   cursor: pointer;
   display: inline-block;
@@ -366,6 +375,8 @@
   font-size: 15px;
   font-weight: bold;
   text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
   color: #fff;
   background-image: linear-gradient(to bottom right, #00c6ff, #0072ff);
   border: none;

@@ -79,3 +79,9 @@
   cursor: pointer;
   font-size: 70px;
 }
+
+@media (max-width: 420px) {
+  .login-box__titulo {
+    font-size: 1.2rem;
+  }  
+}

@@ -1,45 +1,41 @@
+/* Estilos titulo */
+.input-MUI label {
+  font-family: var(--family-montserrat);
+  font-size: 18px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+}
+
 /* Estilos generales */
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input,
-.css-wvuepv-MuiInputBase-root-MuiOutlinedInput-root,
-.input-MUI__verde .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input, .css-1x5jdmq {
-  font-family: var(--family-poppins) !important;
+.input-MUI .css-1kkal6p-MuiAutocomplete-root {
+  height: 63px;
+  box-sizing: border-box;
 }
 
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input:focus,
-.css-wvuepv-MuiInputBase-root-MuiOutlinedInput-root:focus {
-  outline: auto #6278f7 !important;
+.input-MUI .css-1x5jdmq, .input-MUI .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input, 
+.input-MUI .MuiAutocomplete-hasPopupIcon.css-1kkal6p-MuiAutocomplete-root .MuiOutlinedInput-root {
+  padding: 20px 24px !important;
+  font-family: var(--family-poppins);
 }
 
-.css-3dah0e-MuiModal-root-MuiDialog-root {
-  z-index: 10001 !important;
+.input-MUI .css-pzkzrv, .input-MUI .css-bz6wus-MuiInputBase-root-MuiOutlinedInput-root {
+  border-radius: 0 !important;
 }
 
-.css-pzkzrv {
-  border: 0;
+/* Color de Fondo */
+.input-MUI__fondo-verde .css-1x5jdmq, .input-MUI__fondo-verde .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  background-color: #c3f6c0!important;
 }
 
-/* Estilos fondo blanco */
-.input-MUI__blanco .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
-  background-color: white !important;
+.input-MUI__fondo-gris .css-1x5jdmq, .input-MUI__fondo-gris .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  background-color: #c7c8ca;
 }
 
-.input-MUI__blanco .css-1x5jdmq {
-  background-color: white !important;
+.input-MUI__fondo-blanco .css-1kkal6p-MuiAutocomplete-root, .input-MUI__fondo-blanco .MuiAutocomplete-root {
+  background-color: white;
 }
-
-/* Estilos fondo verde */
-.input-MUI__verde .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
-  background-color: #c3f6c0 !important;
-}
-
-.input-MUI__verde .css-wvuepv-MuiInputBase-root-MuiOutlinedInput-root {
-  background-color: #c3f6c0 !important;
-}
-
-.input-MUI__verde .css-1x5jdmq {
-  background-color: #c3f6c0 !important;
-}
-
-.input-MUI__blanco .css-i44wyl {
-  width: 100%;
+/* Cursores */
+.input-MUI__not-allowed .css-1x5jdmq, .input-MUI__not-allowed .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  cursor: not-allowed;
 }
