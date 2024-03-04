@@ -10,8 +10,6 @@ import CampoAutocompletar from '../components/CampoAutocompletar/CampoAutocomple
 import ReciboPago from '../components/ReciboPago/ReciboPago';
 import { Modal } from '@mui/material';
 
-import { calcularMesPorNumero } from '../utils/functions/fechas';
-
 function CrearRecibo({alumnos}) {
   const [ numeroReferencia, setNumeroReferencia ] = useState('')
   const [ personaPago, setPersonaPago ] = useState('')
@@ -21,7 +19,7 @@ function CrearRecibo({alumnos}) {
   const [ cantidadPagadaEscrita, setCantidadPagadaEscrita ] = useState('')
   const [ alumnoPago, setAlumnoPago ] = useState(null)
   const [ listaAlumnosPago, setListaAlumnosPago ] = useState([])
-  const [ fechaRecibo, setFechaRecibo ] = useState(agregarFecha())
+  const [ fechaRecibo, setFechaRecibo ] = useState('')
 
   const [ estadoModalRecibo, setEstadoModalRecibo ] = useState(false)
 
@@ -33,21 +31,6 @@ function CrearRecibo({alumnos}) {
     const nuevaLista = listaAlumnosPago.toSpliced(index, 1)
 
     setListaAlumnosPago(nuevaLista)
-  }
-
-  function agregarFecha () {
-    const date = new Date()
-    const month = date.getMonth()
-    const fecha = date.getDate()
-    const año = date.getFullYear()
-
-    const nombreMes = calcularMesPorNumero(month)
-    let fechaExacta;
-
-    if((fecha + 1) < 10) fechaExacta = `0${fecha}`
-    else if((fecha + 1) >= 10) fechaExacta = `${fecha}`
-
-    return `${fechaExacta} - ${nombreMes} - ${año}`
   }
 
   useEffect(listarAlumnos, [alumnoPago])
@@ -62,6 +45,12 @@ function CrearRecibo({alumnos}) {
       <div className='agregar-alumnos__formulario'>
         <div className='formulario'>
           <h4 className="formulario__titulo">Crear Recibo</h4>
+          <Campo 
+            titulo='Fecha del Recibo'
+            placeholder='Ingresa la fecha del recibo'
+            valor={fechaRecibo}
+            cambiarValor={setFechaRecibo}
+          />
           <Campo 
             titulo='Número de Referencia'
             placeholder='Ingresa el número de referencia'
