@@ -34,10 +34,9 @@ function BarraNavegacion(props) {
         onMouseEnter={() => setEstadoNavbar(true)}
         onMouseLeave={() => setEstadoNavbar(false)}
       >
-        <div className='perfil-admin contenedor__margin-top'>
+        <div className='contenedor__margin-top perfil-admin'>
           <img className='foto-perfil-admin' src={datos[0].foto} alt="Foto de Perfil" />
           <h3 className='perfil-admin__nombre info-admin'>{datos[0].nombre}</h3>
-          <p className='perfil-admin__correo info-admin'>{datos[0].correo}</p>
           <p className='perfil-admin__puesto info-admin'>{datos[0].puesto}</p>
           {
             panelControl && (

@@ -119,6 +119,32 @@
   transition: .5s;
 }
 
+@media (min-width: 1200px) {
+  .perfil-admin {
+    margin-top: 0;
+  }
+
+  .aside-activo .foto-perfil-admin {
+    transition: .5s;
+    width: 70px;
+    height: 70px;
+  }
+
+  .aside-activo .perfil-admin {
+    font-size: 12px;
+  }
+
+  .enlaces {
+    padding: 8px 0 8px 52px;
+  }
+
+  .enlaces span {
+    font-size: 15px;
+  }
+
+
+}
+
 @media (max-width: 800px) {
   .container-panel-control__aside {
     width: 80px;
