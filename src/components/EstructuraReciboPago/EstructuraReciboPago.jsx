@@ -49,9 +49,9 @@ function EstructuraReciboPago(props) {
       alignItems: 'center'
     }, 
     documento: {
-      width: '752px',
-      height: '456px',
-      position: 'relative',
+      width: '566.92920528px',
+      height: '340.15752317px',
+      position: 'relative'
     },
     fondo__documento: {
       width: '100%',
@@ -66,11 +66,11 @@ function EstructuraReciboPago(props) {
       flexDirection: 'row'
     },
     logo: {
-      width: '300px',
-      height: '309.49px'
+      width: '230px',
+      height: '244px'
     }, 
     contenido: {
-      width: '452px',
+      width: '336px',
       height: '100%',
       paddingRight: '25px'
     },
@@ -84,15 +84,14 @@ function EstructuraReciboPago(props) {
     },
     informacion: {
       width: '155px',
-      textAlign: 'center'
     }, 
     titulo__informacion: {
       fontFamily: 'Agency',
       fontWeight: 700,
-      fontSize: '20px',
+      fontSize: '15px',
     },
     numero__referencia: {
-      fontSize: '15px',
+      fontSize: '14px',
       marginTop: '8px',
       fontFamily: 'Agency',
       fontWeight: 400
@@ -100,7 +99,7 @@ function EstructuraReciboPago(props) {
     fecha: {
       fontFamily: 'Agency',
       fontWeight: 700,
-      fontSize: '15px',
+      fontSize: '13px',
       paddingRight: '6px'
     },
     elemento__inferior: {
@@ -109,10 +108,8 @@ function EstructuraReciboPago(props) {
       paddingTop: '20px'
     },
     texto__contenido: {
-      fontFamily: 'Agency',
-      fontWeight: 400,
       lineHeight: '1.5px',
-      fontSize: '19px'
+      fontSize: '11px'
     },
     underline: {
       textDecoration: 'underline'
@@ -133,36 +130,39 @@ function EstructuraReciboPago(props) {
       gap: '5px',
       paddingRight: '58px'
     },
+    texto_firma: {
+      fontSize: '14px'
+    },
     caja__firma__documento: {
-      borderBottom: '3px solid black',
+      borderBottom: '1px solid black',
       paddingHorizontal: '15px'
     },
     firma__documento: {
-      width: '90px',
-      height: '61.84px',
+      width: '40px',
+      height: '40px',
       transform: 'translateY(21px)'
     },
     segundo__contenedor: {
       width: '100%',
       height: '104',
-      paddingLeft: '42px',
+      paddingLeft: '20px',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
       paddingBottom: '10px'
     },
     logo__cambridge: {
-      width: '164px'
+      width: '124px'
     },
     logo__siele: {
-      width: '59px'
+      width: '32px'
     },
     logo__delf: {
-      width: '94px',
+      width: '74px',
       marginLeft: '14px'
     },
     logo__osd: {
-      width: '90px',
+      width: '70px',
       marginLeft: '15px'
     }
   });
@@ -171,8 +171,7 @@ function EstructuraReciboPago(props) {
     <Document title='reciboPago.pdf' language='es'>
       <Page 
         style={styles.page}
-        size={[808.81899954, 529.13392493]}
-        orientation='portrait'
+        size={[612.2835417, 396.8504437]}
       >
         <View style={styles.documento}>
           <Image 
@@ -208,7 +207,7 @@ function EstructuraReciboPago(props) {
                 </Text>
               </View>
               <View style={styles.elemento__firma}>
-                <Text>
+                <Text style={styles.texto_firma}>
                   Recibí:
                 </Text>
                 <View style={styles.caja__firma__documento}>
