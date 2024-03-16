@@ -1,10 +1,10 @@
 import '../../assets/css/components/CampoFecha.css'
 
 function CampoFecha(props) {
-  const { titulo, valor, cambiarValor, variable, funcion, indice } = props
+  const { titulo, valor, cambiarValor, className='', variable, funcion, indice } = props
 
   return (
-    <div className='campo'>
+    <div className={`campo ${className}`}>
       <label>{titulo}</label>
       <input type="date" required value={valor} onChange={(e) => cambiarValor(e.target.value, indice, variable, funcion)} />
     </div>

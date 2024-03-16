@@ -44,7 +44,7 @@ function TablaPagoAlumno(props) {
           <span>Crear Recibo</span>
         </Link>
         <Link className="boton__verde-oscuro" to={`${url}/crear-pago`}>
-          <span>Crear Pago</span>
+          <span>Agregar Pago</span>
         </Link>
       </div>
       {

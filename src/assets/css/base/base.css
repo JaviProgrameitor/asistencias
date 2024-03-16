@@ -257,6 +257,11 @@
   height: 250px;
 }
 
+.tamaño-tabla_250-400 {
+  min-height: 250px;
+  max-height: 400px;
+}
+
 .tamaño-tabla__300 {
   height: 300px;
 }
@@ -299,7 +304,6 @@
   overflow-y: scroll;
 }
 
-/* Estilos tablas */
 .tabla {
   border-spacing: 0;
   margin: auto;

@@ -199,7 +199,7 @@ function TablaAlumnos(props) {
           )
         }
       </div> 
-      <div className='contenedor__tabla-scroll tamaño-tabla__250'>
+      <div className='contenedor__tabla-scroll tamaño-tabla_250-400'>
         <table className='tabla'>
           <thead className='tabla-cabecera tabla-cabecera__tabla-scroll'>
             <tr>
