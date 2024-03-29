@@ -48,3 +48,9 @@
   background-color: #c3f6c0;
   color: black;
 }
+
+/* Diseño disabled */
+.campo-disabled input {
+  background-color: rgb(185, 182, 182);
+  cursor: not-allowed;
+}

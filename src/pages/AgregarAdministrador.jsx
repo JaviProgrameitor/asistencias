@@ -68,6 +68,21 @@ function AgregarAdministrador(props) {
         puesto,
         clavePersonal
       }
+      
+      // const data = {
+      //   email: correo,
+      //   password: contrasena
+      // };
+    
+      // const options = {
+      //   method: 'POST', // Método de la solicitud
+      //   headers: {
+      //     'Content-Type': 'application/json' // Tipo de contenido que estás enviando (en este caso, JSON)
+      //   },
+      //   body: JSON.stringify(data) // Convierte los datos a formato JSON
+      // };
+
+      // fetch('http://localhost:8001/users', options).then(data => data.json()).then(data => console.log(data))
 
       await createDatabase('administradores', datos)
       setActivarLoader(false)

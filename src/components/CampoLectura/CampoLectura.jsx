@@ -1,23 +1,14 @@
 
-import '../../assets/css/components/CampoMUI.css'
+import '../../assets/css/components/Campo.css'
 
-import TextField from '@mui/material/TextField';
 
 function CampoLectura(props) {
   const { className='', titulo, valor } = props
 
   return (
-    <div className={`${className}`}>
-      <label>{titulo}</label>
-      <TextField
-        id="outlined-read-only-input"
-        color="success"
-        fullWidth
-        defaultValue={valor}
-        InputProps={{
-          readOnly: true,
-        }}
-      />
+    <div className={`campo campo-disabled`}>
+      <label htmlFor="">{titulo}</label>
+      <input type="text" value={valor} disabled />
     </div>
   )
 }

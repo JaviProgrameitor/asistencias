@@ -62,10 +62,12 @@ function AgregarAlumno(props) {
 
 
   const opcionesNivelesAcademicos = [
+    'Preescolar',
     'Primaria',
     'Secundaria',
     'Bachillerato',
-    'Educación Superior'
+    'Educación Superior',
+    'Libre'
   ]
 
   const opcionesModalidades = [

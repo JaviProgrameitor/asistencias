@@ -45,7 +45,6 @@ function CrearPago(props) {
 
   //Paso 2
   const [ fechaDiaPago, setFechaDiaPago ] = useState('')
-  const [ numeroFechaDiaPago, setNumeroFechaDiaPago ] = useState(null)
 
   //Paso 3
   const [ añoPagoMenActualAlumno, setAñoPagoMenActualAlumno ] = useState(new Date().getFullYear())
@@ -67,7 +66,7 @@ function CrearPago(props) {
     },
     {
       nombrePaso: 'Día de pago',
-      titulo: 'Selecciona el Mes y la Fecha del día de pago'
+      titulo: 'Selecciona la Fecha del día de pago'
     },
     {
       nombrePaso: 'Mensualidad',
@@ -276,7 +275,10 @@ function CrearPago(props) {
                   </button>
                   <button 
                     className='boton__blanco' 
-                    onClick={() => setPasoExactoPago(2)}
+                    onClick={() => {
+                      if(fechaDiaPago != '') setPasoExactoPago(2)
+                      else toast.error('Selecciona una fecha')
+                    }}
                   >
                     Siguiente
                     <AiOutlineArrowRight />
@@ -292,7 +294,7 @@ function CrearPago(props) {
                   <div>
                     <h5 className="titulos-4">Fecha que corresponde la mensualidad</h5>
                     <CampoNumero
-                      className='input-MUI input-MUI__fondo-verde'
+                      className='campo-verde-claro'
                       titulo='Año'
                       valor={añoPagoMenActualAlumno}
                       cambiarValor={setAñoPagoMenActualAlumno}
@@ -306,7 +308,6 @@ function CrearPago(props) {
                       className='lista-opciones__verde-claro'
                     />
                     <CampoLectura
-                      className='input-MUI input-MUI__fondo-gris input-MUI__not-allowed'
                       titulo='Fecha'
                       valor={fechaPagoMenActualAlumno}
                     />
@@ -382,6 +383,11 @@ function CrearPago(props) {
                   <Indicadores 
                     titulo='Idioma de Pago'
                     respuesta={`${idiomaPagoAlumno}`}
+                    claseExtra='indicadores__chicos'
+                  />
+                  <Indicadores 
+                    titulo='Fecha en que se realizó el pago'
+                    respuesta={`${new Date(dayjs(fechaDiaPago).$d).toLocaleDateString()}`}
                     claseExtra='indicadores__chicos'
                   />
                   <Indicadores 

@@ -71,7 +71,7 @@ function TablaAsistenciasAlumnos(props) {
         valor={palabraFiltar}
         cambiarValor={setPalabraFiltrar}
       />
-      <div className='contenedor__tabla-scroll tamaño-tabla__300'>
+      <div className='contenedor__tabla-scroll tamaño-tabla_250-400'>
         <table className='tabla'>
           <thead className='tabla-cabecera tabla-cabecera__tabla-scroll'>
             <tr>
@@ -79,7 +79,6 @@ function TablaAsistenciasAlumnos(props) {
               <th colSpan='1'>Apellido</th>
               <th colSpan='1'>Clave de Estudiante</th>
               <th colSpan='1'>Idioma de Aprendizaje</th>
-              <th colSpan='1'>Fecha de Pago</th>
             </tr>
           </thead>
           <tbody className="tabla-cuerpo">

@@ -37,25 +37,28 @@ function FilasAlumnos(props) {
           }
         </ul>
       </td>
-      <td className='td-admin'>
-        <ul>
-          {
-            fechaPago.map((fecha, index) => <li key={index}>{fecha}</li>)
-          }
-        </ul>
-      </td>
       {
-        comprobarMensualidad ?
-          <td className='td-admin'>
-            <ul>
-              {
-                idiomaAprendizaje.map((idioma, index) => 
-                  <li key={index}>{estadoMensualidad[index]}</li>
-                )
-              }
-            </ul>
-          </td>
-        : <></>
+        comprobarMensualidad && (
+          <>
+            <td className='td-admin'>
+              <ul>
+                {
+                  fechaPago.map((fecha, index) => <li key={index}>{fecha}</li>)
+                }
+              </ul>
+            </td>
+      
+            <td className='td-admin'>
+              <ul>
+                {
+                  idiomaAprendizaje.map((idioma, index) => 
+                    <li key={index}>{estadoMensualidad[index]}</li>
+                  )
+                }
+              </ul>
+            </td>
+          </>
+        )
       }
     </tr>
   )
