@@ -1,3 +1,7 @@
+/* Columnas */
+.tr-mobil {
+  display: none;
+}
 
 /* aciones alumnos */
 .icon-alumno {
@@ -11,4 +15,14 @@
 
 .alumno-edit {
   color: blue;
+}
+
+@media (max-width: 600px) {
+  .tr-mobil {
+    display: table-cell;
+  }
+
+  .tr-desktop {
+    display: none;
+  }
 }

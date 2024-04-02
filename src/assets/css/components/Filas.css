@@ -16,6 +16,10 @@
   align-items: center;
 }
 
+.td-mobil {
+  display: none;
+}
+
 .elemento-par {
   background-color: white;
 }
@@ -60,6 +64,14 @@
 }
 
 @media (max-width: 600px) {
+  .td-desktop {
+    display: none;
+  }
+
+  .td-mobil {
+    display: table-cell;
+  }
+
   .icon-rechazar {
     font-size: 35px;
   }
