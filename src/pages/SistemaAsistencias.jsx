@@ -40,7 +40,7 @@ function SistemaAsistencias() {
     const año = date.getFullYear()
     const mes = date.getMonth()
     const fecha = date.getDate()
-    const hoyMili = new Date(`${mes + 1} ${fecha}, ${año}`)
+    const hoyMili = new Date(`${mes + 1}/${fecha}/${año}`)
 
     //Variables de la fecha de este mes
     const mesActualNombre = calcularMesPorNumero(mes)
@@ -81,8 +81,12 @@ function SistemaAsistencias() {
         pago.claveEstudiantePago == claveEstudiante
       )
 
-    if(pagoAnterior.length <= 0 && new Date(`${mesAnterior + 1} ${fechaAnterior}, ${añoAnterior}`) > fechaIngresoMilisegundos) {
-      const pagoMili = new Date(`${mesAnterior + 1} ${fechaAnterior}, ${añoAnterior}`)
+    //Comprobar pago del mes anterior
+    let anterior = new Date(`${mesAnterior + 1}/${fechaAnterior}/${añoAnterior}`).getTime()
+    let proximo = new Date(`${mesProximo + 1}/${fechaProximo}/${añoProximo}`).getTime()
+
+    if(pagoAnterior.length <= 0 && anterior > fechaIngresoMilisegundos) {
+      const pagoMili = new Date(anterior).getTime()
       const resto = Math.round((hoyMili - pagoMili) / diaMilisegundos)
 
       return `Retraso de ${resto} días`
@@ -95,7 +99,7 @@ function SistemaAsistencias() {
       }
       
       else {
-        const pagoMili = new Date(`${mesProximo + 1} ${fechaProximo}, ${añoProximo}`)
+        const pagoMili = new Date(proximo).getTime()
         const resto = Math.round((pagoMili - hoyMili) / diaMilisegundos)
 
         if(resto <= 7) {
@@ -107,7 +111,7 @@ function SistemaAsistencias() {
     }
 
     else {
-      const pagoMili = new Date(`${mes + 1} ${fechaPagoMes}, ${año}`)
+      const pagoMili = new Date(`${mes + 1}/${fechaPagoMes}/${año}`).getTime()
 
       if(fechaPagoMes == fecha) {
         return "Día de Pago"

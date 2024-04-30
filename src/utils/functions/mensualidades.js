@@ -10,7 +10,7 @@ export const coloresAlumno = {
 
 //Funciones
 export function calcularFinMensualidad(tipoRespuesta, fecha, mes, año) {
-  let fechaActual = new Date(`${mes} 15, ${año}`).getTime()
+  let fechaActual = new Date(`${mes}/15/${año}`).getTime()
   let nuevaFecha = new Date(fechaActual + mesMilisegundos)
 
   let mesFinal = nuevaFecha.getMonth() + 1
@@ -23,7 +23,7 @@ export function calcularFinMensualidad(tipoRespuesta, fecha, mes, año) {
 }
 
 export function calcularAnteriorMensualidad(tipoRespuesta, fecha, mes, año) {
-  let fechaActual = new Date(`${mes} 15, ${año}`).getTime()
+  let fechaActual = new Date(`${mes}/15/${año}`).getTime()
   let nuevaFecha = new Date(fechaActual - mesMilisegundos)
 
   let mesFinal = nuevaFecha.getMonth() + 1
