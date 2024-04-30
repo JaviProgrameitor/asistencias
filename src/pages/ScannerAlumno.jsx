@@ -11,7 +11,7 @@ import IndicadoresMultiples from '../components/IndicadoresMultiples/Indicadores
 
 import emailjs from '@emailjs/browser';
 
-import { createDatabase } from '../firebase';
+import { createDatabase, asistenciasURL } from '../services/service-db'
 
 function ScannerAlumno(props) {
   const {
@@ -251,7 +251,7 @@ function ScannerAlumno(props) {
 
     //enviarMensaje(entradaSalidaAlumno())
 
-    await createDatabase('asistenciasEntrada', datos)
+    await createDatabase(asistenciasURL, datos)
   }
 
   return (

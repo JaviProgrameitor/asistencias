@@ -8,12 +8,12 @@ import { TiDelete } from 'react-icons/ti'
 
 import Campo from '../components/Campo/Campo'
 import CampoFecha from '../components/CampoFecha/CampoFecha'
-import CampoEmail from '../components/CampoEmail/CampoEmail'
 import ListaOpciones from '../components/ListaOpciones/ListaOpciones'
 import FotoAlumno from '../components/FotoAlumno/FotoAlumno'
 import Loader from '../components/Loader/Loader'
 
-import { updateDatabase, createStorage, deleteStorage, getURLStorage } from '../firebase'
+import { createStorage, deleteStorage, getURLStorage } from '../firebase'
+import { updateDatabase, alumnosURL } from '../services/service-db'
 
 import { Toaster, toast } from 'sonner'
 
@@ -53,7 +53,6 @@ function EditarAlumno(props) {
     id, 
     fechaNacimiento,
     correo, 
-    contrasena,
     nivelAcademico, 
     nivelIdioma, 
     fechaIngreso 
@@ -64,7 +63,6 @@ function EditarAlumno(props) {
   const [ apellidoAlumno, setApellidoAlumno ] = useState(apellido)
   const [ fechaNacimientoAlumno, setFechaNacimientoAlumno ] = useState(fechaNacimiento)
   const [ correoAlumno, setCorreoAlumno ] = useState(correo)
-  const [ contrasenaAlumno, setContrasenaAlumno ] = useState(contrasena)
   const [ numeroTelefonoAlumno, setNumeroTelefonoAlumno ] = useState(numeroTelefono)
   const [ nivelAcademicoAlumno, setNivelAcademicoAlumno ] = useState(nivelAcademico)
   const [ codigoPostalAlumno, setCodigoPostalAlumno ] = useState(codigoPostal)
@@ -395,7 +393,6 @@ function EditarAlumno(props) {
     const apellido = apellidoAlumno
     const fechaNacimiento = fechaNacimientoAlumno
     const correo = correoAlumno
-    const contrasena = contrasenaAlumno
     const numeroTelefono = numeroTelefonoAlumno
     const nivelAcademico = nivelAcademicoAlumno
     const codigoPostal = codigoPostalAlumno
@@ -427,8 +424,7 @@ function EditarAlumno(props) {
       nombre, 
       apellido, 
       fechaNacimiento,
-      correo, 
-      contrasena,
+      correo,
       numeroTelefono, 
       nivelAcademico,
       codigoPostal,
@@ -446,11 +442,18 @@ function EditarAlumno(props) {
       fechaPago
     }
 
-    await updateDatabase('alumnos', idAlumno, datos)
+    const datosAuth = {
+      displayName: `${nombre} ${apellido}`,
+      photoURL: foto
+    }
 
-    actualizarDatosAlumno(false)
-    setActivarLoader(false)
-    toast.success('El Alumno ha sido editado con exito')
+    updateDatabase(alumnosURL, id, {datosAuth, datos})
+    .then(() => {
+      actualizarDatosAlumno(false)
+      setActivarLoader(false)
+      toast.success('El Alumno ha sido editado con exito')
+    })
+    .catch(err => console.log(err))
 
     setTimeout(() => {
       navigate('/sistema-asistencias/panel-control/alumnos')
@@ -505,12 +508,6 @@ function EditarAlumno(props) {
               titulo='Selecciona la Fecha de Nacimiento' 
               cambiarValor={setFechaNacimientoAlumno} 
               valor={fechaNacimientoAlumno} 
-            />
-            <CampoEmail 
-              titulo='Correo Electronico' 
-              placeholder='Ingresa el correo electronico del alumno' 
-              cambiarValor={setCorreoAlumno} 
-              valor={correoAlumno} 
             />
             <Campo 
               titulo='Número de Telefono' 

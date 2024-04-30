@@ -7,7 +7,9 @@ import { BsPersonFillAdd } from 'react-icons/bs'
 import { FaEdit } from 'react-icons/fa'
 import { Link, useResolvedPath } from "react-router-dom"
 
-import { deleteDatabase, deleteStorage } from '../firebase';
+import { deleteStorage } from '../firebase';
+
+import { deleteDatabase, alumnosURL, asistenciasURL, justificantesURL, pagosMensualidadURL, crearCuentasUsuarios, usuariosGeneralURL } from '../services/service-db'
 
 import FilasAlumnos from '../components/FilasAlumnos/FilasAlumnos'
 import DemostracionColores from '../components/DemostracionColores/DemostracionColores'
@@ -54,17 +56,24 @@ function TablaAlumnos(props) {
     const justificantesEnEsperaAlumno = justificantes.filter(justi => justi.claveEstudianteJustificante == alumno.claveEstudiante)
     const pagosMensualidadesAlumno = pagosMensualidades.filter(pago => pago.claveEstudiantePago == alumno.claveEstudiante)
 
+    //Documentos
+    deleteStorage(`alumnos/${alumno.idFoto}`)
+    deleteStorage(`documentos/${alumno.idActaNacimiento}`)
+    deleteStorage(`documentos/${alumno.idIne}`)
+    deleteStorage(`documentos/${alumno.idCurp}`)
+    deleteStorage(`documentos/${alumno.idComprobantePagoInicial}`)
+
     //Todo: Eliminar todas las asistencias del alumno
     if(asistenciasAlumno.length > 0) {
       for(let i = 0; i < asistenciasAlumno.length; i++) {
-        deleteDatabase('asistenciasEntrada', asistenciasAlumno[i].id)
+        await deleteDatabase(asistenciasURL, asistenciasAlumno[i].id)
       }
     }
 
     //Todo: Eliminar justificantes en espera del alumno
     if(justificantesEnEsperaAlumno.length > 0) {
       for(let i = 0; i < justificantesEnEsperaAlumno.length; i++) {
-        deleteDatabase('justificantesEnEspera', justificantesEnEsperaAlumno[i].id)
+        deleteDatabase(justificantesURL, justificantesEnEsperaAlumno[i].id)
         deleteStorage(`justificantes/${justificantesEnEsperaAlumno[i].idFotoJustificante}`)
       }
     }
@@ -72,23 +81,13 @@ function TablaAlumnos(props) {
     //Todo: Eliminar los pagos mensuales del alumno
     if(pagosMensualidadesAlumno.length > 0) {
       for(let i = 0; i < pagosMensualidadesAlumno.length; i++) {
-        deleteDatabase('pagosMensualidades', pagosMensualidadesAlumno[i].id)
+        deleteDatabase(pagosMensualidadURL, pagosMensualidadesAlumno[i].id)
         deleteStorage(`pagosMensualidades/${pagosMensualidadesAlumno[i].idComprobantePagoMensualidad}`)
       }
     }
 
-    deleteStorage(`alumnos/${alumno.idFoto}`)
-
-    deleteStorage(`documentos/${alumno.idActaNacimiento}`)
-
-    deleteStorage(`documentos/${alumno.idIne}`)
-
-    deleteStorage(`documentos/${alumno.idCurp}`)
-
-    deleteStorage(`documentos/${alumno.idComprobantePagoInicial}`)
-
-    deleteDatabase('alumnos', alumno.id)
-    toast.success('El Alumno ha sido eliminado con exito')
+    await deleteDatabase(alumnosURL, alumno.id)
+    toast.success('El Alumno ha sido eliminado correctamente')
     setIdAlumno(false)
   }
 

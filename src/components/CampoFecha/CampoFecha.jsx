@@ -1,4 +1,4 @@
-import '../../assets/css/components/CampoFecha.css'
+import '../../assets/css/components/Campo.css'
 
 function CampoFecha(props) {
   const { titulo, valor, cambiarValor, className='', variable, funcion, indice } = props

@@ -10,13 +10,13 @@ import FotoAlumno from '../components/FotoAlumno/FotoAlumno'
 import CampoContrasena from '../components/CampoContrasena/CampoContrasena'
 import Loader from '../components/Loader/Loader'
 
-import { createDatabase, createStorage, getURLStorage } from '../firebase'
+import { createStorage, getURLStorage } from '../firebase'
+
+import { createDatabase, adminsURL } from '../services/service-db'
 
 import { Toaster, toast } from 'sonner'
 
 import { v4 as uuid } from 'uuid';
-
-import bcrypt from 'bcryptjs'
 
 function AgregarAdministrador(props) {
   const { administradores } = props
@@ -54,7 +54,7 @@ function AgregarAdministrador(props) {
       const nombre = nombreAdministrador
       const apellido = apellidoAdministrador
       const correo = correoAdministrador
-      const contrasena = bcrypt.hashSync(contrasenaAdministrador)
+      const contrasena = contrasenaAdministrador
       const puesto = puestoAdministrador
       const clavePersonal = clavePersonalAdministrador
   
@@ -64,30 +64,23 @@ function AgregarAdministrador(props) {
         nombre,
         apellido,
         correo,
-        contrasena,
         puesto,
         clavePersonal
       }
-      
-      // const data = {
-      //   email: correo,
-      //   password: contrasena
-      // };
-    
-      // const options = {
-      //   method: 'POST', // Método de la solicitud
-      //   headers: {
-      //     'Content-Type': 'application/json' // Tipo de contenido que estás enviando (en este caso, JSON)
-      //   },
-      //   body: JSON.stringify(data) // Convierte los datos a formato JSON
-      // };
 
-      // fetch('http://localhost:8001/users', options).then(data => data.json()).then(data => console.log(data))
+      const datosAuth = {
+        email: correo,
+        password: contrasena,
+        photoURL: foto,
+        displayName: `${nombre} ${apellido}`
+      }
 
-      await createDatabase('administradores', datos)
-      setActivarLoader(false)
-      reiniciarDatos()
-      toast.success('El Administrador(a) ha sido creado(a) con exito')
+      createDatabase(adminsURL, {datosAuth, datos})
+      .then(() => {
+        setActivarLoader(false)
+        reiniciarDatos()
+        toast.success('Administrador(a) creado correctamente.')
+      })
     }
 
     else toast.error('El correo electrónico ya ha sido utilizado.')
@@ -100,6 +93,7 @@ function AgregarAdministrador(props) {
     setCorreoAdministrador('')
     setContraenaAdministrador('')
     setPuestoAdministrador('')
+    setClavePersonalAdministrador('')
     setFotoApoyo(false)
   }
 

@@ -1,4 +1,6 @@
 import { useState } from 'react'
+
+import '../../assets/css/components/Campo.css'
 import '../../assets/css/components/CampoContrasena.css'
 
 import { IoIosCheckbox, IoIosCheckboxOutline } from 'react-icons/io'

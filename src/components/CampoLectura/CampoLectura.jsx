@@ -1,7 +1,6 @@
 
 import '../../assets/css/components/Campo.css'
 
-
 function CampoLectura(props) {
   const { className='', titulo, valor } = props
 

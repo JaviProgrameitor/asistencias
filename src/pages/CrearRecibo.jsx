@@ -93,6 +93,7 @@ function CrearRecibo({alumnos}) {
             valor={alumnoPago}
             cambiarValor={setAlumnoPago}
             opciones={alumnos}
+            variante='standard'
           />
           <div>
               {

@@ -6,14 +6,30 @@ import { FaArrowCircleLeft } from 'react-icons/fa'
 import Indicadores from '../components/Indicadores/Indicadores';
 import IndicadoresMultiples from '../components/IndicadoresMultiples/IndicadoresMultiples';
 import FotoDemostracion from '../components/FotoDemostracion/FotoDemostracion';
+import { useEffect, useState } from 'react';
+
+import { createQRCode } from '../services/qr-code'
+
+import { createStorageBlob, deleteStorage, getURLStorage } from '../firebase'
+import { updateDatabase, alumnosURL } from '../services/service-db'
+
+import { v4 as uuid } from 'uuid';
+
+import { Toaster, toast } from 'sonner'
 
 function PerfilAlumno(props) {
+  const { actualizarDatos } = props
   const { 
     foto, 
+    idFoto,
     actaNacimiento,
+    idActaNacimiento,
     ine,
+    idIne,
     curp,
+    idCurp,
     comprobantePagoInicial,
+    idComprobantePagoInicial,
     nombre, 
     apellido, 
     numeroTelefono,
@@ -33,7 +49,9 @@ function PerfilAlumno(props) {
     correo, 
     nivelAcademico, 
     nivelIdioma, 
-    fechaIngreso 
+    fechaIngreso, 
+    codigoQR = false,
+    idCodigoQR
   } = props.datos
 
   const informacionAlumno = [
@@ -87,13 +105,105 @@ function PerfilAlumno(props) {
     }
   ]
 
+  const [ codigoQRLocal, setcodigoQRLocal ] = useState(codigoQR)
+  const [ procesoIniciado, setProcesoIniciado ] = useState(false)
+
+  const actualizarAlumno = async (blob) => {
+    try {
+      const idCodigoQR = uuid()
+
+      const storageRef = `codigosQR/${idCodigoQR}`
+      await createStorageBlob(storageRef, blob)
+      const codigoQR = await getURLStorage(storageRef)
+
+      const datos = {
+        foto,
+        idFoto,
+        actaNacimiento,
+        idActaNacimiento,
+        ine,
+        idIne,
+        curp,
+        idCurp,
+        comprobantePagoInicial,
+        idComprobantePagoInicial,
+        nombre, 
+        apellido, 
+        fechaNacimiento,
+        correo,
+        numeroTelefono, 
+        nivelAcademico,
+        codigoPostal,
+        pais,
+        estado,
+        municipio,
+        colonia,
+        calle,
+        numeroExterior, 
+        claveEstudiante,
+        idiomaAprendizaje,
+        nivelIdioma,
+        modalidadEstudio,
+        fechaIngreso,
+        fechaPago,
+        codigoQR, 
+        idCodigoQR
+      }
+
+      const datosAuth = {
+        displayName: `${nombre} ${apellido}`,
+        photoURL: foto
+      }
+
+      await updateDatabase(alumnosURL, id, {datos, datosAuth})
+
+      return codigoQR
+
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+  const generateQRCode = async () => {
+    try {
+      setProcesoIniciado(true)
+      const response = await createQRCode(claveEstudiante)
+      const URL = await actualizarAlumno(response)
+
+      setcodigoQRLocal(URL);
+
+      setProcesoIniciado(false)
+    } catch (error) {
+      setProcesoIniciado(false)
+      toast.error(error.message)
+    }
+  };
+
   return (
     <div>
+      <Toaster 
+        position="top-center"
+        expand={false}
+        richColors
+      />
       <div className='container-perfil-alumno'>
         <div className='contenedor__todo-principio'>
-          <Link to={'/sistema-asistencias/panel-control/alumnos'}>
+          <Link to={'/sistema-asistencias/panel-control/alumnos'} onClick={() => actualizarDatos(false)}>
             <FaArrowCircleLeft className='flecha-regresar icon-40' />
           </Link>
+        </div>
+        <div className='justify-end mb-15'>
+          <button 
+            className={`${!codigoQRLocal ? 'boton__blanco' : 'boton__disabled'}`}
+            disabled={codigoQRLocal}
+            onClick={generateQRCode}
+          >
+            {
+              !procesoIniciado
+                ? 'Generar Código QR'
+                : <span className='element-loader'></span>
+            }
+          </button>
         </div>
         <div className='perfil-alumno__personal'>
           <div className='contenedor-_foto-alumno'>
@@ -170,6 +280,16 @@ function PerfilAlumno(props) {
               documento='Comprobante de Pago Inicial'
               nombreDocumento={`Comprobante-pago-inicial__${nombre}`}
             />
+            {
+              codigoQRLocal && (
+                <FotoDemostracion 
+                  alumno={nombre}
+                  imagen={codigoQRLocal}
+                  documento='Código QR'
+                  nombreDocumento={`Comprobante-pago-inicial__${nombre}`}
+                />
+              )
+            }
           </div>
         </div>
       </div>

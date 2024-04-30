@@ -1,0 +1,34 @@
+.acciones-cuenta__contenedor {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
+
+.acciones-cuenta__logo {
+  width: 60px;
+}
+
+.acciones-cuenta__titulo {
+  font-size: 30px;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Solicitar Email */
+.acciones-cuenta__solicitar-foto {
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+@media (max-width: 550px) {
+  .acciones-cuenta__contenedor {
+    flex-direction: column;
+  }
+
+  .acciones-cuenta__titulo {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+  }
+}

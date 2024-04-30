@@ -18,7 +18,8 @@ import StepLabel from '@mui/material/StepLabel';
 
 import CampoFecha from '../components/CampoFecha/CampoFecha';
 
-import { createDatabase, createStorage, getURLStorage } from '../firebase';
+import { createStorage, getURLStorage } from '../firebase';
+import { createDatabase, pagosMensualidadURL } from '../services/service-db'
 
 import { Toaster, toast } from 'sonner'
 
@@ -119,7 +120,7 @@ function CrearPago(props) {
     let fechaFinal = diasMeses[nombreMesFinal] < parseInt(fecha) ? diasMeses[nombreMesFinal] : fecha
 
     if(tipoRespuesta == "string") return `${fechaFinal}/${mesFinal}/${añoFinal}`
-    else if(tipoRespuesta == "objeto") return `${mesFinal} ${fechaFinal}, ${añoFinal} ${hora}:${minutos}`
+    else if(tipoRespuesta == "objeto") return new Date(`${mesFinal} ${fechaFinal}, ${añoFinal} ${hora}:${minutos}`).getTime()
   }
 
   function calcularInicioMensualidad(tipoRespuesta, fecha, mes, año) {
@@ -131,7 +132,7 @@ function CrearPago(props) {
     let fechaInicio = diasMeses[nombreMesInicio] < parseInt(fecha) ? diasMeses[nombreMesInicio] : fecha
 
     if(tipoRespuesta == "string") return `${fechaInicio}/${mes}/${año}`
-    else if(tipoRespuesta == "objeto") return `${mes} ${fechaInicio}, ${año} ${hora}:${minutos}`
+    else if(tipoRespuesta == "objeto") return new Date(`${mes} ${fechaInicio}, ${año} ${hora}:${minutos}`).getTime()
   }
 
   async function agregarPago() {
@@ -187,14 +188,15 @@ function CrearPago(props) {
       idPropietario: id
     }
 
-    await createDatabase('pagosMensualidades', datos)
+    createDatabase(pagosMensualidadURL, datos)
+    .then(() => {
+      setActivarLoader(false)
 
-    setActivarLoader(false)
+      toast.success('El Pago ha sido creado correctamente.')
 
-    toast.success('El Pago ha sido creado con exito')
-
-    setIdiomaPagoAlumno(false)
-    setPasoExactoPago(0)
+      setIdiomaPagoAlumno(false)
+      setPasoExactoPago(0)
+    })
   }
 
   useEffect(() => {

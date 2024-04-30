@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link, useResolvedPath } from "react-router-dom"
 import { BsQrCodeScan } from 'react-icons/bs'
 
-import Campo from '../Campo/Campo';
+import CampoEmail from '../CampoEmail/CampoEmail';
 import CampoContrasena from '../CampoContrasena/CampoContrasena'
 
 import { Toaster, toast } from 'sonner'
 
-import bcrypt from 'bcryptjs'
+import { loginUsuario } from '../../firebase'
 
 function AuthAlumnos(props) {
 
@@ -19,23 +19,38 @@ function AuthAlumnos(props) {
   
   const { alumnos, setIdUsuario, idUsuario, activarScanner, setActivarScanner } = props
 
-  const [ email, setEmail ] = useState("")
-  const [ password, setPassword ] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [ sesion, setSesion ] = useState(false)
+
+  const [ errorPassword, setErrorPasword ] = useState(false)
+  const [ procesoIniciado, setProcesoIniciado ] = useState(false)
 
   //Todo: Función para iniciar sesión
   const iniciar = async() => {
+    setProcesoIniciado(true)
     const nuevoAlumno = alumnos.filter((ad) => ad.correo === email)
 
     if(nuevoAlumno.length > 0) {
-      bcrypt.compare(password, nuevoAlumno[0].contrasena, async(error, match) => {
-        if(match) {
-          await setIdUsuario(nuevoAlumno[0].id)
-          setSesion(true)
-        }
-        else if(!match) toast.error('La contraseña es incorrecta')
+      loginUsuario(email, password)
+      .then(async ({uid}) => {
+        await setIdUsuario(uid)
+        setProcesoIniciado(false)
+        setErrorPasword(false)
+        setSesion(true)
       })
-    } else toast.error('No tiene una cuenta de alumno')
+      .catch(err => {
+        if(err == "Error: Firebase: Error (auth/wrong-password).") {
+          setErrorPasword(true)
+          setProcesoIniciado(false)
+        }
+      })
+    } 
+    
+    else {
+      setProcesoIniciado(false)
+      toast.error('No tiene una cuenta de alumno')
+    }
   }
 
   useEffect(() => {
@@ -51,10 +66,9 @@ function AuthAlumnos(props) {
   return (
     <div className="login-box">
       <Toaster position="top-center" richColors />
-      <h2 className='login-box__titulo'>Bienvenidos Alumnos</h2>
       <p className='login-box__subtitulo'>Iniciar Sesión</p>
       <form onSubmit={formulario}>
-      <Campo 
+        <CampoEmail 
           className='campo-oscuro'
           titulo='Correo Electrónico'
           placeholder='Ingresa el correo electrónico'
@@ -68,8 +82,26 @@ function AuthAlumnos(props) {
           valor={password}
           cambiarValor={setPassword}
         />
-        <button className='boton__azul' onClick={() => iniciar()} >Iniciar Sesión</button>
+        <p className={`text-red ${!errorPassword && 'hidden'}`}>Contraseña incorrecta.</p>
+        <button 
+          className='boton__azul' 
+          onClick={iniciar} 
+        >
+          {
+            !procesoIniciado
+              ? 'Iniciar Sesión'
+              : <span className="element-loader"></span>
+          }
+        </button>
       </form>
+      <div className='justify-center'>
+        <Link 
+          className='text-white decoration-none mt-10 text-center' 
+          to={`${url}/cuenta/recuperar-cuenta/`}
+        >
+          ¿Has olvidado tu contraseña?
+        </Link>
+      </div>
       <div className='contenedor__centrado-separacion caja-enlace-scanner contenedor__wrap gap-y__25'>
         <div className='cajas-qr'>
           <BsQrCodeScan className='scanner' onClick={() => setActivarScanner(!activarScanner)}/>

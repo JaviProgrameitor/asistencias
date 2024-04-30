@@ -1,6 +1,7 @@
 import '../../assets/css/components/BarraNavegacion.css'
 
 import { Link, useResolvedPath } from "react-router-dom"
+import { usuarioActual } from '../../firebase'
 
 import Modal from '@mui/material/Modal';
 

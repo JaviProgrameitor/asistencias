@@ -14,13 +14,12 @@ import FotoAlumno from '../components/FotoAlumno/FotoAlumno'
 import CampoContrasena from '../components/CampoContrasena/CampoContrasena';
 import Loader from '../components/Loader/Loader';
 
-import { createDatabase, createStorage, getURLStorage } from '../firebase'
+import { createStorage, getURLStorage } from '../firebase'
+import { createDatabase, alumnosURL } from '../services/service-db'
 
 import { Toaster, toast } from 'sonner'
 
 import { v4 as uuid } from 'uuid';
-
-import bcrypt from 'bcryptjs'
 
 function AgregarAlumno(props) {
   const { alumnos, idiomasImpartidos } = props
@@ -204,7 +203,7 @@ function AgregarAlumno(props) {
       const apellido = apellidoAlumno
       const fechaNacimiento = fechaNacimientoAlumno
       const correo = correoAlumno
-      const contrasena = bcrypt.hashSync(contrasenaAlumno)
+      const contrasena = contrasenaAlumno
       const numeroTelefono = numeroTelefonoAlumno
       const nivelAcademico = nivelAcademicoAlumno
       const codigoPostal = codigoPostalAlumno
@@ -236,7 +235,6 @@ function AgregarAlumno(props) {
         apellido, 
         fechaNacimiento, 
         correo, 
-        contrasena,
         numeroTelefono, 
         nivelAcademico,
         codigoPostal,
@@ -254,10 +252,19 @@ function AgregarAlumno(props) {
         fechaPago
       }
 
-      await createDatabase('alumnos', datos)
-      setActivarLoader(false)
-      reiniciarDatos()
-      toast.success('El Alumno ha sido creado con exito')
+      const datosAuth = {
+        email: correo,
+        password: contrasena,
+        photoURL: foto,
+        displayName: `${nombre} ${apellido}`
+      }
+
+      createDatabase(alumnosURL, {datosAuth, datos})
+      .then(() => {
+        setActivarLoader(false)
+        reiniciarDatos()
+        toast.success('El Alumno ha sido creado con exito')
+      })
     }
 
     else toast.error('El correo electrónico ya ha sido utilizado.')

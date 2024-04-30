@@ -9,7 +9,7 @@ import Loader from '../components/Loader/Loader'
 import CampoHora from '../components/CampoHora/CampoHora';
 import BarraBusquedaOpciones from '../components/BarraBusquedaOpciones/BarraBusquedaOpciones';
 
-import { createDatabase, deleteDatabase } from '../firebase';
+import { deleteDatabase, createDatabase, clasesURL } from '../services/service-db'
 
 import dayjs from 'dayjs';
 
@@ -161,6 +161,7 @@ function HorariosContenido(props) {
 
     const diasNumeroClaseTexto = diasNumeroClaseMap.filter(dia => dia !== undefined)
 
+    //Agregando los datos
     const claveClase = uuid()
     const nombreClase = nombreClaseNuevo
     const idiomaClase = idiomaClaseNuevo
@@ -170,6 +171,7 @@ function HorariosContenido(props) {
     const diasClase = Array.prototype.join.call(diasClaseTexto, "-")
     const diasNumeroClase = diasNumeroClaseTexto
 
+    //Agrupar los datos
     const datos = {
       claveClase,
       nombreClase,
@@ -181,15 +183,18 @@ function HorariosContenido(props) {
       diasNumeroClase
     }
 
-    await createDatabase('clases', datos)
-    setActivarLoader(false)
-    toast.success('La Clase ha sido agregada con éxito.')
+    //Petición al servidor
+    createDatabase(clasesURL, datos)
+    .then(() => {
+      setActivarLoader(false)
+      toast.success('Clase creada correctamenete.')
+    })
   }
 
   //Todo: Función para eliminar clases
   async function eliminarClase() {
-    await deleteDatabase('clases', idClaseSeleccionada)
-    toast.success('La Clase ha sido eliminada con éxito.')
+    await deleteDatabase(clasesURL, idClaseSeleccionada)
+    .then(() => toast.success('Clase eliminada correctamente.'))
   }
 
   function accesoDenegado() {

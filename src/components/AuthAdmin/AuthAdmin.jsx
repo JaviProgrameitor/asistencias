@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link, useResolvedPath } from "react-router-dom"
 import { BsQrCodeScan } from 'react-icons/bs'
 
-import Campo from '../Campo/Campo';
+import CampoEmail from '../CampoEmail/CampoEmail';
 import CampoContrasena from '../CampoContrasena/CampoContrasena'
 
-import { Toaster, toast } from 'sonner'
+import { loginUsuario } from '../../firebase'
 
-import bcrypt from 'bcryptjs'
+import { Toaster, toast } from 'sonner'
 
 function AuthAdmin(props) {
   const navigate = useNavigate()
@@ -18,23 +18,38 @@ function AuthAdmin(props) {
 
   const { administradores, setAdmin, admin, activarScanner, setActivarScanner } = props
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [ email, setEmail ] = useState("")
+  const [ password, setPassword ] = useState("")
   const [ sesion, setSesion ] = useState(false)
+
+  const [ errorPassword, setErrorPasword ] = useState(false)
+  const [ procesoIniciado, setProcesoIniciado ] = useState(false)
 
   //Todo: Función para iniciar sesión
   async function iniciar() {
-    const nuevoAdmin = administradores.filter((ad) => ad.correo === email)
-    
-    if(nuevoAdmin.length > 0) {
-      bcrypt.compare(password, nuevoAdmin[0].contrasena, async(error, match) => {
-        if(match) {
-          await setAdmin(nuevoAdmin[0].id)
-          setSesion(true)
-        }
-        else if(!match) toast.error('La contraseña es incorrecta')
+    setProcesoIniciado(true)
+    const verificarAdmin = administradores.filter((ad) => ad.correo === email)
+
+    if(verificarAdmin.length > 0) {
+      loginUsuario(email, password)
+      .then(async ({uid}) => {
+        await setAdmin(uid)
+        setProcesoIniciado(false)
+        setErrorPasword(false)
+        setSesion(true)
       })
-    } else toast.error('No tiene una cuenta de administrador')
+      .catch(err => {
+        if(err == "Error: Firebase: Error (auth/wrong-password).") {
+          setProcesoIniciado(false)
+          setErrorPasword(true)
+        }
+      })
+    } 
+    
+    else {
+      setProcesoIniciado(false)
+      toast.error('No tiene una cuenta de alumno')
+    }
   }
 
   function formulario(e) {
@@ -50,10 +65,9 @@ function AuthAdmin(props) {
   return (
     <div className="login-box">
       <Toaster position="top-center" richColors />
-      <h2 className='login-box__titulo'>Bienvenidos Administradores</h2>
       <p className='login-box__subtitulo'>Iniciar Sesión</p>
       <form onSubmit={formulario}>
-        <Campo 
+        <CampoEmail 
           className='campo-oscuro'
           titulo='Correo Electrónico'
           placeholder='Ingresa el correo electrónico'
@@ -67,8 +81,26 @@ function AuthAdmin(props) {
           valor={password}
           cambiarValor={setPassword}
         />
-        <button className='boton__azul' onClick={() => iniciar()} >Iniciar Sesión</button>
+        <p className={`text-red ${!errorPassword && 'hidden'}`}>Contraseña incorrecta.</p>
+        <button 
+          className='boton__azul' 
+          onClick={iniciar} 
+        >
+          {
+            !procesoIniciado
+              ? 'Iniciar Sesión'
+              : <span className="element-loader"></span>
+          }
+        </button>
       </form>
+      <div className='justify-center'>
+        <Link 
+          className='text-white decoration-none mt-10 text-center' 
+          to={`${url}/cuenta/recuperar-cuenta/`}
+        >
+          ¿Has olvidado tu contraseña?
+        </Link>
+      </div>
       <div className='contenedor__centrado-separacion caja-enlace-scanner contenedor__wrap gap-y__25'>
         <div className='cajas-qr'>
           <BsQrCodeScan className='scanner' onClick={() => setActivarScanner(!activarScanner)}/>

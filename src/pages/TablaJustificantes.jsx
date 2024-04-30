@@ -12,7 +12,7 @@ import BarraBusquedaTexto from '../components/BarraBusquedaTexto/BarraBusquedaTe
 
 import Modal from '@mui/material/Modal';
 
-import { createDatabase, deleteDatabase, updateDatabase } from '../firebase'
+import { updateDatabase, justificantesURL } from '../services/service-db'
 
 import emailjs from '@emailjs/browser';
 
@@ -114,7 +114,7 @@ function TablaJustificantes(props) {
     //     console.log(error.text);
     //   });
 
-    await updateDatabase('justificantes', justificanteSeleccionado.id, datos)
+    await updateDatabase(justificantesURL, justificanteSeleccionado.id, datos)
     cambiarValor(false)
     setActivarLoader(false)
     toast.success('El Justificante ha sido aceptado con éxito.')
@@ -180,10 +180,10 @@ function TablaJustificantes(props) {
     //       console.log(error.text);
     //   });
 
-    await updateDatabase('justificantes', justificanteSeleccionado.id, datos)
+    await updateDatabase(justificantesURL, justificanteSeleccionado.id, datos)
     cambiarValor(false)
     setActivarLoader(false)
-    toast.success('El Justificante ha sido rechazado con éxito.')
+    toast.success('El Justificante ha sido rechazado correctamente.')
   }
 
   function cambiarValor(justificante) {

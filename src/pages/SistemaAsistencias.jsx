@@ -7,6 +7,7 @@ import Usuario from './Usuario';
 import ScannerAlumno from './ScannerAlumno';
 import ScannerEnLinea from './ScannerEnLinea'
 import AdministrarQR from './AdministrarQR';
+import AccionesCuenta from './AccionesCuenta';
 
 import { initializeApp } from "firebase/app";
 import { collection, getFirestore, onSnapshot, orderBy, query } from "firebase/firestore";
@@ -156,7 +157,7 @@ function SistemaAsistencias() {
   //Todo: Función para leer los datos de la base de datos
   useEffect(
     () => {
-      const collectionRef = collection(db, 'asistenciasEntrada')
+      const collectionRef = collection(db, 'asistencias')
       const q = query(collectionRef, orderBy('fechaAsistenciaEntrada', 'desc'))
 
       onSnapshot(q,(snapshot) => 
@@ -286,6 +287,10 @@ function SistemaAsistencias() {
       <Route
         path='/administrar-qr'
         element={<AdministrarQR />}
+      />
+      <Route
+        path='/cuenta/*'
+        element={<AccionesCuenta />}
       />
       <Route 
         path='*' 

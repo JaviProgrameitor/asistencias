@@ -1,5 +1,4 @@
-import '../../assets/css/components/CampoMUI.css'
-import TextField from '@mui/material/TextField';
+import '../../assets/css/components/Campo.css'
 
 function CampoNumero(props) {
   const { className='', titulo, placeholder, valor, cambiarValor } = props
@@ -7,7 +6,13 @@ function CampoNumero(props) {
   return (
     <div className={`campo ${className}`}>
       <label htmlFor="">{titulo}</label>
-      <input type="number" required placeholder={placeholder} value={valor} onChange={(e) => cambiarValor(e.target.value)} />
+      <input 
+        type="number" 
+        required 
+        placeholder={placeholder} 
+        value={valor} 
+        onChange={(e) => cambiarValor(e.target.value)} 
+      />
     </div>
   )
 }

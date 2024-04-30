@@ -7,7 +7,9 @@ import { AiFillDelete } from 'react-icons/ai'
 import FilasAdministradores from '../components/FilasAdministradors/FilasAdministradores';
 import Indicadores from '../components/Indicadores/Indicadores'
 
-import { deleteDatabase, deleteStorage } from '../firebase';
+import { deleteStorage } from '../firebase';
+
+import { deleteDatabase, adminsURL } from '../services/service-db'
 
 import { Toaster, toast } from 'sonner'
 
@@ -22,8 +24,8 @@ function TablaAdministradors(props) {
 
   //Todo: Función para eliminar alumnos de la base de datos
   async function eliminarAdministrador(id) {
-    await deleteDatabase('administradores', id)
     await deleteStorage(`administradores/${perfilAdministrador.idFoto}`)
+    await deleteDatabase(adminsURL, `${perfilAdministrador.id}`)
     setIdAdministrador(false)
     toast.success('El Administrador ha sido eliminado con éxito.')
   }

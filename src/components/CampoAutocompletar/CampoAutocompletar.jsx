@@ -1,25 +1,40 @@
-import '../../assets/css/components/CampoMUI.css'
 
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { themeAutocomplete } from '../../Themes/MuiAutocomplete'
+
+import { ThemeProvider } from '@mui/material/styles';
 
 function CampoAutocompletar(props) {
-  const { className='', titulo, placeholder, opciones, valor, cambiarValor } = props
+  const { titulo, placeholder, opciones, valor, cambiarValor, variante } = props
 
   return (
-    <div className='input-MUI input-MUI__fondo-blanco'>
-      <label className='titulo-autocompletar'>{titulo}</label>
-      <Autocomplete
-        className={`${className}`}
-        disablePortal
-        fullWidth
-        value={valor}
-        onChange={(event, newValue) => {
-          cambiarValor(newValue);
-        }}
-        options={opciones}
-        renderInput={(params) => <TextField {...params} required fullWidth placeholder={placeholder} color="success" />}
-      />
+    <div className='campoMUI'>
+      <label className='label'>{titulo}</label>
+        <Autocomplete
+          disablePortal
+          fullWidth
+          value={valor}
+          onChange={(event, newValue) => {
+            cambiarValor(newValue);
+          }}
+          options={opciones}
+          renderInput={(params) => 
+            <ThemeProvider 
+              theme={themeAutocomplete}
+            >
+              <TextField 
+                {...params} 
+                variant={variante} 
+                required 
+                fullWidth 
+                placeholder={placeholder} 
+                aria-expanded={false}
+              />
+            </ThemeProvider>
+          }
+        />
+      
     </div>
   )
 }

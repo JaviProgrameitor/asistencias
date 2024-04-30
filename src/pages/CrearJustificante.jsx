@@ -10,7 +10,8 @@ import FotoAlumno from "../components/FotoAlumno/FotoAlumno"
 import TextArea from '../components/TextArea/TextArea';
 import Loader from '../components/Loader/Loader';
 
-import { createDatabase, createStorage, getURLStorage } from '../firebase';
+import { createStorage, getURLStorage } from '../firebase';
+import { createDatabase, justificantesURL } from '../services/service-db'
 
 import { v4 as uuid } from 'uuid';
 
@@ -88,10 +89,14 @@ function CrearJustificante(props) {
       estado
     }
 
-    await createDatabase('justificantes', datos)
-    setActivarLoader(false)
-    notificarJustificanteEnviado()
-    navigate('/sistema-asistencias/perfil-alumno/usuario-justificantes')
+    createDatabase(justificantesURL, datos)
+    .then(() => {
+      setActivarLoader(false)
+      notificarJustificanteEnviado()
+      navigate('/sistema-asistencias/perfil-alumno/usuario-justificantes')
+    })
+
+    .catch((error) => console.log(error))
   }
 
   return (

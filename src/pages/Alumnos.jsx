@@ -89,6 +89,7 @@ function Alumnos(props) {
             <PerfilAlumno 
               idAlumno={idAlumno} 
               datos={perfilAlumno} 
+              actualizarDatos={actualizarDatos}
             />
           } 
         />

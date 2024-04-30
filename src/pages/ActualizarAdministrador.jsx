@@ -4,22 +4,22 @@ import { FaArrowCircleLeft } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 
 import Campo from '../components/Campo/Campo'
-import CampoEmail from '../components/CampoEmail/CampoEmail'
 import FotoAlumno from '../components/FotoAlumno/FotoAlumno'
 import Loader from '../components/Loader/Loader'
 
-import { updateDatabase, createStorage, deleteStorage, getURLStorage } from '../firebase'
+import { createStorage, deleteStorage, getURLStorage } from '../firebase'
+
+import { updateDatabase, adminsURL } from '../services/service-db'
 
 import { Toaster, toast } from 'sonner'
 
 function ActualizarAdministrador(props) {
-  const { nombre, apellido, correo, foto, contrasena, idFoto, puesto, id, clavePersonal } = props.adminActivo[0]
+  const { nombre, apellido, correo, foto, idFoto, puesto, id, clavePersonal } = props.adminActivo[0]
 
   const [ fotoPerfilAdministrador, setFotoPerfilAdministrador ] = useState(foto)
   const [ nombreAdministrador, setNombreAdministrador ] = useState(nombre)
   const [ apellidoAdministrador, setApellidoAdministrador ] = useState(apellido)
   const [ correoAdministrador, setCorreoAdministrador ] = useState(correo)
-  const [ contrasenaAdministrador, setContraenaAdministrador ] = useState(contrasena)
   const [ puestoAdministrador, setPuestoAdministrador ] = useState(puesto)
   const [ clavePersonalAdministrador, setClavePersonalAdministrador ] = useState(clavePersonal)
 
@@ -54,7 +54,6 @@ function ActualizarAdministrador(props) {
     const nombre = nombreAdministrador
     const apellido = apellidoAdministrador
     const correo = correoAdministrador
-    const contrasena = contrasenaAdministrador
     const puesto = puestoAdministrador
     const clavePersonal = clavePersonalAdministrador
 
@@ -64,14 +63,21 @@ function ActualizarAdministrador(props) {
       nombre,
       apellido,
       correo,
-      contrasena,
       puesto,
       clavePersonal
     }
 
-    await updateDatabase('administradores', id, datos)
-    setActivarLoader(false)
-    toast.success('El Administrador(a) ha sido actualizado(a) con exito')
+    const datosAuth = {
+      displayName: `${nombre} ${apellido}`,
+      photoURL: foto
+    }
+
+    updateDatabase(adminsURL, id, {datosAuth, datos})
+    .then(() => {
+      setActivarLoader(false)
+      toast.success('El Administrador(a) ha sido actualizado(a) con exito')
+    })
+    .catch(err => console.log(err))
 
     setTimeout(() => {
       navigate('/sistema-asistencias/panel-control/administradores/perfil-administrador')
@@ -115,12 +121,6 @@ function ActualizarAdministrador(props) {
               placeholder='Ingresa el apellido del administrador'
               cambiarValor={setApellidoAdministrador}
               valor={apellidoAdministrador}
-            />
-            <CampoEmail 
-              titulo='Correo Electrónico'
-              placeholder='Ingresa el correo electrónico del administrador'
-              cambiarValor={setCorreoAdministrador}
-              valor={correoAdministrador}
             />
             <Campo 
               titulo='Clave del Personal'

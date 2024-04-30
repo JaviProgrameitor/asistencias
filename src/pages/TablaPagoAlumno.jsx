@@ -9,7 +9,8 @@ import { FcStackOfPhotos } from 'react-icons/fc'
 import FilasPagos from "../components/FilasPagos/FilasPagos";
 import Indicadores from '../components/Indicadores/Indicadores';
 
-import { deleteDatabase, deleteStorage } from '../firebase';
+import { deleteStorage } from '../firebase';
+import { deleteDatabase, pagosMensualidadURL } from '../services/service-db'
 
 import Modal from '@mui/material/Modal';
 
@@ -25,7 +26,7 @@ function TablaPagoAlumno(props) {
 
   async function eliminarPago() {
     await deleteStorage(`pagosMensualidades/${pagoSeleccionado.idComprobantePagoMensualidad}`)
-    await deleteDatabase('pagosMensualidades', pagoSeleccionado.id)
+    await deleteDatabase(pagosMensualidadURL, pagoSeleccionado.id)
     toast.success('El Pago ha sido eliminado con exito')
     setPagoSeleccionado(false)
   }

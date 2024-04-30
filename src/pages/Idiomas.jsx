@@ -4,7 +4,7 @@ import FilasIdiomas from '../components/FilasIdiomas/FilasIdiomas'
 import Campo from '../components/Campo/Campo'
 import Loader from '../components/Loader/Loader'
 
-import { createDatabase, deleteDatabase } from '../firebase';
+import { deleteDatabase, createDatabase, idiomasURL } from '../services/service-db'
 
 import Modal from '@mui/material/Modal';
 
@@ -36,21 +36,26 @@ function Idiomas(props) {
 
   //Todo: Función para eliminar idiomas
   async function eliminarIdioma() {
-    await deleteDatabase('idiomas', idiomaSeleccionado.id)
-    notificarEliminacion('Idioma')
+    deleteDatabase(idiomasURL, idiomaSeleccionado.id)
+    .then(() => notificarEliminacion('Idioma'))
   }
 
   //Todo: Función para agregar idiomas
   async function agregarIdioma() {
+    //Activar el loader
     setActivarLoader(true)
 
+    //Agrupar los datos
     const datos = {
       nombre: nombreIdioma
     }
 
-    await createDatabase('idiomas', datos)
-    setActivarLoader(false)
-    toast.success('El Idioma ha sido agregado con exito')
+    //Ejecuta la petición
+    createDatabase(idiomasURL, datos)
+    .then(() => {
+      setActivarLoader(false)
+      toast.success('Idioma agregado correctamente.')
+    })
   }
 
   function accesoDenegado() {

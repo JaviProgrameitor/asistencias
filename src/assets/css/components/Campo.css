@@ -3,7 +3,7 @@
   margin: 24px 0;
 }
 
-.campo label {
+.campo label, .campoMUI label {
   font-family: var(--family-montserrat);
   font-size: 18px;
   font-weight: 600;
