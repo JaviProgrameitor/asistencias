@@ -32,15 +32,24 @@ function FilasAlumnos(props) {
       <td className='td-admin'>{claveEstudiante}</td>
       {
         comprobarMensualidad && (
-          <td className='td-admin td-mobil'>
-            <ul>
-              {
-                idiomaAprendizaje.map((idioma, index) => 
-                  <li key={index}>{estadoMensualidad[index]}</li>
-                )
-              }
-            </ul>
-          </td>
+          <>
+            <td className='td-admin td-mobil'>
+              <ul>
+                {
+                  fechaPago.map((fecha, index) => <li key={index}>{fecha}</li>)
+                }
+              </ul>
+            </td>
+            <td className='td-admin td-mobil'>
+              <ul>
+                {
+                  estadoMensualidad.map((estado, index) => 
+                    <li key={index}>{estado}</li>
+                  )
+                }
+              </ul>
+            </td>
+          </>
         )
       }
       <td className='td-admin'>
@@ -53,7 +62,7 @@ function FilasAlumnos(props) {
       {
         comprobarMensualidad && (
           <>
-            <td className='td-admin'>
+            <td className='td-admin td-desktop'>
               <ul>
                 {
                   fechaPago.map((fecha, index) => <li key={index}>{fecha}</li>)
@@ -64,8 +73,8 @@ function FilasAlumnos(props) {
             <td className='td-admin td-desktop'>
               <ul>
                 {
-                  idiomaAprendizaje.map((idioma, index) => 
-                    <li key={index}>{estadoMensualidad[index]}</li>
+                  estadoMensualidad.map((estado, index) => 
+                    <li key={index}>{estado}</li>
                   )
                 }
               </ul>

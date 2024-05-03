@@ -145,6 +145,7 @@ function TablaAlumnos(props) {
           <span>Agregar Alumno</span>
         </Link>
       </div>
+      <p className='titulos-4 titulos__izquierda'><strong>Cantidad total de Alumnos:</strong> {alumnos.length} alumnos</p>
       <BarraBusquedaOpciones
         titulo='Idioma'
         valor={idiomaSeleccionado}
@@ -205,9 +206,10 @@ function TablaAlumnos(props) {
               <th colSpan='1'>Nombre</th>
               <th colSpan='1'>Apellido</th>
               <th colSpan='1'>Clave de Estudiante</th>
+              <th className='tr-mobil' colSpan='1'>Fecha de Pago</th>
               <th className='tr-mobil' colSpan='1'>Estado Mensualidad</th>
               <th colSpan='1'>Idioma de Aprendizaje</th>
-              <th colSpan='1'>Fecha de Pago</th>
+              <th className='tr-desktop' colSpan='1'>Fecha de Pago</th>
               <th className='tr-desktop' colSpan='1'>Estado Mensualidad</th>
             </tr>
           </thead>
