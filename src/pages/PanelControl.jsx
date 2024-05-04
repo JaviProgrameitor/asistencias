@@ -25,12 +25,10 @@ import Reportes from './Reportes'
 import logo from '../assets/img/logo.webp'
 import Page404 from './Page404'
 
-import { initializeApp } from "firebase/app";
-import { collection, onSnapshot, getFirestore, orderBy, query } from "firebase/firestore";
-import firebaseConfig from '../firebase';
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { db, auth } from '../firebase';
 
 function PanelControl(props) {
-  const auth = getAuth()
   const navigate = useNavigate()
   
   const { admin, setAdmin, alumnos, administradores, clases, asistenciasEntrada, pagosMensualidades } = props
@@ -41,9 +39,6 @@ function PanelControl(props) {
 
   const [ idiomasImpartidos, setIdiomasImpartidos ] = useState([])
   const [ justificantes, setJustificantes ] = useState([])
-
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
 
   const url = useResolvedPath("").pathname
   const enlaces = [

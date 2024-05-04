@@ -9,11 +9,10 @@ import { IoIosPaper } from 'react-icons/io'
 import { FaClipboardList } from 'react-icons/fa'
 import { FaMoneyCheckDollar } from "react-icons/fa6";
 
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 
-import { initializeApp } from "firebase/app";
-import { collection, onSnapshot, getFirestore, orderBy, query } from "firebase/firestore";
-import firebaseConfig from '../firebase';
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { db, auth } from '../firebase';
 
 import BarraNavegacion from '../components/BarraNavegacion/BarraNavegacion';
 
@@ -31,9 +30,6 @@ import Logo from '../assets/img/logo.webp'
 function Usuario(props) {
   const { datos, setUsuario, asistenciasEntrada, pagosMensualidades } = props
 
-  const auth = getAuth()
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
   const url = useResolvedPath("").pathname
   
   const navigate = useNavigate()

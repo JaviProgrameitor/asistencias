@@ -9,9 +9,8 @@ import ScannerEnLinea from './ScannerEnLinea'
 import AdministrarQR from './AdministrarQR';
 import AccionesCuenta from './AccionesCuenta';
 
-import { initializeApp } from "firebase/app";
-import { collection, getFirestore, onSnapshot, orderBy, query } from "firebase/firestore";
-import firebaseConfig from '../firebase';
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { db } from '../firebase';
 
 import { coloresAlumno, calcularFinMensualidad, calcularAnteriorMensualidad } from '../utils/functions/mensualidades';
 import { diaMilisegundos, diasMeses, calcularMesPorNumero } from '../utils/functions/fechas';
@@ -30,9 +29,6 @@ function SistemaAsistencias() {
   const [ asistenciasEntrada, setAsistenciasEntrada ] = useState([])
   const [ clases, setClases ] = useState([])
   const [ pagosMensualidades, setPagosMensualidades ] = useState([])
-
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app);
 
   function comprobarMensualidad(idioma, idiomaFecha, fechaIngreso ,claveEstudiante) {
     //Variables del día actual

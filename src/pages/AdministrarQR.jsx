@@ -4,7 +4,7 @@ import { AiFillDelete } from 'react-icons/ai'
 
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore, onSnapshot, doc, deleteDoc } from "firebase/firestore";
-import firebaseConfig from '../firebase';
+import { firebaseConfig } from '../firebase';
 
 import Campo from '../components/Campo/Campo'
 import FilasCodigosQR from "../components/FilasCodigosQR/FilasCodigosQR";

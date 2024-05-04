@@ -3,26 +3,17 @@ import { addDoc, collection, getFirestore, doc, deleteDoc, setDoc } from "fireba
 import { getStorage, ref, uploadBytesResumable, uploadBytes , getDownloadURL, deleteObject } from 'firebase/storage'
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, verifyPasswordResetCode, confirmPasswordReset } from "firebase/auth";
 
-export default {
-  apiKey: "AIzaSyC2qqFtsPNTfZJ3lXzPR6_yBIRNHsoslqo",
-  authDomain: "control-asistencias-dfa14.firebaseapp.com",
-  projectId: "control-asistencias-dfa14",
-  storageBucket: "control-asistencias-dfa14.appspot.com",
-  messagingSenderId: "488253676858",
-  appId: "1:488253676858:web:34ebcf9c0c302f89d88403"
+export const firebaseConfig =  {
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTHDOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGE_ING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
 };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyC2qqFtsPNTfZJ3lXzPR6_yBIRNHsoslqo",
-  authDomain: "control-asistencias-dfa14.firebaseapp.com",
-  projectId: "control-asistencias-dfa14",
-  storageBucket: "control-asistencias-dfa14.appspot.com",
-  messagingSenderId: "488253676858",
-  appId: "1:488253676858:web:34ebcf9c0c302f89d88403"
-};
-
-const app = initializeApp(firebaseConfig)
-const db = getFirestore(app);
+export const app = initializeApp(firebaseConfig)
+export const db = getFirestore(app);
 const st = getStorage(app);
 export const auth = getAuth(app);
 
