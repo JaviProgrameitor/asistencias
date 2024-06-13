@@ -10,7 +10,7 @@ import AdministrarQR from './AdministrarQR';
 import AccionesCuenta from './AccionesCuenta';
 
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import { db } from '../firebase';
+import { db, observadorAuth } from '../firebase';
 
 import { coloresAlumno, calcularFinMensualidad, calcularAnteriorMensualidad } from '../utils/functions/mensualidades';
 import { diaMilisegundos, diasMeses, calcularMesPorNumero } from '../utils/functions/fechas';
@@ -19,6 +19,7 @@ import { Routes, Route } from 'react-router-dom'
 
 function SistemaAsistencias() {
   const [ admin, setAdmin ] = useState(false)
+  const [ observadorUsuario, setObservadorUsuario ] = useState(false)
   const [ idUsuario, setIdUsuario ] = useState(false)
   const [ scannerAlumno, setScannerAlumno ] = useState()
   const [ scannerClase, setScannerClase ] = useState()
@@ -29,6 +30,8 @@ function SistemaAsistencias() {
   const [ asistenciasEntrada, setAsistenciasEntrada ] = useState([])
   const [ clases, setClases ] = useState([])
   const [ pagosMensualidades, setPagosMensualidades ] = useState([])
+  const [ pagosMensualidadesCompleto, setPagosMensualidadesCompleto ] = useState([])
+  const [ alumnosEliminados, setAlumnosEliminados ] = useState([])
 
   function comprobarMensualidad(idioma, idiomaFecha, fechaIngreso ,claveEstudiante) {
     //Variables del día actual
@@ -154,6 +157,23 @@ function SistemaAsistencias() {
     setAlumnosCompleto(nuevos)
   }
 
+  function similitud(arrayElementos) {
+    const nuevaArray = []
+    arrayElementos.map(elemento => {
+      const alumnoEncontrado = alumnos.find(alumno => alumno.id === elemento.idPropietario)
+      nuevaArray.push(
+        {
+          ...elemento, 
+          nombre: alumnoEncontrado.nombre, 
+          apellido: alumnoEncontrado.apellido, 
+          claveEstudiante: alumnoEncontrado.claveEstudiante
+        }
+      )
+    })
+
+    return nuevaArray
+  }
+
   //Todo: Función para leer los datos de la base de datos
   useEffect(
     () => {
@@ -212,8 +232,21 @@ function SistemaAsistencias() {
       [db]
   )
 
+  //Todo: Función para leer los datos de la base de datos
+  useEffect(
+    () => {
+      const collectionRef = collection(db, 'alumnosEliminados')
+      const q = query(collectionRef, orderBy('nombre', 'asc'))
+
+      onSnapshot(q,(snapshot) => 
+        setAlumnosEliminados(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+      )
+    },[db]
+  )
+
   useEffect(() => {
     nuevosAlumnos()
+    setPagosMensualidadesCompleto(similitud(pagosMensualidades))
   }, [pagosMensualidades, alumnos])
 
   return (
@@ -244,7 +277,8 @@ function SistemaAsistencias() {
             administradores={administradores}
             clases={clases}
             asistenciasEntrada={asistenciasEntrada}
-            pagosMensualidades={pagosMensualidades}
+            pagosMensualidades={pagosMensualidadesCompleto}
+            alumnosEliminados={alumnosEliminados}
           />
         } 
       />
@@ -255,7 +289,7 @@ function SistemaAsistencias() {
             datos={idUsuario === false ? false : alumnosCompleto.filter(alumno => alumno.id == idUsuario)} 
             setUsuario={setIdUsuario} 
             asistenciasEntrada={asistenciasEntrada}
-            pagosMensualidades={pagosMensualidades}
+            pagosMensualidades={pagosMensualidadesCompleto}
           />
         } 
       />
@@ -278,7 +312,7 @@ function SistemaAsistencias() {
             scannerAlumno={scannerAlumno} 
             setScannerAlumno={setScannerAlumno}
             clases={clases}
-            pagosMensualidades={pagosMensualidades}
+            pagosMensualidades={pagosMensualidadesCompleto}
             scannerClase={scannerClase}
             setScannerClase={setScannerClase}
           />

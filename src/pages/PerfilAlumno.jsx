@@ -18,7 +18,6 @@ import { v4 as uuid } from 'uuid';
 import { Toaster, toast } from 'sonner'
 
 function PerfilAlumno(props) {
-  const { actualizarDatos } = props
   const { 
     foto, 
     idFoto,
@@ -188,7 +187,7 @@ function PerfilAlumno(props) {
       />
       <div className='container-perfil-alumno'>
         <div className='contenedor__todo-principio'>
-          <Link to={'/sistema-asistencias/panel-control/alumnos'} onClick={() => actualizarDatos(false)}>
+          <Link to={'/sistema-asistencias/panel-control/alumnos'}>
             <FaArrowCircleLeft className='flecha-regresar icon-40' />
           </Link>
         </div>

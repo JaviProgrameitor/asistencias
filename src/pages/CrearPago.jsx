@@ -119,8 +119,6 @@ function CrearPago(props) {
     let añoFinal = nuevaFecha.getFullYear()
     let fechaFinal = diasMeses[nombreMesFinal] < parseInt(fecha) ? diasMeses[nombreMesFinal] : fecha
 
-    console.log(mesFinal, nombreMesFinal, añoFinal, fechaFinal)
-
     if(tipoRespuesta == "string") return `${fechaFinal}/${mesFinal}/${añoFinal}`
     else if(tipoRespuesta == "objeto") return new Date(`${mesFinal}/${fechaFinal}/${añoFinal}`).getTime()
   }

@@ -7,6 +7,7 @@ import AgregarAlumno from './AgregarAlumno';
 import EditarAlumno from './EditarAlumno';
 import PagosAlumnos from './PagosAlumnos';
 import ActividadAlumno from './ActividadAlumno';
+import TablaAlumnosEliminados from './TablaAlumnosEliminados';
 
 function Alumnos(props) {
   const { 
@@ -16,12 +17,14 @@ function Alumnos(props) {
     asistenciasEntrada, 
     idiomasImpartidos, 
     justificantes,
-    pagosMensualidades
+    pagosMensualidades,
+    alumnosEliminados
   } = props
 
   const [ perfilAlumno, setPerfilAlumno ] = useState({})
   const [ idAlumno, setIdAlumno ] = useState(false)
   const [ claveEstudiante, setClaveEstudiante ] = useState("")
+  const [ coordenadasAlumno, setCoordenadasAlumno ] = useState(0)
 
   function actualizarDatos(datos) {
     if(datos === false) {
@@ -58,6 +61,8 @@ function Alumnos(props) {
               justificantes={justificantes}
               pagosMensualidades={pagosMensualidades}
               idiomasImpartidos={idiomasImpartidos.map(idioma => idioma.nombre)}
+              coordenadasAlumno={coordenadasAlumno}
+              setCoordenadasAlumno={setCoordenadasAlumno}
             />
           } 
         />
@@ -88,7 +93,7 @@ function Alumnos(props) {
           element={
             <PerfilAlumno 
               idAlumno={idAlumno} 
-              datos={perfilAlumno} 
+              datos={alumnos.find(alumno => alumno.id == idAlumno)} 
               actualizarDatos={actualizarDatos}
             />
           } 
@@ -113,6 +118,14 @@ function Alumnos(props) {
               justificantesAceptados={justificantes.filter(justi => justi.claveEstudianteJustificante == claveEstudiante && justi.estado == 'Aceptado')}
               justificantesEnEspera={justificantes.filter(justi => justi.claveEstudianteJustificante == claveEstudiante && justi.estado == 'EnEspera')}
               justificantesRechazados={justificantes.filter(justi => justi.claveEstudianteJustificante == claveEstudiante && justi.estado == 'Rechazado')}
+            />
+          } 
+        />
+        <Route 
+          path='/alumnos-eliminados' 
+          element={
+            <TablaAlumnosEliminados 
+              alumnosEliminados={alumnosEliminados}
             />
           } 
         />

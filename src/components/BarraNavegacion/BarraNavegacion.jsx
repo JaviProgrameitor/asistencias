@@ -1,6 +1,6 @@
 import '../../assets/css/components/BarraNavegacion.css'
 
-import { Link, useResolvedPath } from "react-router-dom"
+import { Link, useResolvedPath, NavLink } from "react-router-dom"
 import { usuarioActual } from '../../firebase'
 
 import Modal from '@mui/material/Modal';
@@ -54,7 +54,7 @@ function BarraNavegacion(props) {
           {
             enlaces.map((enlace, index) => {
               return (
-                <Link 
+                <NavLink 
                   className={`enlaces ${comprobarUrl(urlActual, enlace.destino, index) ? "enlaces-activos" : ""}`}
                   to={enlace.destino} 
                   key={index}
@@ -63,7 +63,7 @@ function BarraNavegacion(props) {
                     <enlace.icon />
                     <span>{enlace.titulo}</span>
                   </div>
-                </Link>
+                </NavLink>
               )
             })
           }

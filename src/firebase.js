@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore, doc, deleteDoc, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytesResumable, uploadBytes , getDownloadURL, deleteObject } from 'firebase/storage'
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, verifyPasswordResetCode, confirmPasswordReset } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, verifyPasswordResetCode, confirmPasswordReset, signOut, onAuthStateChanged } from "firebase/auth";
 
 export const firebaseConfig =  {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -54,6 +54,16 @@ export const loginUsuario = async (correo, contrasena) => {
   return user
 }
 
+export async function cerrarSesion() {
+  try {
+    const respuesta = signOut(auth)
+
+    return respuesta
+  } catch (error) {
+    throw new Error(error.message)
+  }
+}
+
 export const verificarCodeContrasena = async (actionCode) => {
   try {
     const email = await verifyPasswordResetCode(auth, actionCode)
@@ -82,6 +92,18 @@ export const confirmarContrasena = async (actionCode, newPassword) => {
   .catch(error => {
     throw new Error(error.message)
   })
+
+  return respuesta
+}
+
+export function observadorAuth() {
+  const respuesta = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      return user
+    } else {
+      return false
+    }
+  });
 
   return respuesta
 }

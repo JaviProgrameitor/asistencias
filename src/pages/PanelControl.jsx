@@ -10,8 +10,6 @@ import { FiPower } from 'react-icons/fi'
 import { MdAdminPanelSettings } from 'react-icons/md'
 import { FaClipboardList } from 'react-icons/fa'
 
-import { getAuth, signOut } from "firebase/auth";
-
 import BarraNavegacion from '../components/BarraNavegacion/BarraNavegacion'
 
 import Principal from './Principal'
@@ -26,12 +24,12 @@ import logo from '../assets/img/logo.webp'
 import Page404 from './Page404'
 
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import { db, auth } from '../firebase';
+import { db, cerrarSesion } from '../firebase';
 
 function PanelControl(props) {
   const navigate = useNavigate()
   
-  const { admin, setAdmin, alumnos, administradores, clases, asistenciasEntrada, pagosMensualidades } = props
+  const { admin, setAdmin, alumnos, administradores, clases, asistenciasEntrada, pagosMensualidades, alumnosEliminados } = props
 
   const [ sesion, setSesion ] = useState(false)
   const [ estadoNavbar, setEstadoNavbar ] = useState(false)
@@ -86,14 +84,12 @@ function PanelControl(props) {
     }
   ]
 
-  function cerrarSesion() {
-    signOut(auth).then(() => {
-      // Sign-out successful.
+  function complementoCerrarSesion() {
+    cerrarSesion()
+    .then(() => {
       setAdmin(false)
-      setSesion(true)
-    }).catch((error) => {
-      // An error happened.
-    });
+      navigate('/sistema-asistencias')
+    })
   }
 
   //Todo: Función para leer los datos de la base de datos
@@ -148,7 +144,10 @@ function PanelControl(props) {
                 <h3 className='empresa-titulo'>Centro De Idiomas</h3>
               </div>
               <div className='central-caja-superior__cerrar-sesion'>
-                <div className='cerrar-sesion' onClick={cerrarSesion}>
+                <div 
+                  className='cerrar-sesion' 
+                  onClick={complementoCerrarSesion}
+                >
                   <FiPower className='logo-cerrar-sesion' />
                   <span className='texto-cerrar-sesion'>Cerrar Sesión</span>
                 </div>
@@ -185,6 +184,7 @@ function PanelControl(props) {
                       idiomasImpartidos={idiomasImpartidos}
                       justificantes={justificantes}
                       pagosMensualidades={pagosMensualidades}
+                      alumnosEliminados={alumnosEliminados}
                     />
                   } 
                 />

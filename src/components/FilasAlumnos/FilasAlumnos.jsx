@@ -1,10 +1,16 @@
-import 'aos/dist/aos.css';
+
 import '../../assets/css/components/Filas.css'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 function FilasAlumnos(props) {
-  const { idAlumno, actualizarDatos, datos, comprobarMensualidad = false } = props
+  const { 
+    idAlumno, 
+    actualizarDatos, 
+    datos, 
+    comprobarMensualidad = false, 
+    getCoordinates,
+  } = props
   const { 
     nombre, 
     apellido,
@@ -16,6 +22,9 @@ function FilasAlumnos(props) {
     clasesMensualidad,
     id 
   } = datos
+
+  const filaRef = useRef(null)
+
   const [ activo, setActivo ] = useState("")
 
   useEffect(() => {
@@ -25,7 +34,15 @@ function FilasAlumnos(props) {
   return (
     <tr
       className={`fila ${activo} ${comprobarMensualidad ? clasesMensualidad.join(' ') : ''}`} 
-      onClick={() => {activo === "activo" ? actualizarDatos(false) : actualizarDatos(datos)}}
+      ref={filaRef}
+      onClick={
+        () => {
+          getCoordinates(filaRef)
+          activo === "activo"
+            ? actualizarDatos(false)
+            : actualizarDatos(datos)
+        }
+      }
     >
       <td className='td-admin'>{nombre}</td>
       <td className='td-admin'>{apellido}</td>

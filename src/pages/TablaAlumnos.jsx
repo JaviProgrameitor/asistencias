@@ -1,15 +1,16 @@
 import '../assets/css/TablaAlumnos.css'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FcContacts, FcCurrencyExchange, FcCalendar } from "react-icons/fc";
 import { AiFillDelete } from 'react-icons/ai'
 import { BsPersonFillAdd } from 'react-icons/bs'
+import { IoMdLocate } from "react-icons/io";
 import { FaEdit } from 'react-icons/fa'
 import { Link, useResolvedPath } from "react-router-dom"
 
 import { deleteStorage } from '../firebase';
 
-import { deleteDatabase, alumnosURL, asistenciasURL, justificantesURL, pagosMensualidadURL, crearCuentasUsuarios, usuariosGeneralURL } from '../services/service-db'
+import { deleteDatabase, alumnosURL, asistenciasURL, justificantesURL, pagosMensualidadURL, createDatabase, alumnosEliminadosURL } from '../services/service-db'
 
 import FilasAlumnos from '../components/FilasAlumnos/FilasAlumnos'
 import DemostracionColores from '../components/DemostracionColores/DemostracionColores'
@@ -17,8 +18,12 @@ import BarraBusquedaOpciones from '../components/BarraBusquedaOpciones/BarraBusq
 import BarraBusquedaTexto from '../components/BarraBusquedaTexto/BarraBusquedaTexto';
 import Indicadores from '../components/Indicadores/Indicadores'
 import IndicadoresMultiples from '../components/IndicadoresMultiples/IndicadoresMultiples';
+import CampoFecha from '../components/CampoFecha/CampoFecha';
+import TextArea from '../components/TextArea/TextArea';
 
 import Modal from '@mui/material/Modal';
+
+import dayjs from 'dayjs';
 
 import { Toaster, toast } from 'sonner'
 
@@ -33,8 +38,16 @@ function TablaAlumnos(props) {
     asistenciasEntrada, 
     justificantes,
     pagosMensualidades,
-    idiomasImpartidos
+    idiomasImpartidos,
+    coordenadasAlumno,
+    setCoordenadasAlumno
   } = props
+
+  const contenedorTablaAlumnos = useRef(null);
+
+  const [ paso, setPaso ] = useState(0)
+  const [ motivoBaja, setMotivoBaja ] = useState('')
+  const [ fechaBaja, setFechaBaja ] = useState('')
 
   const [ palabraBusqueda, setPalabraBusqueda ] = useState('')
   const [ idiomaSeleccionado, setIdiomaSeleccionado] = useState('General');
@@ -57,11 +70,11 @@ function TablaAlumnos(props) {
     const pagosMensualidadesAlumno = pagosMensualidades.filter(pago => pago.claveEstudiantePago == alumno.claveEstudiante)
 
     //Documentos
-    deleteStorage(`alumnos/${alumno.idFoto}`)
-    deleteStorage(`documentos/${alumno.idActaNacimiento}`)
-    deleteStorage(`documentos/${alumno.idIne}`)
-    deleteStorage(`documentos/${alumno.idCurp}`)
-    deleteStorage(`documentos/${alumno.idComprobantePagoInicial}`)
+    // deleteStorage(`alumnos/${alumno.idFoto}`)
+    // deleteStorage(`documentos/${alumno.idActaNacimiento}`)
+    // deleteStorage(`documentos/${alumno.idIne}`)
+    // deleteStorage(`documentos/${alumno.idCurp}`)
+    // deleteStorage(`documentos/${alumno.idComprobantePagoInicial}`)
 
     //Todo: Eliminar todas las asistencias del alumno
     if(asistenciasAlumno.length > 0) {
@@ -85,6 +98,44 @@ function TablaAlumnos(props) {
         deleteStorage(`pagosMensualidades/${pagosMensualidadesAlumno[i].idComprobantePagoMensualidad}`)
       }
     }
+
+    const fechaEliminacion = new Date(dayjs(fechaBaja).$d).getTime()
+
+    const datos = {
+      foto: perfilAlumno.foto,
+      actaNacimiento: perfilAlumno.actaNacimiento,
+      ine: perfilAlumno.ine,
+      curp: perfilAlumno.curp,
+      comprobantePagoInicial: perfilAlumno.comprobantePagoInicial,
+      idFoto: perfilAlumno.idFoto,
+      idActaNacimiento: perfilAlumno.idActaNacimiento,
+      idIne: perfilAlumno.idIne,
+      idCurp: perfilAlumno.idCurp,
+      idComprobantePagoInicial: perfilAlumno.idComprobantePagoInicial,
+      nombre: perfilAlumno.nombre, 
+      apellido: perfilAlumno.apellido, 
+      fechaNacimiento: perfilAlumno.fechaNacimiento, 
+      correo: perfilAlumno.correo, 
+      numeroTelefono: perfilAlumno.numeroTelefono, 
+      nivelAcademico: perfilAlumno.nivelAcademico,
+      codigoPostal: perfilAlumno.codigoPostal,
+      pais: perfilAlumno.pais,
+      estado: perfilAlumno.estado,
+      municipio: perfilAlumno.municipio,
+      colonia: perfilAlumno.colonia,
+      calle: perfilAlumno.calle,
+      numeroExterior: perfilAlumno.numeroExterior,
+      claveEstudiante: perfilAlumno.claveEstudiante,
+      idiomaAprendizaje: perfilAlumno.idiomaAprendizaje,
+      nivelIdioma: perfilAlumno.nivelIdioma,
+      modalidadEstudio: perfilAlumno.modalidadEstudio,
+      fechaIngreso: perfilAlumno.fechaIngreso,
+      fechaPago: perfilAlumno.fechaPago,
+      fechaEliminacion,
+      motivoEliminacion: motivoBaja
+    }
+
+    await createDatabase(alumnosEliminadosURL, {datos})
 
     await deleteDatabase(alumnosURL, alumno.id)
     toast.success('El Alumno ha sido eliminado correctamente')
@@ -127,6 +178,30 @@ function TablaAlumnos(props) {
     setFiltrarPorIdioma(alumnosFiltrados)
   }
 
+  function scrollearAlumno(top, left) {
+    if (contenedorTablaAlumnos.current) {
+      contenedorTablaAlumnos.current.scroll({
+        top: top,
+        left: left,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  const getCoordinates = (targetRef) => {
+    if (contenedorTablaAlumnos.current && targetRef.current) {
+      const tablaRef = contenedorTablaAlumnos.current.children[0]
+      const headerRef = tablaRef.children[0]
+
+      const containerRect = contenedorTablaAlumnos.current.getBoundingClientRect();
+      const targetRect = targetRef.current.getBoundingClientRect();
+
+      const top = ((targetRect.top - containerRect.top + contenedorTablaAlumnos.current.scrollTop) - targetRef.current.clientHeight) - headerRef.clientHeight;
+
+      setCoordenadasAlumno(top)
+    }
+  };
+
   useEffect(() => {
     filtrarIdiomaAlumnos()
   },[idiomaSeleccionado, alumnos])
@@ -143,6 +218,9 @@ function TablaAlumnos(props) {
         <Link to={`${url}/agregar-alumno`} className='boton__blanco' >
           <BsPersonFillAdd />
           <span>Agregar Alumno</span>
+        </Link>
+        <Link to={`${url}/alumnos-eliminados`} className='boton__verde-oscuro'>
+          Alumnos En Seguimiento
         </Link>
       </div>
       <p className='titulos-4 titulos__izquierda'><strong>Cantidad total de Alumnos:</strong> {alumnos.length} alumnos</p>
@@ -198,8 +276,15 @@ function TablaAlumnos(props) {
             </div>
           )
         }
-      </div> 
-      <div className='contenedor__tabla-scroll tamaño-tabla_250-400'>
+      </div>
+      <div
+        className={`align-center max-content pointer mt-10 ${idAlumno === false  ? 'hidden' : ''}`}
+        onClick={() => scrollearAlumno(coordenadasAlumno, 0)}
+      >
+        <IoMdLocate />
+        Ir Alumno
+      </div>
+      <div className='contenedor__tabla-scroll tamaño-tabla_250-400' ref={contenedorTablaAlumnos}>
         <table className='tabla'>
           <thead className='tabla-cabecera tabla-cabecera__tabla-scroll'>
             <tr>
@@ -222,6 +307,7 @@ function TablaAlumnos(props) {
                   idAlumno={idAlumno}
                   actualizarDatos={actualizarDatos}
                   comprobarMensualidad={true}
+                  getCoordinates={getCoordinates}
                 />
               )
             }
@@ -234,77 +320,114 @@ function TablaAlumnos(props) {
         onClose={() => setModalEliminarAlumno(false)}
       >
         <div className='modal__por-defecto modal__contenido scroll-personalizado'>
-          <h4 className='advertencia__titulo'>¡ADVERTENCIA!</h4>
-          <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al alumno?</p>
-          <div className='contenedor__columna-centro'>
-            <div>
-              <Indicadores 
-                titulo='Nombre'
-                respuesta={perfilAlumno.nombre}
-              />
-              <Indicadores 
-                titulo='Apellido'
-                respuesta={perfilAlumno.apellido}
-              />
-              <Indicadores 
-                titulo='Fecha de Nacimiento'
-                respuesta={perfilAlumno.fechaNacimiento}
-              />
-              <Indicadores 
-                titulo='Correo Electrónico'
-                respuesta={perfilAlumno.correo}
-              />
-              <Indicadores 
-                titulo='Número de Teléfono'
-                respuesta={perfilAlumno.numeroTelefono}
-              />
-              <Indicadores 
-                titulo='Nivel Académico'
-                respuesta={perfilAlumno.nivelAcademico}
-              />
-              <Indicadores 
-                titulo={'Clave del Estudiante'} 
-                respuesta={perfilAlumno.claveEstudiante} 
-              />
-              <IndicadoresMultiples 
-                titulo={'Idiomas de Aprendizaje'} 
-                respuesta={perfilAlumno.idiomaAprendizaje} 
-              />
-              <IndicadoresMultiples 
-                titulo={'Nivel MCERLC'} 
-                respuesta={perfilAlumno.nivelIdioma} 
-              />
-              <IndicadoresMultiples 
-                titulo={'Modalidad de Estudio'} 
-                respuesta={perfilAlumno.modalidadEstudio} 
-              />
-              <IndicadoresMultiples 
-                titulo={'Fecha de Ingreso'} 
-                respuesta={perfilAlumno.fechaIngreso} 
-              />
-              <IndicadoresMultiples 
-                titulo={'Fecha de Pago'} 
-                respuesta={perfilAlumno.fechaPago} 
-              />
-            </div>
-          </div>
-          <div className='contenedor__centro-separacion'>
-            <button 
-              className='boton__verde-oscuro' 
-              onClick={() => setModalEliminarAlumno(false)}
-            >
-              Cancelar
-            </button>
-            <button 
-              className='boton__blanco' 
-              onClick={() => {
-                eliminarAlumnos(perfilAlumno)
-                setModalEliminarAlumno(false)
-              }}
-            >
-              Eliminar
-            </button>
-          </div>
+          {
+            paso === 0
+              ? <>
+                  <h4 className='advertencia__titulo'>¡ADVERTENCIA!</h4>
+                  <p className='advertencia__texto'>¿Estás seguro de que quieres eliminar al alumno?</p>
+                  <div className='contenedor__columna-centro'>
+                    <div>
+                      <Indicadores 
+                        titulo='Nombre'
+                        respuesta={perfilAlumno.nombre}
+                      />
+                      <Indicadores 
+                        titulo='Apellido'
+                        respuesta={perfilAlumno.apellido}
+                      />
+                      <Indicadores 
+                        titulo='Fecha de Nacimiento'
+                        respuesta={perfilAlumno.fechaNacimiento}
+                      />
+                      <Indicadores 
+                        titulo='Correo Electrónico'
+                        respuesta={perfilAlumno.correo}
+                      />
+                      <Indicadores 
+                        titulo='Número de Teléfono'
+                        respuesta={perfilAlumno.numeroTelefono}
+                      />
+                      <Indicadores 
+                        titulo='Nivel Académico'
+                        respuesta={perfilAlumno.nivelAcademico}
+                      />
+                      <Indicadores 
+                        titulo={'Clave del Estudiante'} 
+                        respuesta={perfilAlumno.claveEstudiante} 
+                      />
+                      <IndicadoresMultiples 
+                        titulo={'Idiomas de Aprendizaje'} 
+                        respuesta={perfilAlumno.idiomaAprendizaje} 
+                      />
+                      <IndicadoresMultiples 
+                        titulo={'Nivel MCERLC'} 
+                        respuesta={perfilAlumno.nivelIdioma} 
+                      />
+                      <IndicadoresMultiples 
+                        titulo={'Modalidad de Estudio'} 
+                        respuesta={perfilAlumno.modalidadEstudio} 
+                      />
+                      <IndicadoresMultiples 
+                        titulo={'Fecha de Ingreso'} 
+                        respuesta={perfilAlumno.fechaIngreso} 
+                      />
+                      <IndicadoresMultiples 
+                        titulo={'Fecha de Pago'} 
+                        respuesta={perfilAlumno.fechaPago} 
+                      />
+                    </div>
+                  </div>
+                  <div className='contenedor__centro-separacion'>
+                    <button 
+                      className='boton__verde-oscuro' 
+                      onClick={() => setModalEliminarAlumno(false)}
+                    >
+                      Cancelar
+                    </button>
+                    <button 
+                      className='boton__blanco' 
+                      onClick={() => setPaso(1)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </>
+              : <>
+                  <p className='advertencia__texto'>LLena la siguiente información</p>
+                  <form>
+                    <CampoFecha 
+                      titulo='Fecha de Eliminación'
+                      valor={fechaBaja}
+                      cambiarValor={setFechaBaja}
+                      className='campo-verde-claro'
+                    />
+                    <TextArea 
+                      titulo='Motivo de la Eliminación'
+                      placeholder='Escribe el motivo de la eliminación del alumno'
+                      valor={motivoBaja}
+                      cambiarValor={setMotivoBaja}
+                      className='campo-verde-claro'
+                    />
+                  </form>
+                  <div className='contenedor__centro-separacion'>
+                    <button 
+                      className='boton__verde-oscuro' 
+                      onClick={() => setPaso(0)}
+                    >
+                      Regresar
+                    </button>
+                    <button 
+                      className='boton__blanco' 
+                      onClick={() => {
+                        eliminarAlumnos(perfilAlumno)
+                        setModalEliminarAlumno(false)
+                      }}
+                    >
+                      Confirmar
+                    </button>
+                  </div>
+                </>
+          }
         </div>
       </Modal> 
     </div>

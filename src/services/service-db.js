@@ -13,6 +13,7 @@ export const justificantesURL = 'justificantes'
 export const asistenciasURL = 'asistencias'
 export const pagosMensualidadURL = 'pagosMensualidades'
 export const usuariosGeneralURL = 'usuarios-general'
+export const alumnosEliminadosURL = 'alumnos-eliminados'
 
 //Todo: Funciones Database
 export const createDatabase = (url, datos) => {
