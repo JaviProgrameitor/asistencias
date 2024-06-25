@@ -6,16 +6,15 @@ import PagosAlumnos from '../../pages/PagosAlumnos'
 function FilasPagos(props) {
   const { posicion, pagoSeleccionado, setPagoSeleccionado, personal = false } = props
   const {
-    nombrePago,
-    apellidoPago,
-    claveEstudiantePago,
+    nombre,
+    apellido,
+    claveEstudiante,
     idiomaPago,
     id,
     diaPago,
     inicioMensualidad
   } = props.datos
 
-  const [tipo, setTipo] = useState("")
   const [ activo, setActivo ] = useState("")
 
   useEffect(() => {
@@ -23,14 +22,9 @@ function FilasPagos(props) {
     else setActivo('inactivo')
   }, [pagoSeleccionado.id])
 
-  useEffect(() => {
-    if(posicion === 0 || posicion % 2 === 0) setTipo('elemento-par')
-    else setTipo('elemento-impar')
-  }, [posicion])
-
   return (
     <tr 
-      className={`fila ${tipo} ${activo}`} 
+      className={`fila ${activo}`} 
       onClick={() => {
         if(activo === 'activo') setPagoSeleccionado(false)
         else setPagoSeleccionado(props.datos)
@@ -39,8 +33,8 @@ function FilasPagos(props) {
       {
         !personal
           ? <>
-              <td className='td-admin'>{nombrePago}</td>
-              <td className='td-admin'>{apellidoPago}</td>
+              <td className='td-admin'>{nombre}</td>
+              <td className='td-admin'>{apellido}</td>
             </>
           : ''
       }

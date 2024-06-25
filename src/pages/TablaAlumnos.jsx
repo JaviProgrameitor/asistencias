@@ -65,9 +65,9 @@ function TablaAlumnos(props) {
 
   //Todo: Función para eliminar alumnos de la base de datos
   async function eliminarAlumnos(alumno) {
-    const asistenciasAlumno = asistenciasEntrada.filter((asis) => asis.claveEstudianteAsistenciaEntrada == alumno.claveEstudiante)
-    const justificantesEnEsperaAlumno = justificantes.filter(justi => justi.claveEstudianteJustificante == alumno.claveEstudiante)
-    const pagosMensualidadesAlumno = pagosMensualidades.filter(pago => pago.claveEstudiantePago == alumno.claveEstudiante)
+    const asistenciasAlumno = asistenciasEntrada.filter((asis) => asis.idPropietario == alumno.id)
+    const justificantesEnEsperaAlumno = justificantes.filter(justi => justi.idPropietario == alumno.id)
+    const pagosMensualidadesAlumno = pagosMensualidades.filter(pago => pago.idPropietario == alumno.id)
 
     //Documentos
     // deleteStorage(`alumnos/${alumno.idFoto}`)
@@ -86,16 +86,16 @@ function TablaAlumnos(props) {
     //Todo: Eliminar justificantes en espera del alumno
     if(justificantesEnEsperaAlumno.length > 0) {
       for(let i = 0; i < justificantesEnEsperaAlumno.length; i++) {
-        deleteDatabase(justificantesURL, justificantesEnEsperaAlumno[i].id)
-        deleteStorage(`justificantes/${justificantesEnEsperaAlumno[i].idFotoJustificante}`)
+        await deleteDatabase(justificantesURL, justificantesEnEsperaAlumno[i].id)
+        await deleteStorage(`justificantes/${justificantesEnEsperaAlumno[i].idFotoJustificante}`)
       }
     }
 
     //Todo: Eliminar los pagos mensuales del alumno
     if(pagosMensualidadesAlumno.length > 0) {
       for(let i = 0; i < pagosMensualidadesAlumno.length; i++) {
-        deleteDatabase(pagosMensualidadURL, pagosMensualidadesAlumno[i].id)
-        deleteStorage(`pagosMensualidades/${pagosMensualidadesAlumno[i].idComprobantePagoMensualidad}`)
+        await deleteDatabase(pagosMensualidadURL, pagosMensualidadesAlumno[i].id)
+        await deleteStorage(`pagosMensualidades/${pagosMensualidadesAlumno[i].idComprobantePagoMensualidad}`)
       }
     }
 

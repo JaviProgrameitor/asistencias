@@ -161,14 +161,16 @@ function SistemaAsistencias() {
     const nuevaArray = []
     arrayElementos.map(elemento => {
       const alumnoEncontrado = alumnos.find(alumno => alumno.id === elemento.idPropietario)
-      nuevaArray.push(
+      //if(alumnoEncontrado === undefined) console.log(elemento)
+      if(alumnoEncontrado !== undefined) 
+      {nuevaArray.push(
         {
           ...elemento, 
           nombre: alumnoEncontrado.nombre, 
           apellido: alumnoEncontrado.apellido, 
           claveEstudiante: alumnoEncontrado.claveEstudiante
         }
-      )
+      )}
     })
 
     return nuevaArray
