@@ -33,7 +33,7 @@ function SistemaAsistencias() {
   const [ pagosMensualidadesCompleto, setPagosMensualidadesCompleto ] = useState([])
   const [ alumnosEliminados, setAlumnosEliminados ] = useState([])
 
-  function comprobarMensualidad(idioma, idiomaFecha, fechaIngreso ,claveEstudiante) {
+  function comprobarMensualidad(idioma, idiomaFecha, fechaIngreso, idAlumno) {
     //Variables del día actual
     const date = new Date()
     const año = date.getFullYear()
@@ -61,7 +61,7 @@ function SistemaAsistencias() {
         new Date(pago.finalMensualidad).getFullYear() == año && 
         new Date(pago.finalMensualidad).getMonth() == mes && 
         pago.idiomaPago == idioma && 
-        pago.claveEstudiantePago == claveEstudiante
+        pago.idPropietario == idAlumno
       )
     const pago = 
       pagosMensualidades.filter(
@@ -69,7 +69,7 @@ function SistemaAsistencias() {
         new Date(pago.inicioMensualidad).getFullYear() == año && 
         new Date(pago.inicioMensualidad).getMonth() == mes && 
         pago.idiomaPago == idioma && 
-        pago.claveEstudiantePago == claveEstudiante
+        pago.idPropietario == idAlumno
       )
     const pagoProximo = 
       pagosMensualidades.filter(
@@ -77,7 +77,7 @@ function SistemaAsistencias() {
         new Date(pago.inicioMensualidad).getFullYear() == añoProximo && 
         new Date(pago.inicioMensualidad).getMonth() == mesProximo && 
         pago.idiomaPago == idioma && 
-        pago.claveEstudiantePago == claveEstudiante
+        pago.idPropietario == idAlumno
       )
 
     //Comprobar pago del mes anterior
@@ -147,7 +147,7 @@ function SistemaAsistencias() {
       let estadoMensualidad = []
       let clasesMensualidad = []
       for(let i = 0; i < alumno.idiomaAprendizaje.length; i++) {
-        estadoMensualidad.push(comprobarMensualidad(alumno.idiomaAprendizaje[i], alumno.fechaPago[i], alumno.fechaIngreso[i], alumno.claveEstudiante))
+        estadoMensualidad.push(comprobarMensualidad(alumno.idiomaAprendizaje[i], alumno.fechaPago[i], alumno.fechaIngreso[i], alumno.id))
         clasesMensualidad.push(asignarClaseMensualidad(estadoMensualidad[i]))
       }
 

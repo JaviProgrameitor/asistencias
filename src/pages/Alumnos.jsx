@@ -7,7 +7,7 @@ import AgregarAlumno from './AgregarAlumno';
 import EditarAlumno from './EditarAlumno';
 import PagosAlumnos from './PagosAlumnos';
 import ActividadAlumno from './ActividadAlumno';
-import TablaAlumnosEliminados from './TablaAlumnosEliminados';
+import AlumnosEliminados from './AlumnosEliminados';
 
 function Alumnos(props) {
   const { 
@@ -82,8 +82,8 @@ function Alumnos(props) {
               idAlumno={idAlumno} 
               datos={perfilAlumno}
               actualizarDatosAlumno={actualizarDatos}
-              asistenciasEntrada={asistenciasEntrada.filter((asis) => asis.claveEstudianteAsistenciaEntrada == claveEstudiante)}
-              justificantes={justificantes.filter(justi => justi.claveEstudianteJustificante == claveEstudiante)}
+              asistenciasEntrada={asistenciasEntrada.filter((asis) => asis.idPropietario == idAlumno)}
+              justificantes={justificantes.filter(justi => justi.idPropietario == idAlumno)}
               pagosMensualidades={pagosMensualidades.filter(pago => pago.idPropietario == idAlumno)}
             />
           } 
@@ -95,6 +95,7 @@ function Alumnos(props) {
               idAlumno={idAlumno} 
               datos={alumnos.find(alumno => alumno.id == idAlumno)} 
               actualizarDatos={actualizarDatos}
+              tipo='activo'
             />
           } 
         />
@@ -114,17 +115,17 @@ function Alumnos(props) {
           element={
             <ActividadAlumno 
               pagosMensualidades={pagosMensualidades.filter(pago => pago.idPropietario == idAlumno)}
-              asistenciasEntrada={asistenciasEntrada.filter((asis) => asis.claveEstudianteAsistenciaEntrada == claveEstudiante && asis.entradaSalidaAsistencia == 'Entrada')}
-              justificantesAceptados={justificantes.filter(justi => justi.claveEstudianteJustificante == claveEstudiante && justi.estado == 'Aceptado')}
-              justificantesEnEspera={justificantes.filter(justi => justi.claveEstudianteJustificante == claveEstudiante && justi.estado == 'EnEspera')}
-              justificantesRechazados={justificantes.filter(justi => justi.claveEstudianteJustificante == claveEstudiante && justi.estado == 'Rechazado')}
+              asistenciasEntrada={asistenciasEntrada.filter((asis) => asis.idPropietario == idAlumno && asis.entradaSalidaAsistencia == 'Entrada')}
+              justificantesAceptados={justificantes.filter(justi => justi.idPropietario == idAlumno && justi.estado == 'Aceptado')}
+              justificantesEnEspera={justificantes.filter(justi => justi.idPropietario == idAlumno && justi.estado == 'EnEspera')}
+              justificantesRechazados={justificantes.filter(justi => justi.idPropietario == idAlumno && justi.estado == 'Rechazado')}
             />
           } 
         />
         <Route 
-          path='/alumnos-eliminados' 
+          path='/alumnos-en-seguimiento/*' 
           element={
-            <TablaAlumnosEliminados 
+            <AlumnosEliminados 
               alumnosEliminados={alumnosEliminados}
             />
           } 

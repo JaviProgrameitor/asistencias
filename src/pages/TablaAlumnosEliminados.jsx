@@ -1,14 +1,15 @@
 
-import { Link } from "react-router-dom"
+import { Link, useResolvedPath } from "react-router-dom"
 import { FaArrowCircleLeft } from 'react-icons/fa'
+import { FcContacts, FcCurrencyExchange, FcCalendar } from "react-icons/fc";
 import { useState } from "react"
 
 import FilasAlumnosEliminados from "../components/FilasAlumnosEliminados/FilasAlumnosEliminados"
 
 function TablaAlumnosEliminados(props) {
-  const { alumnosEliminados } =props
+  const { alumnosEliminados, idAlumno, setIdAlumno } =props
 
-  const [ idAlumno, setIdAlumno ] = useState(null)
+  const url = useResolvedPath("").pathname
 
   function actualizarDatos(id) {
     if(id) {
@@ -27,7 +28,19 @@ function TablaAlumnosEliminados(props) {
           <FaArrowCircleLeft className='flecha-regresar icon-40' />
         </Link>
       </div>
-      <h2 className='titulos-2'>Tabla de Alumnos Eliminados</h2>
+      <h2 className='titulos-2'>Tabla de Alumnos En Seguimiento</h2>
+      {
+        idAlumno !== null && (
+          <div>
+            <Link to={`${url}/actividad-alumno`}>
+              <FcCalendar className='alumno-completo icon-alumno' />
+            </Link>
+            <Link to={`${url}/perfil/${idAlumno}`}>
+              <FcContacts className='alumno-completo icon-alumno' />
+            </Link>
+          </div>
+        )
+      }
       <div className='contenedor__tabla-scroll tamaño-tabla_250-400'>
         <table className='tabla'>
           <thead className='tabla-cabecera tabla-cabecera__tabla-scroll'>

@@ -219,7 +219,7 @@ function TablaAlumnos(props) {
           <BsPersonFillAdd />
           <span>Agregar Alumno</span>
         </Link>
-        <Link to={`${url}/alumnos-eliminados`} className='boton__verde-oscuro'>
+        <Link onClick={() => toast.error('Este apartado se deshabilitó temporalmente.')} className='boton__verde-oscuro'>
           Alumnos En Seguimiento
         </Link>
       </div>

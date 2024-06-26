@@ -18,6 +18,8 @@ import { v4 as uuid } from 'uuid';
 import { Toaster, toast } from 'sonner'
 
 function PerfilAlumno(props) {
+  const { datos, tipo } = props
+
   const { 
     foto, 
     idFoto,
@@ -51,7 +53,7 @@ function PerfilAlumno(props) {
     fechaIngreso, 
     codigoQR = false,
     idCodigoQR
-  } = props.datos
+  } = datos
 
   const informacionAlumno = [
     {
