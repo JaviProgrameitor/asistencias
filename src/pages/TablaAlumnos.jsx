@@ -20,6 +20,7 @@ import Indicadores from '../components/Indicadores/Indicadores'
 import IndicadoresMultiples from '../components/IndicadoresMultiples/IndicadoresMultiples';
 import CampoFecha from '../components/CampoFecha/CampoFecha';
 import TextArea from '../components/TextArea/TextArea';
+import Loader from '../components/Loader/Loader';
 
 import Modal from '@mui/material/Modal';
 
@@ -55,6 +56,8 @@ function TablaAlumnos(props) {
   const [ filtrarAlumnos, setFiltrarAlumnos ] = useState(filtrarPorIdioma)
   const [ modalEliminarAlumno, setModalEliminarAlumno ] = useState(false)
 
+  const [ activarLoader, setActivarLoader ] = useState(false)
+
   const url = useResolvedPath("").pathname
 
   const coloresAlumno = {
@@ -65,6 +68,8 @@ function TablaAlumnos(props) {
 
   //Todo: Función para eliminar alumnos de la base de datos
   async function eliminarAlumnos(alumno) {
+    setActivarLoader(true)
+
     const asistenciasAlumno = asistenciasEntrada.filter((asis) => asis.idPropietario == alumno.id)
     const justificantesEnEsperaAlumno = justificantes.filter(justi => justi.idPropietario == alumno.id)
     const pagosMensualidadesAlumno = pagosMensualidades.filter(pago => pago.idPropietario == alumno.id)
@@ -138,8 +143,10 @@ function TablaAlumnos(props) {
     await createDatabase(alumnosEliminadosURL, {datos})
 
     await deleteDatabase(alumnosURL, alumno.id)
+    resetValues()
     toast.success('El Alumno ha sido eliminado correctamente')
     setIdAlumno(false)
+    setActivarLoader(false)
   }
 
   //Todo: Función para buscar ALUMNOS por medio de nombres o apellidos
@@ -202,6 +209,11 @@ function TablaAlumnos(props) {
     }
   };
 
+  function resetValues() {
+    setMotivoBaja('')
+    setFechaBaja('')
+  }
+
   useEffect(() => {
     filtrarIdiomaAlumnos()
   },[idiomaSeleccionado, alumnos])
@@ -219,7 +231,7 @@ function TablaAlumnos(props) {
           <BsPersonFillAdd />
           <span>Agregar Alumno</span>
         </Link>
-        <Link onClick={() => toast.error('Este apartado se deshabilitó temporalmente.')} className='boton__verde-oscuro'>
+        <Link to={`${url}/alumnos-en-seguimiento`} className='boton__verde-oscuro'>
           Alumnos En Seguimiento
         </Link>
       </div>
@@ -421,6 +433,7 @@ function TablaAlumnos(props) {
                       onClick={() => {
                         eliminarAlumnos(perfilAlumno)
                         setModalEliminarAlumno(false)
+                        setPaso(0)
                       }}
                     >
                       Confirmar
@@ -430,6 +443,9 @@ function TablaAlumnos(props) {
           }
         </div>
       </Modal> 
+      <Loader
+        activarLoader={activarLoader}
+      />
     </div>
   )
 }

@@ -29,7 +29,7 @@ function TablaAlumnosEliminados(props) {
         </Link>
       </div>
       <h2 className='titulos-2'>Tabla de Alumnos En Seguimiento</h2>
-      {
+      {/* {
         idAlumno !== null && (
           <div>
             <Link to={`${url}/actividad-alumno`}>
@@ -40,7 +40,7 @@ function TablaAlumnosEliminados(props) {
             </Link>
           </div>
         )
-      }
+      } */}
       <div className='contenedor__tabla-scroll tamaño-tabla_250-400'>
         <table className='tabla'>
           <thead className='tabla-cabecera tabla-cabecera__tabla-scroll'>

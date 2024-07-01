@@ -161,7 +161,7 @@ function SistemaAsistencias() {
     const nuevaArray = []
     arrayElementos.map(elemento => {
       const alumnoEncontrado = alumnos.find(alumno => alumno.id === elemento.idPropietario)
-      //if(alumnoEncontrado === undefined) console.log(elemento)
+      //if(alumnoEncontrado !== undefined) console.log(elemento)
       if(alumnoEncontrado !== undefined) 
       {nuevaArray.push(
         {
