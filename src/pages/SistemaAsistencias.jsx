@@ -34,6 +34,9 @@ function SistemaAsistencias() {
   const [ alumnosEliminados, setAlumnosEliminados ] = useState([])
 
   function comprobarMensualidad(idioma, idiomaFecha, fechaIngreso, idAlumno) {
+    //Variables generales
+    const cantidadDiasProximoPago = 3
+
     //Variables del día actual
     const date = new Date()
     const año = date.getFullYear()
@@ -101,7 +104,7 @@ function SistemaAsistencias() {
         const pagoMili = new Date(proximo).getTime()
         const resto = Math.round((pagoMili - hoyMili) / diaMilisegundos)
 
-        if(resto <= 7) {
+        if(resto <= cantidadDiasProximoPago) {
           return `Faltan ${resto} días`
         }
 
@@ -119,7 +122,7 @@ function SistemaAsistencias() {
       else if(pagoMili > hoyMili) {
         const resto = Math.round((pagoMili - hoyMili) / diaMilisegundos)
 
-        if(resto <= 7) {
+        if(resto <= cantidadDiasProximoPago) {
           return `Faltan ${resto} días`
         }
 
