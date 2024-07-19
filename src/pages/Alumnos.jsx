@@ -26,6 +26,11 @@ function Alumnos(props) {
   const [ claveEstudiante, setClaveEstudiante ] = useState("")
   const [ coordenadasAlumno, setCoordenadasAlumno ] = useState(0)
 
+  //Estados Tabla de Alumnos
+  const [ palabraBusqueda, setPalabraBusqueda ] = useState('')
+  const [ idiomaSeleccionado, setIdiomaSeleccionado] = useState('General');
+  const [ estadoMensualidadSeleccionado, setEstadoMensualidadSeleccionado ] = useState('sin-estado')
+
   function actualizarDatos(datos) {
     if(datos === false) {
       setPerfilAlumno({})
@@ -63,6 +68,12 @@ function Alumnos(props) {
               idiomasImpartidos={idiomasImpartidos.map(idioma => idioma.nombre)}
               coordenadasAlumno={coordenadasAlumno}
               setCoordenadasAlumno={setCoordenadasAlumno}
+              palabraBusqueda={palabraBusqueda}
+              setPalabraBusqueda={setPalabraBusqueda}
+              idiomaSeleccionado={idiomaSeleccionado}
+              setIdiomaSeleccionado={setIdiomaSeleccionado}
+              estadoMensualidadSeleccionado={estadoMensualidadSeleccionado}
+              setEstadoMensualidadSeleccionado={setEstadoMensualidadSeleccionado}
             />
           } 
         />

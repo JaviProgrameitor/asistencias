@@ -30,6 +30,7 @@
 
   padding-bottom: 25px;
   border-bottom: 3px solid white;
+  font-size: 12px;
 }
 
 .foto-perfil-admin {
@@ -44,8 +45,8 @@
 
 .aside-activo .foto-perfil-admin {
   transition: .5s;
-  width: 150px;
-  height: 150px;
+  width: 70px;
+  height: 70px;
 }
 
 .info-admin {
@@ -82,7 +83,7 @@
 .enlaces {
   box-sizing: border-box;
   width: 100%;
-  padding: 15px 0 15px 52px;
+  padding: 8px 0 8px 52px;
   color: white;
   text-decoration: none;
 }
@@ -110,39 +111,13 @@
 }
 
 .enlaces span {
-  font-size: 18px;
+  font-size: 15px;
   margin-left: 50px;
 }
 
 .aside-activo .enlaces span {
   display: inline;
   transition: .5s;
-}
-
-@media (min-width: 1200px) {
-  .perfil-admin {
-    margin-top: 0;
-  }
-
-  .aside-activo .foto-perfil-admin {
-    transition: .5s;
-    width: 70px;
-    height: 70px;
-  }
-
-  .aside-activo .perfil-admin {
-    font-size: 12px;
-  }
-
-  .enlaces {
-    padding: 8px 0 8px 52px;
-  }
-
-  .enlaces span {
-    font-size: 15px;
-  }
-
-
 }
 
 @media (max-width: 800px) {

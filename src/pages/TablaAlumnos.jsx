@@ -41,7 +41,13 @@ function TablaAlumnos(props) {
     pagosMensualidades,
     idiomasImpartidos,
     coordenadasAlumno,
-    setCoordenadasAlumno
+    setCoordenadasAlumno,
+    palabraBusqueda,
+    setPalabraBusqueda,
+    idiomaSeleccionado,
+    setIdiomaSeleccionado,
+    estadoMensualidadSeleccionado,
+    setEstadoMensualidadSeleccionado
   } = props
 
   const contenedorTablaAlumnos = useRef(null);
@@ -50,10 +56,9 @@ function TablaAlumnos(props) {
   const [ motivoBaja, setMotivoBaja ] = useState('')
   const [ fechaBaja, setFechaBaja ] = useState('')
 
-  const [ palabraBusqueda, setPalabraBusqueda ] = useState('')
-  const [ idiomaSeleccionado, setIdiomaSeleccionado] = useState('General');
   const [ filtrarPorIdioma, setFiltrarPorIdioma ] = useState(alumnos)
   const [ filtrarAlumnos, setFiltrarAlumnos ] = useState(filtrarPorIdioma)
+  const [ filtrarEstadoMensualidad, setFiltrarEstadoMensualidad ] = useState(filtrarAlumnos)
   const [ modalEliminarAlumno, setModalEliminarAlumno ] = useState(false)
 
   const [ activarLoader, setActivarLoader ] = useState(false)
@@ -214,6 +219,21 @@ function TablaAlumnos(props) {
     setFechaBaja('')
   }
 
+  function filtroEstadoMensualidad() {
+    let alumnosFiltrados = []
+
+    if(estadoMensualidadSeleccionado == 'sin-estado') {
+      setFiltrarEstadoMensualidad(filtrarAlumnos)
+      return
+    }
+
+    for(let i = 0; i < filtrarAlumnos.length; i++) {
+      if(filtrarAlumnos[i].clasesMensualidad.includes(estadoMensualidadSeleccionado)) alumnosFiltrados.push(filtrarAlumnos[i])
+    }
+
+    setFiltrarEstadoMensualidad(alumnosFiltrados)
+  }
+
   useEffect(() => {
     filtrarIdiomaAlumnos()
   },[idiomaSeleccionado, alumnos])
@@ -221,6 +241,10 @@ function TablaAlumnos(props) {
   useEffect(() => {
     busqueda(palabraBusqueda)
   },[filtrarPorIdioma, palabraBusqueda])
+
+  useEffect(() => {
+    filtroEstadoMensualidad()
+  }, [filtrarAlumnos, estadoMensualidadSeleccionado])
 
   return (
     <div>
@@ -253,14 +277,20 @@ function TablaAlumnos(props) {
           <DemostracionColores 
             color={coloresAlumno.colorFondoPago}
             texto="Día de Pago"
+            estadoMensualidadSeleccionado={estadoMensualidadSeleccionado}
+            setEstadoMensualidadSeleccionado={setEstadoMensualidadSeleccionado}
           />
           <DemostracionColores 
             color={coloresAlumno.colorFondoCercaPago}
             texto="Proximo Pago"
+            estadoMensualidadSeleccionado={estadoMensualidadSeleccionado}
+            setEstadoMensualidadSeleccionado={setEstadoMensualidadSeleccionado}
           />
           <DemostracionColores 
             color={coloresAlumno.colorFondoDeuda}
             texto="No ha pagado"
+            estadoMensualidadSeleccionado={estadoMensualidadSeleccionado}
+            setEstadoMensualidadSeleccionado={setEstadoMensualidadSeleccionado}
           />
         </div>
         {
@@ -312,7 +342,7 @@ function TablaAlumnos(props) {
           </thead>
           <tbody className='tabla-cuerpo'>
             {
-              filtrarAlumnos.map((alumno, index) => 
+              filtrarEstadoMensualidad.map((alumno, index) => 
                 <FilasAlumnos 
                   datos={alumno}
                   key={index}
@@ -320,6 +350,7 @@ function TablaAlumnos(props) {
                   actualizarDatos={actualizarDatos}
                   comprobarMensualidad={true}
                   getCoordinates={getCoordinates}
+                  activo={alumno.id == idAlumno ? 'activo' : 'inactivo'}
                 />
               )
             }

@@ -1,11 +1,21 @@
+.container-demostracion-color {
+  border-radius: 5px;
+  padding: 5px;
+  box-sizing: border-box;
+  transition: 500ms;
+}
+
 .container-demostracion-color__caja-color {
   width: 25px;
   height: 25px;
   border-radius: 50%;
   border: 2px solid black;
-  cursor: pointer;
 }
 
 .container-demostracion-color__caja-texto {
   font-family: 'Fredoka', sans-serif;
+}
+
+.color-activo, .container-demostracion-color:hover {
+  background-color: #c0ffa7;
 }

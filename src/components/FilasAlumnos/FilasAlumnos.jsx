@@ -10,6 +10,7 @@ function FilasAlumnos(props) {
     datos, 
     comprobarMensualidad = false, 
     getCoordinates,
+    activo
   } = props
   const { 
     nombre, 
@@ -24,12 +25,6 @@ function FilasAlumnos(props) {
   } = datos
 
   const filaRef = useRef(null)
-
-  const [ activo, setActivo ] = useState("")
-
-  useEffect(() => {
-    id === idAlumno ? setActivo('activo') : setActivo('inactivo')
-  }, [idAlumno])
 
   return (
     <tr
