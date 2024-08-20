@@ -7,6 +7,7 @@ import { BsPersonFillAdd } from 'react-icons/bs'
 import { IoMdLocate } from "react-icons/io";
 import { FaEdit } from 'react-icons/fa'
 import { Link, useResolvedPath } from "react-router-dom"
+import TooltipComplete from '../components/TooltipComplete/TooltipComplete';
 
 import { deleteStorage } from '../firebase';
 
@@ -79,13 +80,6 @@ function TablaAlumnos(props) {
     const justificantesEnEsperaAlumno = justificantes.filter(justi => justi.idPropietario == alumno.id)
     const pagosMensualidadesAlumno = pagosMensualidades.filter(pago => pago.idPropietario == alumno.id)
 
-    //Documentos
-    // deleteStorage(`alumnos/${alumno.idFoto}`)
-    // deleteStorage(`documentos/${alumno.idActaNacimiento}`)
-    // deleteStorage(`documentos/${alumno.idIne}`)
-    // deleteStorage(`documentos/${alumno.idCurp}`)
-    // deleteStorage(`documentos/${alumno.idComprobantePagoInicial}`)
-
     //Todo: Eliminar todas las asistencias del alumno
     if(asistenciasAlumno.length > 0) {
       for(let i = 0; i < asistenciasAlumno.length; i++) {
@@ -145,7 +139,7 @@ function TablaAlumnos(props) {
       motivoEliminacion: motivoBaja
     }
 
-    await createDatabase(alumnosEliminadosURL, {datos})
+    await createDatabase(alumnosEliminadosURL, {datos, id: alumno.id})
 
     await deleteDatabase(alumnosURL, alumno.id)
     resetValues()
@@ -296,24 +290,51 @@ function TablaAlumnos(props) {
         {
           idAlumno !== false && (
             <div>
-              <Link to={`${url}/actividad-alumno`}>
-                <FcCalendar className='alumno-completo icon-alumno' />
-              </Link>
-              <Link to={`${url}/pagos-alumnos`}>
-                <FcCurrencyExchange className='alumno-completo icon-alumno' />
-              </Link>
-              <Link to={`${url}/perfil/${idAlumno}`}>
-                <FcContacts className='alumno-completo icon-alumno' />
-              </Link>
-              <Link to={`${url}/editar-alumno`}>
-                <FaEdit className="alumno-edit icon-alumno" />
-              </Link>
-              <AiFillDelete 
-                className='alumno-delete icon-alumno'
-                onClick={() => {
-                  if(puestoAdmin === 'Director(a)') setModalEliminarAlumno(true)
-                  else toast.error('No tienes acceso a esta función.')
-                }}
+              <TooltipComplete 
+                titulo='Actividad Alumno(a)'
+                body={
+                  <Link to={`${url}/actividad-alumno`}>
+                    <FcCalendar className='alumno-completo icon-alumno' />
+                  </Link>
+                }
+              />
+              <TooltipComplete 
+                titulo='Pagos'
+                body={
+                  <Link to={`${url}/pagos-alumnos`}>
+                    <FcCurrencyExchange className='alumno-completo icon-alumno' />
+                  </Link>
+                }
+              />
+              <TooltipComplete 
+                titulo='Perfil Alumno(a)'
+                body={
+                  <Link to={`${url}/perfil/${idAlumno}`}>
+                    <FcContacts className='alumno-completo icon-alumno' />
+                  </Link>
+                }
+              />
+              <TooltipComplete 
+                titulo='Editar Alumno(a)'
+                body={
+                  <Link to={`${url}/editar-alumno`}>
+                    <FaEdit className="alumno-edit icon-alumno" />
+                  </Link>
+                }
+              />
+              <TooltipComplete 
+                titulo='Eliminar'
+                body={
+                  <span>
+                    <AiFillDelete 
+                    className='alumno-delete icon-alumno'
+                    onClick={() => {
+                      if(puestoAdmin === 'Director(a)') setModalEliminarAlumno(true)
+                      else toast.error('No tienes acceso a esta función.')
+                    }}
+                  />
+                  </span>
+                }
               />
             </div>
           )
@@ -360,7 +381,11 @@ function TablaAlumnos(props) {
       <Modal
         className='modal__superior'
         open={modalEliminarAlumno}
-        onClose={() => setModalEliminarAlumno(false)}
+        onClose={() => {
+          setModalEliminarAlumno(false)
+          setPaso(0)
+          resetValues()
+        }}
       >
         <div className='modal__por-defecto modal__contenido scroll-personalizado'>
           {
@@ -423,7 +448,10 @@ function TablaAlumnos(props) {
                   <div className='contenedor__centro-separacion'>
                     <button 
                       className='boton__verde-oscuro' 
-                      onClick={() => setModalEliminarAlumno(false)}
+                      onClick={() => {
+                        resetValues()
+                        setModalEliminarAlumno(false)
+                      }}
                     >
                       Cancelar
                     </button>
@@ -431,13 +459,20 @@ function TablaAlumnos(props) {
                       className='boton__blanco' 
                       onClick={() => setPaso(1)}
                     >
-                      Eliminar
+                      Continuar
                     </button>
                   </div>
                 </>
               : <>
-                  <p className='advertencia__texto'>LLena la siguiente información</p>
-                  <form>
+                  <p className='advertencia__texto'>Llena la siguiente información</p>
+                  <form
+                    onSubmit={() => {
+                      eliminarAlumnos(perfilAlumno)
+                      setModalEliminarAlumno(false)
+                      setPaso(0)
+                      resetValues()
+                    }}
+                  >
                     <CampoFecha 
                       titulo='Fecha de Eliminación'
                       valor={fechaBaja}
@@ -451,25 +486,22 @@ function TablaAlumnos(props) {
                       cambiarValor={setMotivoBaja}
                       className='campo-verde-claro'
                     />
+                    <div className='contenedor__centro-separacion'>
+                      <button 
+                        className='boton__verde-oscuro' 
+                        onClick={() => {
+                          setPaso(0)
+                        }}
+                      >
+                        Regresar
+                      </button>
+                      <button 
+                        className='boton__blanco' 
+                      >
+                        Confirmar
+                      </button>
+                    </div>
                   </form>
-                  <div className='contenedor__centro-separacion'>
-                    <button 
-                      className='boton__verde-oscuro' 
-                      onClick={() => setPaso(0)}
-                    >
-                      Regresar
-                    </button>
-                    <button 
-                      className='boton__blanco' 
-                      onClick={() => {
-                        eliminarAlumnos(perfilAlumno)
-                        setModalEliminarAlumno(false)
-                        setPaso(0)
-                      }}
-                    >
-                      Confirmar
-                    </button>
-                  </div>
                 </>
           }
         </div>

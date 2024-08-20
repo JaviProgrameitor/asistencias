@@ -18,6 +18,7 @@ function AlumnosEliminados(props) {
           element={
             <TablaAlumnosEliminados 
               alumnosEliminados={alumnosEliminados}
+              alumnoSeleccionado={idAlumno != null ? alumnosEliminados.find(alumno => alumno.id === idAlumno) : {}}
               idAlumno={idAlumno}
               setIdAlumno={setIdAlumno}
             />

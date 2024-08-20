@@ -106,7 +106,7 @@ function Alumnos(props) {
               idAlumno={idAlumno} 
               datos={alumnos.find(alumno => alumno.id == idAlumno)} 
               actualizarDatos={actualizarDatos}
-              tipo='activo'
+              estadoAlumno = 'activo'
             />
           } 
         />

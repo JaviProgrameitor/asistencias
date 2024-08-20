@@ -18,7 +18,7 @@ import { v4 as uuid } from 'uuid';
 import { Toaster, toast } from 'sonner'
 
 function PerfilAlumno(props) {
-  const { datos, tipo } = props
+  const { datos, estadoAlumno = 'inactivo' } = props
 
   const { 
     foto, 
@@ -109,6 +109,11 @@ function PerfilAlumno(props) {
   const [ codigoQRLocal, setcodigoQRLocal ] = useState(codigoQR)
   const [ procesoIniciado, setProcesoIniciado ] = useState(false)
 
+  const linksback = {
+    activo: '/sistema-asistencias/panel-control/alumnos',
+    inactivo: '/sistema-asistencias/panel-control/alumnos/alumnos-en-seguimiento'
+  }
+
   const actualizarAlumno = async (blob) => {
     try {
       const idCodigoQR = uuid()
@@ -189,23 +194,27 @@ function PerfilAlumno(props) {
       />
       <div className='container-perfil-alumno'>
         <div className='contenedor__todo-principio'>
-          <Link to={'/sistema-asistencias/panel-control/alumnos'}>
+          <Link to={linksback[estadoAlumno]}>
             <FaArrowCircleLeft className='flecha-regresar icon-40' />
           </Link>
         </div>
-        <div className='justify-end mb-15'>
-          <button 
-            className={`${!codigoQRLocal ? 'boton__blanco' : 'boton__disabled'}`}
-            disabled={codigoQRLocal}
-            onClick={generateQRCode}
-          >
-            {
-              !procesoIniciado
-                ? 'Generar Código QR'
-                : <span className='element-loader'></span>
-            }
-          </button>
-        </div>
+        {
+          estadoAlumno == 'activo' && (
+            <div className='justify-end mb-15'>
+              <button 
+                className={`${!codigoQRLocal ? 'boton__blanco' : 'boton__disabled'}`}
+                disabled={codigoQRLocal}
+                onClick={generateQRCode}
+              >
+                {
+                  !procesoIniciado
+                    ? 'Generar Código QR'
+                    : <span className='element-loader'></span>
+                }
+              </button>
+            </div>
+          )
+        }
         <div className='perfil-alumno__personal'>
           <div className='contenedor-_foto-alumno'>
             <div className='personal__fondo'>
