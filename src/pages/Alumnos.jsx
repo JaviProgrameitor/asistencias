@@ -138,6 +138,7 @@ function Alumnos(props) {
           element={
             <AlumnosEliminados 
               alumnosEliminados={alumnosEliminados}
+              puestoAdmin={puestoAdmin}
             />
           } 
         />

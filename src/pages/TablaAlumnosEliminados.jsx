@@ -22,7 +22,7 @@ import Modal from '@mui/material/Modal';
 import { Toaster, toast } from 'sonner'
 
 function TablaAlumnosEliminados(props) {
-  const { alumnosEliminados, idAlumno, setIdAlumno, alumnoSeleccionado } = props
+  const { alumnosEliminados, idAlumno, setIdAlumno, alumnoSeleccionado, puestoAdmin } = props
 
   const [ estadoModal, setEstadoModal ] = useState(false)
   const [ accionAlumno, setAccionAlumno ] = useState(0)
@@ -134,8 +134,12 @@ function TablaAlumnosEliminados(props) {
                   <IoPersonAddSharp 
                     className="alumno-readd icon-alumno"
                     onClick={() => {
-                      setAccionAlumno(0)
-                      setEstadoModal(true)
+                      if(puestoAdmin === 'Director(a)') {
+                        setAccionAlumno(0)
+                        setEstadoModal(true)
+                      }
+                      else toast.error('No tienes acceso a esta función.')
+                      
                     }}
                   />
                 </span>
@@ -148,8 +152,12 @@ function TablaAlumnosEliminados(props) {
                   <AiFillDelete 
                     className='alumno-delete icon-alumno'
                     onClick={() => {
-                      setAccionAlumno(1)
-                      setEstadoModal(true)
+                      if(puestoAdmin === 'Director(a)') {
+                        setAccionAlumno(1)
+                        setEstadoModal(true)
+                      }
+                      else toast.error('No tienes acceso a esta función.')
+                      
                     }}
                   />
                 </span>
