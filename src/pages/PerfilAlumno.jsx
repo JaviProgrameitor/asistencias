@@ -8,12 +8,16 @@ import IndicadoresMultiples from '../components/IndicadoresMultiples/Indicadores
 import FotoDemostracion from '../components/FotoDemostracion/FotoDemostracion';
 import { useEffect, useState } from 'react';
 
+import { format, iso8601 } from "@formkit/tempo"
+
 import { createQRCode } from '../services/qr-code'
 
 import { createStorageBlob, deleteStorage, getURLStorage } from '../firebase'
 import { updateDatabase, alumnosURL } from '../services/service-db'
 
 import { v4 as uuid } from 'uuid';
+
+import Modal from '@mui/material/Modal';
 
 import { Toaster, toast } from 'sonner'
 
@@ -52,7 +56,11 @@ function PerfilAlumno(props) {
     nivelIdioma, 
     fechaIngreso, 
     codigoQR = false,
-    idCodigoQR
+    idCodigoQR,
+    nombreTutor = '',
+    apellidoTutor = '',
+    correoTutor = '',
+    numeroTelefonoTutor = ''
   } = datos
 
   const informacionAlumno = [
@@ -62,7 +70,7 @@ function PerfilAlumno(props) {
     },
     {
       titulo: 'Fecha de Nacimiento',
-      valor: fechaNacimiento
+      valor: format(fechaNacimiento, 'long')
     },
     {
       titulo: 'Correo',
@@ -106,8 +114,25 @@ function PerfilAlumno(props) {
     }
   ]
 
+  const informacionTutor = [
+    {
+      titulo: 'Nombre Completo',
+      valor: `${nombreTutor} ${apellidoTutor}`
+    },
+    {
+      titulo: 'Número de Teléfono',
+      valor: numeroTelefonoTutor
+    },
+    {
+      titulo: 'Correo Electrónico',
+      valor: correoTutor
+    },
+  ]
+
   const [ codigoQRLocal, setcodigoQRLocal ] = useState(codigoQR)
   const [ procesoIniciado, setProcesoIniciado ] = useState(false)
+
+  const [ modalFotoEstado, setModalFotoEstado ] = useState('')
 
   const linksback = {
     activo: '/sistema-asistencias/panel-control/alumnos',
@@ -234,6 +259,24 @@ function PerfilAlumno(props) {
             }
           </div>
         </div>
+        {
+          nombreTutor !== '' && (
+            <div className='perfil-alumno__personal'>
+              <h2 className='titulos-2'>Información Padre o Tutor</h2>
+              <div>
+                {
+                  informacionTutor.map((info, index) => 
+                    <Indicadores 
+                      titulo={info.titulo} 
+                      respuesta={info.valor} 
+                      key={index} 
+                    />
+                  )
+                }
+              </div>
+            </div>
+          )
+        }
         <div className='perfil-alumno__centro-idiomas'>
           <h2 className='titulos-2'>Información Centro de Idiomas</h2>
           <div>
@@ -255,7 +298,13 @@ function PerfilAlumno(props) {
             />
             <IndicadoresMultiples 
               titulo={'Fecha de Ingreso'} 
-              respuesta={fechaIngreso} 
+              respuesta={
+                fechaIngreso.map(fecha => {
+                  if(iso8601(fecha)) return format(fecha, 'long')
+
+                  return fecha
+                })
+              } 
             />
             <IndicadoresMultiples 
               titulo={'Fecha de Pago'} 
@@ -271,24 +320,32 @@ function PerfilAlumno(props) {
               imagen={actaNacimiento}
               documento='Acta de Nacimiento'
               nombreDocumento={`Acta-nacimiento__${nombre}`}
+              mostrarEnModal
+              setModalFotoEstado={setModalFotoEstado}
             />
             <FotoDemostracion 
               alumno={nombre}
               imagen={ine}
               documento='Ine'
               nombreDocumento={`Ine__${nombre}`}
+              mostrarEnModal
+              setModalFotoEstado={setModalFotoEstado}
             />
             <FotoDemostracion 
               alumno={nombre}
               imagen={curp}
               documento='Curp'
               nombreDocumento={`Curp__${nombre}`}
+              mostrarEnModal
+              setModalFotoEstado={setModalFotoEstado}
             />
             <FotoDemostracion 
               alumno={nombre}
               imagen={comprobantePagoInicial}
               documento='Comprobante de Pago Inicial'
               nombreDocumento={`Comprobante-pago-inicial__${nombre}`}
+              mostrarEnModal
+              setModalFotoEstado={setModalFotoEstado}
             />
             {
               codigoQRLocal && (
@@ -303,6 +360,18 @@ function PerfilAlumno(props) {
           </div>
         </div>
       </div>
+      <Modal
+        className='modal__superior'
+        open={modalFotoEstado !== '' ? true : false}
+        onClose={() => setModalFotoEstado('')}
+      >
+        <img 
+          className='foto-prueba centrar__contenido' 
+          src={modalFotoEstado} 
+          alt='Foto de la prueba del justificante'
+          onClick={() => setModalFotoEstado('')}
+        />
+      </Modal>
     </div>
   )
 }

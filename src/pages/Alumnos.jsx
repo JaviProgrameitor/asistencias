@@ -92,6 +92,7 @@ function Alumnos(props) {
             <EditarAlumno 
               idAlumno={idAlumno} 
               datos={perfilAlumno}
+              idiomasImpartidos={idiomasImpartidos.map(idioma => idioma.nombre)}
               actualizarDatosAlumno={actualizarDatos}
               asistenciasEntrada={asistenciasEntrada.filter((asis) => asis.idPropietario == idAlumno)}
               justificantes={justificantes.filter(justi => justi.idPropietario == idAlumno)}

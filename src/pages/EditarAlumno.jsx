@@ -1,6 +1,6 @@
 import '../assets/css/AgregarAlumno.css'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import { FaArrowCircleLeft } from 'react-icons/fa'
 import { IoIosAddCircle } from 'react-icons/io'
@@ -8,16 +8,24 @@ import { TiDelete } from 'react-icons/ti'
 
 import Campo from '../components/Campo/Campo'
 import CampoFecha from '../components/CampoFecha/CampoFecha'
+import CampoLectura from '../components/CampoLectura/CampoLectura'
+import CampoEmail from '../components/CampoEmail/CampoEmail'
 import ListaOpciones from '../components/ListaOpciones/ListaOpciones'
 import FotoAlumno from '../components/FotoAlumno/FotoAlumno'
 import Loader from '../components/Loader/Loader'
 
+import { parse, isBefore, diffYears } from "@formkit/tempo"
+
 import { createStorage, deleteStorage, getURLStorage } from '../firebase'
 import { updateDatabase, alumnosURL } from '../services/service-db'
+
+import { opcionesFechasPagos, opcionesModalidades, opcionesNiveles, opcionesNivelesAcademicos } from '../utils/functions/cis'
 
 import { Toaster, toast } from 'sonner'
 
 function EditarAlumno(props) {
+  const { idiomasImpartidos } = props
+
   const { 
     idAlumno, 
     asistenciasEntrada,
@@ -55,13 +63,18 @@ function EditarAlumno(props) {
     correo, 
     nivelAcademico, 
     nivelIdioma, 
-    fechaIngreso 
+    fechaIngreso,
+    nombreTutor = '',
+    apellidoTutor = '',
+    correoTutor = '',
+    numeroTelefonoTutor = ''
   } = props.datos
 
   const [ fotoPerfilAlumno, setFotoPerfilAlumno ] = useState(foto)
   const [ nombreAlumno, setNombreAlumno ] = useState(nombre)
   const [ apellidoAlumno, setApellidoAlumno ] = useState(apellido)
   const [ fechaNacimientoAlumno, setFechaNacimientoAlumno ] = useState(fechaNacimiento)
+  const [ edadAlumno, setEdadAlumno ] = useState('')
   const [ correoAlumno, setCorreoAlumno ] = useState(correo)
   const [ numeroTelefonoAlumno, setNumeroTelefonoAlumno ] = useState(numeroTelefono)
   const [ nivelAcademicoAlumno, setNivelAcademicoAlumno ] = useState(nivelAcademico)
@@ -76,6 +89,11 @@ function EditarAlumno(props) {
   const [ fotoIne, setFotoIne ] = useState(ine)
   const [ fotoCurp, setFotoCurp ] = useState(curp)
   const [ fotoComprobantePagoInicial, setFotoComprobantePagoInicial ] = useState(comprobantePagoInicial)
+
+  const [ nombreTutorAlumno, setNombreTutorAlumno ] = useState(nombreTutor)
+  const [ apellidoTutorAlumno, setApellidoTutorAlumno ] = useState(apellidoTutor)
+  const [ numeroTelefonoTutorAlumno, setNumeroTelefonoTutorAlumno ] = useState(numeroTelefonoTutor)
+  const [ correoTutorAlumno, setCorreoTutorAlumno ] = useState(correoTutor)
 
   const [ claveEstudianteAlumno, setClaveEstudianteAlumno ] = useState(claveEstudiante)
   const [ idiomaAprendizajeAlumno, setIdiomaAprendizajeAlumno ] = useState(idiomaAprendizaje)
@@ -99,37 +117,6 @@ function EditarAlumno(props) {
   const navigate = useNavigate()
   
   const [ activarLoader, setActivarLoader ] = useState(false)
-
-  const opcionesNivelesAcademicos = [
-    'Primaria',
-    'Secundaria',
-    'Bachillerato',
-    'Educación Superior'
-  ]
-
-  const opcionesIdiomas = [
-    'Inglés',
-    'Francés',
-    'Aleman'
-  ]
-
-  const opcionesModalidades = [
-    'Presencial',
-    'En linea'
-  ]
-
-  const opcionesNiveles = [
-    'A1',
-    'A2',
-    'B1',
-    'B2',
-    'C1',
-    'C2'
-  ]
-
-  const opcionesFechasPagos = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
-  ]
 
   function agregarIdioma() {
     setIdiomaAprendizajeAlumno([...idiomaAprendizajeAlumno, ''])
@@ -166,6 +153,21 @@ function EditarAlumno(props) {
 
     const actualizados = nuevosValores.splice(index, 1, valor)
     funcion(nuevosValores)
+  }
+
+  function validarFechaNacimiento(fecha) {
+    if(fecha !== '') {
+      const fechaNacimiento = parse(fecha)
+      const fechaActual = new Date()
+
+      if(isBefore(fechaNacimiento, fechaActual) ) setFechaNacimientoAlumno(fecha)
+      else {
+        setFechaNacimientoAlumno('')
+        toast.error('Fecha invalida')
+      }
+    }
+
+    else setFechaNacimientoAlumno('')
   }
 
   async function editarAlumnos(e) {
@@ -465,6 +467,17 @@ function EditarAlumno(props) {
     }
   }
 
+  useEffect(() => {
+    if(fechaNacimientoAlumno !== '') {
+      const fechaNacimiento = parse(fechaNacimientoAlumno)
+      const fechaActual = new Date()
+
+      setEdadAlumno(diffYears(fechaActual, fechaNacimiento))
+    }
+
+    else setEdadAlumno('')
+  }, [fechaNacimientoAlumno])
+
   return (
     <div>
       <div className="container-agregar-alumno">
@@ -508,6 +521,11 @@ function EditarAlumno(props) {
               titulo='Selecciona la Fecha de Nacimiento' 
               cambiarValor={setFechaNacimientoAlumno} 
               valor={fechaNacimientoAlumno} 
+            />
+            <CampoLectura 
+              titulo='Edad'
+              valor={edadAlumno}
+              placeholder='Edad del alumno'
             />
             <Campo 
               titulo='Número de Telefono' 
@@ -608,6 +626,37 @@ function EditarAlumno(props) {
               required={false}
               classInput='imagen__comprobante-pago-inicial'
             />
+            {
+              edadAlumno !== '' && edadAlumno < 18 && (
+                <>
+                  <h4 className='formulario__subtitulo'>Información del Padre o Tutor</h4>
+                  <Campo 
+                    titulo='Nombre(s)' 
+                    placeholder='Ingresa el nombre del padre o tutor del alumno' 
+                    cambiarValor={setNombreTutorAlumno} 
+                    valor={nombreTutorAlumno} 
+                  />
+                  <Campo 
+                    titulo='Apellidos' 
+                    placeholder='Ingresa los apellidos del padre o tutor del alumno' 
+                    cambiarValor={setApellidoTutorAlumno} 
+                    valor={apellidoTutorAlumno} 
+                  />
+                  <Campo 
+                    titulo='Número de Teléfono' 
+                    placeholder='Ingresa el número de teléfono del padre o tutor del alumno' 
+                    cambiarValor={setNumeroTelefonoTutorAlumno} 
+                    valor={numeroTelefonoTutorAlumno} 
+                  />
+                  <CampoEmail 
+                    titulo='Correo Electrónico' 
+                    placeholder='Ingresa el correo electrónico del padre o tutor del alumno' 
+                    cambiarValor={setCorreoTutorAlumno} 
+                    valor={correoTutorAlumno} 
+                  />
+                </>
+              )
+            }
             <h4 className='formulario__subtitulo'>Información del Centro de Idiomas</h4>
             <Campo
               titulo='Clave del Estudiante'
@@ -636,7 +685,7 @@ function EditarAlumno(props) {
                       placeholder='Ingresa el idioma de aprendizaje'
                       valor={idiomaAprendizajeAlumno[index]}
                       cambiarValor={actualizarDatos}
-                      opciones={opcionesIdiomas}
+                      opciones={idiomasImpartidos}
                       indice={index}
                       variable={idiomaAprendizajeAlumno}
                       funcion={setIdiomaAprendizajeAlumno}
