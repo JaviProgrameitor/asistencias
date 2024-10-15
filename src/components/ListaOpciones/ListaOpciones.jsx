@@ -1,12 +1,16 @@
 import '../../assets/css/components/ListaOpciones.css'
 
 function ListaOpciones(props) {
-  const { titulo, placeholder, valor, cambiarValor, opciones, indice, variable, funcion, className } = props
+  const { titulo, placeholder, valor, cambiarValor, opciones, indice, variable, funcion, className, required = false } = props
 
   return (
     <div className={`lista-opciones ${className}`}>
       <label>{titulo}</label>
-      <select required value={valor} onChange={(e) => cambiarValor(e.target.value, indice, variable, funcion)} >
+      <select 
+        required={required} 
+        value={valor} 
+        onChange={(e) => cambiarValor(e.target.value, indice, variable, funcion)} 
+      >
         <option value="" disabled defaultValue="" hidden>{placeholder}</option>
         {
           opciones.map((opcion, index) => {

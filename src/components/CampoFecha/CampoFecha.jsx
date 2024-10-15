@@ -4,7 +4,7 @@ import { iso8601 } from "@formkit/tempo"
 import { Toaster, toast } from 'sonner'
 
 function CampoFecha(props) {
-  const { titulo, valor, cambiarValor, className='', variable, funcion, indice } = props
+  const { titulo, valor, cambiarValor, className = '', variable, funcion, indice, required = false } = props
 
   return (
     <div className={`campo ${className}`}>
@@ -16,7 +16,7 @@ function CampoFecha(props) {
       <label>{titulo}</label>
       <input 
         type="date" 
-        required 
+        required={required}
         value={valor} 
         onChange={
           (e) => {

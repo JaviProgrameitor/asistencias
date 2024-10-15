@@ -29,7 +29,7 @@ import { v4 as uuid } from 'uuid';
 function AgregarAlumno(props) {
   const { alumnos, idiomasImpartidos } = props
 
-  const [ fotoPerfilAlumno, setFotoPerfilAlumno ] = useState()
+  const [ fotoPerfilAlumno, setFotoPerfilAlumno ] = useState('')
   const [ nombreAlumno, setNombreAlumno ] = useState('')
   const [ apellidoAlumno, setApellidoAlumno ] = useState('')
   const [ fechaNacimientoAlumno, setFechaNacimientoAlumno ] = useState('')
@@ -183,25 +183,43 @@ function AgregarAlumno(props) {
       const identificadorAleatorio5 = uuid()
 
       const storageRef = `alumnos/${identificadorAleatorio}`
-      await createStorage(storageRef, fotoPerfilAlumno)
-
       const storageRefActa = `documentos/${identificadorAleatorio2}`
-      await createStorage(storageRefActa, fotoActaNacimiento)
-
       const storageRefIne = `documentos/${identificadorAleatorio3}`
-      await createStorage(storageRefIne, fotoIne)
-
       const storageRefCurp = `documentos/${identificadorAleatorio4}`
-      await createStorage(storageRefCurp, fotoCurp)
-
       const storageRefComPagoIni = `documentos/${identificadorAleatorio5}`
-      await createStorage(storageRefComPagoIni, fotoComprobantePagoInicial)
-    
-      const foto = await getURLStorage(storageRef)
-      const actaNacimiento = await getURLStorage(storageRefActa)
-      const ine = await getURLStorage(storageRefIne)
-      const curp = await getURLStorage(storageRefCurp)
-      const comprobantePagoInicial = await getURLStorage(storageRefComPagoIni)
+
+      let foto = null;
+      let actaNacimiento = null;
+      let ine = null;
+      let curp = null;
+      let comprobantePagoInicial = null;
+      
+      //Validar si los documentos se ingresaron
+      if(fotoPerfilAlumno){
+        await createStorage(storageRef, fotoPerfilAlumno)
+        foto = await getURLStorage(storageRef)
+      }
+
+      if(fotoActaNacimiento) {
+        await createStorage(storageRefActa, fotoActaNacimiento)
+        actaNacimiento = await getURLStorage(storageRefActa)
+      }
+
+      if(fotoIne) {
+        await createStorage(storageRefIne, fotoIne)
+        ine = await getURLStorage(storageRefIne)
+      }
+
+      if(fotoCurp) {
+        await createStorage(storageRefCurp, fotoCurp)
+        curp = await getURLStorage(storageRefCurp)
+      }
+
+      if(fotoComprobantePagoInicial) {
+        await createStorage(storageRefComPagoIni, fotoComprobantePagoInicial)
+        comprobantePagoInicial = await getURLStorage(storageRefComPagoIni)
+      }
+
       const idFoto = identificadorAleatorio;
       const idActaNacimiento = identificadorAleatorio2
       const idIne = identificadorAleatorio3
@@ -271,7 +289,6 @@ function AgregarAlumno(props) {
       const datosAuth = {
         email: correo,
         password: contrasena,
-        photoURL: foto,
         displayName: `${nombre} ${apellido}`
       }
 
@@ -319,7 +336,6 @@ function AgregarAlumno(props) {
               tipo={false}
               foto={fotoApoyo}
               setFoto={setFotoApoyo}
-              required
               classInput='imagen__foto-perfil'
             />
             <Campo 
@@ -327,12 +343,14 @@ function AgregarAlumno(props) {
               placeholder='Ingresa los nombres del alumno' 
               cambiarValor={setNombreAlumno} 
               valor={nombreAlumno} 
+              required
             />
             <Campo 
               titulo='Apellido' 
               placeholder='Ingresa los apellidos del alumno' 
               cambiarValor={setApellidoAlumno} 
               valor={apellidoAlumno} 
+              required
             />
             <CampoFecha 
               titulo='Selecciona la Fecha de Nacimiento' 
@@ -419,7 +437,6 @@ function AgregarAlumno(props) {
               tipo={false}
               foto={fotoApoyoActaNacimiento}
               setFoto={setFotoApoyoActaNacimiento}
-              required
               classInput='imagen__acta-nacimiento'
             />
             <FotoAlumno 
@@ -430,7 +447,6 @@ function AgregarAlumno(props) {
               tipo={false}
               foto={fotoApoyoIne}
               setFoto={setFotoApoyoIne}
-              required
               classInput='imagen__ine'
             />
             <FotoAlumno 
@@ -441,7 +457,6 @@ function AgregarAlumno(props) {
               tipo={false}
               foto={fotoApoyoCurp}
               setFoto={setFotoApoyoCurp}
-              required
               classInput='imagen__curp'
             />
             <FotoAlumno 
@@ -452,7 +467,6 @@ function AgregarAlumno(props) {
               tipo={false}
               foto={fotoApoyoComprobantePagoInicial}
               setFoto={setFotoApoyoComprobantePagoInicial}
-              required
               classInput='imagen__comprobante-pago-inicial'
             />
             {
@@ -491,7 +505,8 @@ function AgregarAlumno(props) {
               titulo='Clave del Estudiante'
               placeholder='Ingresa la clave del estudiante'
               valor={claveEstudianteAlumno}
-              cambiarValor={setClaveEstudianteAlumno}
+              cambiarValor={setClaveEstudianteAlumno} 
+              required
             />
             <div className='agregar-idiomas__icon' onClick={agregarIdioma}>
               <IoIosAddCircle />
@@ -518,6 +533,7 @@ function AgregarAlumno(props) {
                       indice={index}
                       variable={idiomaAprendizajeAlumno}
                       funcion={setIdiomaAprendizajeAlumno}
+                      required
                     />
                     <ListaOpciones 
                       titulo='Nivel MCERL'
@@ -528,6 +544,7 @@ function AgregarAlumno(props) {
                       indice={index}
                       variable={nivelIdiomaAlumno}
                       funcion={setNivelIdiomaAlumno}
+                      required
                     />
                     <ListaOpciones 
                       titulo='Modalidad de Estudio'
@@ -538,6 +555,7 @@ function AgregarAlumno(props) {
                       indice={index}
                       variable={modalidadEstudioAlumno}
                       funcion={setModalidadEstudioAlumno}
+                      required
                     />
                     <CampoFecha 
                       titulo='Fecha de Ingreso'
@@ -546,6 +564,7 @@ function AgregarAlumno(props) {
                       indice={index}
                       variable={fechaIngresoAlumno}
                       funcion={setFechaIngresoAlumno}
+                      required
                     />
                     <ListaOpciones 
                       titulo='Fecha de Pago'
@@ -556,6 +575,7 @@ function AgregarAlumno(props) {
                       indice={index}
                       variable={fechaPagoAlumno}
                       funcion={setFechaPagoAlumno}
+                      required
                     />
                   </div>
                 )

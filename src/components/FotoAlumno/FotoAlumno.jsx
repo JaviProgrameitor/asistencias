@@ -3,7 +3,7 @@ import '../../assets/css/components/FotoAlumno.css'
 import { Toaster, toast } from 'sonner'
 
 function FotoAlumno(props) {
-  const { className, titulo, valor, cambiarValor, tipo, foto, setFoto, required, classInput } = props
+  const { className, titulo, valor, cambiarValor, tipo, foto, setFoto, required = false, classInput } = props
 
   function clickFoto() {
     const file = document.querySelector(`.${classInput}`)

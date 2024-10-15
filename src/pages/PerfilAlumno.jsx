@@ -66,51 +66,51 @@ function PerfilAlumno(props) {
   const informacionAlumno = [
     {
       titulo: 'Nombre Completo',
-      valor: `${nombre} ${apellido}`
+      valor: nombre && apellido ? `${nombre} ${apellido}` : 'Campo no agregado'
     },
     {
       titulo: 'Fecha de Nacimiento',
-      valor: format(fechaNacimiento, 'long')
+      valor: fechaNacimiento ? format(fechaNacimiento, 'long') : 'Campo no agregado'
     },
     {
       titulo: 'Correo',
-      valor: correo
+      valor: correo ? correo : 'Campo no agregado'
     },
     {
       titulo: 'Número Telefónico',
-      valor: numeroTelefono
+      valor: numeroTelefono ? numeroTelefono : 'Campo no agregado'
     },
     {
       titulo: 'Nivel Academico',
-      valor: nivelAcademico
+      valor: nivelAcademico ? nivelAcademico : 'Campo no agregado'
     },
     {
       titulo: 'Codigo Postal',
-      valor: codigoPostal
+      valor: codigoPostal ? codigoPostal : 'Campo no agregado'
     },
     {
       titulo: 'País',
-      valor: pais
+      valor: pais ? pais : 'Campo no agregado'
     },
     {
       titulo: 'Estado',
-      valor: estado
+      valor: estado ? estado : 'Campo no agregado'
     },
     {
       titulo: 'Municipio o Alcaldía',
-      valor: municipio
+      valor: municipio ? municipio : 'Campo no agregado'
     },
     {
       titulo: 'Colonia',
-      valor: colonia
+      valor: colonia ? colonia : 'Campo no agregado'
     },
     {
       titulo: 'Calle',
-      valor: calle
+      valor: calle ? calle : 'Campo no agregado'
     },
     {
       titulo: 'Número Exterior',
-      valor: numeroExterior
+      valor: numeroExterior ? numeroExterior : 'Campo no agregado'
     }
   ]
 
@@ -246,6 +246,9 @@ function PerfilAlumno(props) {
               <img className='perfil-foto-alumno' src={foto} alt="Foto de Perfil del Alumno" />
             </div>
           </div>
+          {
+            !correo && <h2 className='titulos-2 text-red'>El Alumno no tiene una cuenta</h2>
+          }
           <h2 className='titulos-2'>Información Personal</h2>
           <div>
             {

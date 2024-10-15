@@ -170,6 +170,19 @@ function EditarAlumno(props) {
     else setFechaNacimientoAlumno('')
   }
 
+  async function remplazarImagen(foto, fotoApoyo) {
+    if(foto && fotoApoyo) {
+      const storageRef = `documentos/${idFotoActaNacimiento}`
+      await deleteStorage(storageRef)
+      await createStorage(storageRef, fotoActaNacimiento)
+
+      actaNacimiento = await getURLStorage(storageRef)
+    }
+    else if(fotoApoyoActaNacimiento) {
+      
+    }
+  }
+
   async function editarAlumnos(e) {
     e.preventDefault()
 
@@ -178,19 +191,19 @@ function EditarAlumno(props) {
     try {
 
     let foto;
-    let idFoto;
+    const idFoto = idFotoAlumno
 
     let actaNacimiento;
-    let idActaNacimiento;
+    const idActaNacimiento = idFotoActaNacimiento
 
     let ine;
-    let idIne;
+    const idIne = idFotoActaNacimiento
 
     let curp;
-    let idCurp;
+    const idCurp = idFotoActaNacimiento
 
     let comprobantePagoInicial;
-    let idComprobantePagoInicial;
+    const idComprobantePagoInicial = idFotoComprobantePagoInicial
 
     //Todo: Foto perfil alumno
     if(fotoApoyo) {
@@ -199,12 +212,10 @@ function EditarAlumno(props) {
       await createStorage(storageRef, fotoPerfilAlumno)
   
       foto = await getURLStorage(storageRef)
-      idFoto = idFotoAlumno
     }
 
     else if(fotoApoyo === false) {
       foto = fotoPerfilAlumno
-      idFoto = idFotoAlumno
     }
 
     //Todo: Foto de la acta de nacimiento
@@ -214,12 +225,10 @@ function EditarAlumno(props) {
       await createStorage(storageRef, fotoActaNacimiento)
 
       actaNacimiento = await getURLStorage(storageRef)
-      idActaNacimiento = idFotoActaNacimiento
     }
 
     else if(fotoApoyoActaNacimiento === false) {
       actaNacimiento = fotoActaNacimiento
-      idActaNacimiento = idFotoActaNacimiento
     }
 
     //Todo: Foto de el ine
@@ -229,12 +238,10 @@ function EditarAlumno(props) {
       await createStorage(storageRef, fotoIne)
 
       ine = await getURLStorage(storageRef)
-      idIne = idFotoIne
     }
 
     else if(fotoApoyoIne === false) {
       ine = fotoIne
-      idIne = idFotoIne
     }
 
     //Todo: Foto de la curp
@@ -244,12 +251,10 @@ function EditarAlumno(props) {
       await createStorage(storageRef, fotoCurp)
 
       curp = await getURLStorage(storageRef)
-      idCurp = idFotoCurp
     }
 
     else if(fotoApoyoCurp === false) {
       curp = fotoCurp
-      idCurp = idFotoCurp
     }
 
     //Todo: Foto de el comprobante de pago inicial
@@ -259,136 +264,10 @@ function EditarAlumno(props) {
       await createStorage(storageRef, fotoComprobantePagoInicial)
 
       comprobantePagoInicial = await getURLStorage(storageRef)
-      idComprobantePagoInicial = idFotoComprobantePagoInicial
     }
 
     else if(fotoApoyoComprobantePagoInicial === false) {
       comprobantePagoInicial = fotoComprobantePagoInicial
-      idComprobantePagoInicial = idFotoComprobantePagoInicial
-    }
-
-    //Todo: Editar el nombre, apellido y clave de estudiante de las asistencias del alumno
-    for(let i = 0; i < asistenciasEntrada.length; i++) {
-      let {
-        nombreAsistenciaEntrada, 
-        apellidoAsistenciaEntrada,
-        claveEstudianteAsistenciaEntrada,
-        fechaInternaAsistenciaEntrada,
-        fechaAsistenciaEntrada,
-        diasHorarios,
-        horaHorario,
-        claveHorario,
-        puntualidadClase,
-        modalidadClase,
-        entradaSalidaAsistencia,
-        idiomaAsistenciaEntrada,
-        id,
-        idPropietario
-      } = asistenciasEntrada[i]
-
-      nombreAsistenciaEntrada = nombreAlumno
-      apellidoAsistenciaEntrada = apellidoAlumno
-      claveEstudianteAsistenciaEntrada = claveEstudianteAlumno
-
-      const datos = {
-        nombreAsistenciaEntrada, 
-        apellidoAsistenciaEntrada,
-        claveEstudianteAsistenciaEntrada,
-        fechaInternaAsistenciaEntrada,
-        fechaAsistenciaEntrada,
-        diasHorarios,
-        horaHorario,
-        claveHorario,
-        puntualidadClase,
-        modalidadClase,
-        entradaSalidaAsistencia,
-        idiomaAsistenciaEntrada,
-        idPropietario
-      }
-
-      await updateDatabase('asistenciasEntrada', id, datos)
-    }
-
-    //Todo: Editar el nombre, apellido y clave de estudiante de los justificantes en espera del alumno
-    for(let i = 0; i < justificantes.length; i++) {
-      let {
-        nombreJustificante, 
-        apellidoJustificante,
-        claveEstudianteJustificante,
-        numeroTelefonoJustificante,
-        fechaInternaJustificante,
-        fechaEmisionJustificante,
-        fechaJustificante,
-        motivoJustificante,
-        explicacionJustificante,
-        fotoJustificante,
-        correoJustificante,
-        idFotoJustificante,
-        id,
-        idPropietario,
-        estado
-      } = justificantes[i]
-
-      nombreJustificante = nombreAlumno
-      apellidoJustificante = apellidoAlumno
-      claveEstudianteJustificante = claveEstudianteAlumno
-
-      const datos = {
-        nombreJustificante, 
-        apellidoJustificante,
-        claveEstudianteJustificante,
-        numeroTelefonoJustificante,
-        fechaInternaJustificante,
-        fechaEmisionJustificante,
-        fechaJustificante,
-        motivoJustificante,
-        explicacionJustificante,
-        fotoJustificante,
-        correoJustificante,
-        idFotoJustificante,
-        idPropietario,
-        estado
-      }
-
-      await updateDatabase('justificantes', id, datos)
-    }
-
-    //Todo: Editar el nombre, apellido y clave de estudiante de los pagos mensuales
-    for(let i = 0; i < pagosMensualidades.length; i++) {
-      let {
-        comprobantePagoMensualidad,
-        idComprobantePagoMensualidad,
-        nombrePago,
-        apellidoPago,
-        claveEstudiantePago,
-        idiomaPago,
-        inicioMensualidad,
-        fechaInternaDiaPago,
-        diaPago,
-        finalMensualidad,
-        id,
-        idPropietario
-      } = pagosMensualidades[i]
-
-      nombrePago = nombreAlumno
-      apellidoPago = apellidoAlumno
-      claveEstudiantePago = claveEstudianteAlumno
-
-      const datos = {
-        comprobantePagoMensualidad,
-        idComprobantePagoMensualidad,
-        nombrePago,
-        apellidoPago,
-        claveEstudiantePago,
-        idiomaPago,
-        inicioMensualidad,
-        fechaInternaDiaPago,
-        diaPago,
-        finalMensualidad,
-        idPropietario
-      }
-
-      await updateDatabase('pagosMensualidades', id, datos)
     }
 
     const nombre = nombreAlumno
@@ -446,7 +325,7 @@ function EditarAlumno(props) {
 
     const datosAuth = {
       displayName: `${nombre} ${apellido}`,
-      photoURL: foto
+      email: correo
     }
 
     updateDatabase(alumnosURL, id, {datosAuth, datos})
@@ -502,30 +381,37 @@ function EditarAlumno(props) {
               tipo={true}
               foto={fotoApoyo}
               setFoto={setFotoApoyo}
-              required={false}
               classInput='imagen__foto-perfil-alumno'
             />
             <Campo 
               titulo='Nombre' 
               placeholder='Ingresa los nombres del alumno' 
               cambiarValor={setNombreAlumno} 
-              valor={nombreAlumno} 
+              valor={nombreAlumno}
+              required
             />
             <Campo 
               titulo='Apellido' 
               placeholder='Ingresa los apellidos del alumno' 
               cambiarValor={setApellidoAlumno} 
-              valor={apellidoAlumno} 
+              valor={apellidoAlumno}
+              required
             />
             <CampoFecha 
               titulo='Selecciona la Fecha de Nacimiento' 
-              cambiarValor={setFechaNacimientoAlumno} 
+              cambiarValor={validarFechaNacimiento} 
               valor={fechaNacimientoAlumno} 
             />
             <CampoLectura 
               titulo='Edad'
               valor={edadAlumno}
               placeholder='Edad del alumno'
+            />
+            <CampoEmail 
+              titulo='Correo Electrónico' 
+              placeholder='Ingresa el correo electrónico del alumno' 
+              cambiarValor={setCorreoAlumno} 
+              valor={correoAlumno} 
             />
             <Campo 
               titulo='Número de Telefono' 
@@ -590,7 +476,6 @@ function EditarAlumno(props) {
               tipo={true}
               foto={fotoApoyoActaNacimiento}
               setFoto={setFotoApoyoActaNacimiento}
-              required={false}
               classInput='imagen__acta-nacimiento'
             />
             <FotoAlumno 
@@ -601,7 +486,6 @@ function EditarAlumno(props) {
               tipo={true}
               foto={fotoApoyoIne}
               setFoto={setFotoApoyoIne}
-              required={false}
               classInput='imagen__ine'
             />
             <FotoAlumno 
@@ -612,7 +496,6 @@ function EditarAlumno(props) {
               tipo={true}
               foto={fotoApoyoCurp}
               setFoto={setFotoApoyoCurp}
-              required={false}
               classInput='imagen__curp'
             />
             <FotoAlumno 
@@ -623,7 +506,6 @@ function EditarAlumno(props) {
               tipo={true}
               foto={fotoApoyoComprobantePagoInicial}
               setFoto={setFotoApoyoComprobantePagoInicial}
-              required={false}
               classInput='imagen__comprobante-pago-inicial'
             />
             {
@@ -663,6 +545,7 @@ function EditarAlumno(props) {
               placeholder='Ingresa la clave del estudiante'
               valor={claveEstudianteAlumno}
               cambiarValor={setClaveEstudianteAlumno}
+              required
             />
             <div className='agregar-idiomas__icon' onClick={agregarIdioma}>
               <IoIosAddCircle />
@@ -689,6 +572,7 @@ function EditarAlumno(props) {
                       indice={index}
                       variable={idiomaAprendizajeAlumno}
                       funcion={setIdiomaAprendizajeAlumno}
+                      required
                     />
                     <ListaOpciones 
                       titulo='Nivel MCERL'
@@ -699,6 +583,7 @@ function EditarAlumno(props) {
                       indice={index}
                       variable={nivelIdiomaAlumno}
                       funcion={setNivelIdiomaAlumno}
+                      required
                     />
                     <ListaOpciones 
                       titulo='Modalidad de Estudio'
@@ -709,6 +594,7 @@ function EditarAlumno(props) {
                       indice={index}
                       variable={modalidadEstudioAlumno}
                       funcion={setModalidadEstudioAlumno}
+                      required
                     />
                     <CampoFecha 
                       titulo='Fecha de Ingreso'
@@ -717,6 +603,7 @@ function EditarAlumno(props) {
                       indice={index}
                       variable={fechaIngresoAlumno}
                       funcion={setFechaIngresoAlumno}
+                      required
                     />
                     <ListaOpciones 
                       titulo='Fecha de Pago'
@@ -727,6 +614,7 @@ function EditarAlumno(props) {
                       indice={index}
                       variable={fechaPagoAlumno}
                       funcion={setFechaPagoAlumno}
+                      required
                     />
                   </div>
                 )

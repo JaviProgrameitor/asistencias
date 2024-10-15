@@ -6,7 +6,7 @@ import '../../assets/css/components/CampoContrasena.css'
 import { IoIosCheckbox, IoIosCheckboxOutline } from 'react-icons/io'
 
 function CampoContrasena(props) {
-  const { titulo, placeholder, valor, cambiarValor, className, autoFocus } = props
+  const { titulo, placeholder, valor, cambiarValor, className, autoFocus, required = false } = props
 
   const [ tipo, setTipo ] = useState(false)
 
@@ -19,7 +19,7 @@ function CampoContrasena(props) {
               type="text" 
               placeholder={placeholder} 
               autoFocus={autoFocus} 
-              required 
+              required={required}
               name="" 
               id="" 
               value={valor}
@@ -29,7 +29,7 @@ function CampoContrasena(props) {
               type="password" 
               placeholder={placeholder} 
               autoFocus={autoFocus} 
-              required 
+              required={required} 
               name="" 
               id="" 
               value={valor}
