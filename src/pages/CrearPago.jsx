@@ -31,34 +31,34 @@ import { diasMeses, calcularNumeroPorMes, calcularMesPorNumero } from '../utils/
 
 function CrearPago(props) {
   const {
-    nombre, 
+    nombre,
     apellido,
-    claveEstudiante, 
+    claveEstudiante,
     idiomaAprendizaje,
     fechaPago,
     id
   } = props.perfilAlumno
 
-  const [ pasoExactoPago, setPasoExactoPago ] = useState(0)
+  const [pasoExactoPago, setPasoExactoPago] = useState(0)
 
   //Paso 1
-  const [ idiomaPagoAlumno, setIdiomaPagoAlumno ] = useState(false)
+  const [idiomaPagoAlumno, setIdiomaPagoAlumno] = useState(false)
 
   //Paso 2
-  const [ fechaDiaPago, setFechaDiaPago ] = useState('')
+  const [fechaDiaPago, setFechaDiaPago] = useState('')
 
   //Paso 3
-  const [ añoPagoMenActualAlumno, setAñoPagoMenActualAlumno ] = useState(new Date().getFullYear())
-  const [ mesPagoMenActualAlumno, setMesPagoMenActualAlumno ] = useState(`${calcularMesPorNumero(new Date().getMonth())}`)
-  const [ numeroMesPagoMenActualAlumno, setNumeroMesPagoMenActualAlumno ] = useState(calcularNumeroPorMes(mesPagoMenActualAlumno))
-  const [ fechaPagoMenActualAlumno, setFechaPagoMenActualAlumno ] = useState("")
+  const [añoPagoMenActualAlumno, setAñoPagoMenActualAlumno] = useState(new Date().getFullYear())
+  const [mesPagoMenActualAlumno, setMesPagoMenActualAlumno] = useState(`${calcularMesPorNumero(new Date().getMonth())}`)
+  const [numeroMesPagoMenActualAlumno, setNumeroMesPagoMenActualAlumno] = useState(calcularNumeroPorMes(mesPagoMenActualAlumno))
+  const [fechaPagoMenActualAlumno, setFechaPagoMenActualAlumno] = useState("")
 
   //Paso 4
-  const [ comprobantePagoMensualidadAlumno, setComprobantePagoMensualidadAlumno ] = useState()
+  const [comprobantePagoMensualidadAlumno, setComprobantePagoMensualidadAlumno] = useState()
 
   //Paso 5
-  const [ fotoApoyoComprobantePagoMensualidad, setFotoApoyoComprobantePagoMensualidad ] = useState(false)
-  const [ activarLoader, setActivarLoader ] = useState(false)
+  const [fotoApoyoComprobantePagoMensualidad, setFotoApoyoComprobantePagoMensualidad] = useState(false)
+  const [activarLoader, setActivarLoader] = useState(false)
 
   const pasosPago = [
     {
@@ -115,12 +115,12 @@ function CrearPago(props) {
     let nuevaFecha = new Date(fechaActual + mesMilisegundos)
 
     let mesFinal = nuevaFecha.getMonth() + 1
-    let nombreMesFinal = calcularMesPorNumero(mesFinal -  1)
+    let nombreMesFinal = calcularMesPorNumero(mesFinal - 1)
     let añoFinal = nuevaFecha.getFullYear()
     let fechaFinal = diasMeses[nombreMesFinal] < parseInt(fecha) ? diasMeses[nombreMesFinal] : fecha
 
-    if(tipoRespuesta == "string") return `${fechaFinal}/${mesFinal}/${añoFinal}`
-    else if(tipoRespuesta == "objeto") return new Date(`${mesFinal}/${fechaFinal}/${añoFinal}`).getTime()
+    if (tipoRespuesta == "string") return `${fechaFinal}/${mesFinal}/${añoFinal}`
+    else if (tipoRespuesta == "objeto") return new Date(`${mesFinal}/${fechaFinal}/${añoFinal}`).getTime()
   }
 
   function calcularInicioMensualidad(tipoRespuesta, fecha, mes, año) {
@@ -131,8 +131,8 @@ function CrearPago(props) {
     let nombreMesInicio = calcularMesPorNumero(mes - 1)
     let fechaInicio = diasMeses[nombreMesInicio] < parseInt(fecha) ? diasMeses[nombreMesInicio] : fecha
 
-    if(tipoRespuesta == "string") return `${fechaInicio}/${mes}/${año}`
-    else if(tipoRespuesta == "objeto") return new Date(`${mes}/${fechaInicio}/${año}`).getTime()
+    if (tipoRespuesta == "string") return `${fechaInicio}/${mes}/${año}`
+    else if (tipoRespuesta == "objeto") return new Date(`${mes}/${fechaInicio}/${año}`).getTime()
   }
 
   async function agregarPago() {
@@ -152,11 +152,11 @@ function CrearPago(props) {
     let fechaExacto;
 
     //Todo: Calcular exactamente la fecha y la hora
-    if((mes + 1) < 10) mesExacto = `0${mes + 1}`
-    else if((mes + 1) >= 10) mesExacto = `${mes + 1}`
+    if ((mes + 1) < 10) mesExacto = `0${mes + 1}`
+    else if ((mes + 1) >= 10) mesExacto = `${mes + 1}`
 
-    if(fecha < 10) fechaExacto = `0${fecha}`
-    else if(fecha >= 10) fechaExacto = `${fecha}`
+    if (fecha < 10) fechaExacto = `0${fecha}`
+    else if (fecha >= 10) fechaExacto = `${fecha}`
 
     const comprobantePagoMensualidad = await getURLStorage(storageRef)
     const idComprobantePagoMensualidad = identificadorAleatorio
@@ -189,19 +189,19 @@ function CrearPago(props) {
     }
 
     createDatabase(pagosMensualidadURL, datos)
-    .then(() => {
-      setActivarLoader(false)
+      .then(() => {
+        setActivarLoader(false)
 
-      toast.success('El Pago ha sido creado correctamente.')
+        toast.success('El Pago ha sido creado correctamente.')
 
-      setIdiomaPagoAlumno(false)
-      setPasoExactoPago(0)
-    })
+        setIdiomaPagoAlumno(false)
+        setPasoExactoPago(0)
+      })
   }
 
   useEffect(() => {
     setFechaPagoMenActualAlumno(`${idiomaPagoAlumno ? fechaPago[idiomaAprendizaje.indexOf(idiomaPagoAlumno)] : ""}`)
-  },[idiomaPagoAlumno])
+  }, [idiomaPagoAlumno])
 
   return (
     <div>
@@ -223,15 +223,15 @@ function CrearPago(props) {
         <div className="contenedor__columna-centro">
           <h5 className='titulos-3'>{pasosPago[pasoExactoPago].titulo}</h5>
           {
-            pasoExactoPago == 0 
-            ? <div className='contenedor__completo contenedor__columna-centro'>
+            pasoExactoPago == 0
+              ? <div className='contenedor__completo contenedor__columna-centro'>
                 <div className='container-idiomas'>
                   {
                     idiomaAprendizaje.map((idioma, index) => {
                       return (
-                        <div 
-                          className={`caja-idiomas ${idiomaPagoAlumno == idioma ? "idioma-activo" : "idioma-inactivo"}`} 
-                          key={index} 
+                        <div
+                          className={`caja-idiomas ${idiomaPagoAlumno == idioma ? "idioma-activo" : "idioma-inactivo"}`}
+                          key={index}
                           onClick={() => setIdiomaPagoAlumno(idioma)}
                         >
                           {idioma}
@@ -241,10 +241,10 @@ function CrearPago(props) {
                   }
                 </div>
                 <div className='container-botones contenedor__centro-separacion'>
-                  <button 
-                    className='boton__blanco' 
+                  <button
+                    className='boton__blanco'
                     onClick={() => {
-                      if(idiomaPagoAlumno)setPasoExactoPago(1)
+                      if (idiomaPagoAlumno) setPasoExactoPago(1)
                       else toast.error('Selecciona un idioma')
                     }}
                   >
@@ -253,7 +253,7 @@ function CrearPago(props) {
                   </button>
                 </div>
               </div>
-            : <></>
+              : <></>
           }
           {
             pasoExactoPago == 1 && (
@@ -268,17 +268,17 @@ function CrearPago(props) {
                   />
                 </div>
                 <div className='container-botones contenedor__centro-separacion'>
-                  <button 
+                  <button
                     className='boton__blanco'
                     onClick={() => setPasoExactoPago(0)}
                   >
                     <AiOutlineArrowLeft />
                     Anterior
                   </button>
-                  <button 
-                    className='boton__blanco' 
+                  <button
+                    className='boton__blanco'
                     onClick={() => {
-                      if(fechaDiaPago != '') setPasoExactoPago(2)
+                      if (fechaDiaPago != '') setPasoExactoPago(2)
                       else toast.error('Selecciona una fecha')
                     }}
                   >
@@ -290,8 +290,8 @@ function CrearPago(props) {
             )
           }
           {
-            pasoExactoPago == 2 
-            ? <div className='contenedor__completo contenedor__columna-centro'>
+            pasoExactoPago == 2
+              ? <div className='contenedor__completo contenedor__columna-centro'>
                 <div>
                   <div>
                     <h5 className="titulos-4">Fecha que corresponde la mensualidad</h5>
@@ -301,7 +301,7 @@ function CrearPago(props) {
                       valor={añoPagoMenActualAlumno}
                       cambiarValor={setAñoPagoMenActualAlumno}
                     />
-                    <ListaOpciones 
+                    <ListaOpciones
                       titulo='Mes'
                       placeholder='Selecciona el mes del año'
                       valor={mesPagoMenActualAlumno}
@@ -316,15 +316,15 @@ function CrearPago(props) {
                   </div>
                 </div>
                 <div className='container-botones contenedor__centro-separacion'>
-                  <button 
+                  <button
                     className='boton__blanco'
                     onClick={() => setPasoExactoPago(1)}
                   >
                     <AiOutlineArrowLeft />
                     Anterior
                   </button>
-                  <button 
-                    className='boton__blanco' 
+                  <button
+                    className='boton__blanco'
                     onClick={() => setPasoExactoPago(3)}
                   >
                     Siguiente
@@ -332,13 +332,13 @@ function CrearPago(props) {
                   </button>
                 </div>
               </div>
-            : <></>
+              : <></>
           }
           {
-            pasoExactoPago == 3 
-            ? <div className='contenedor__completo contenedor__columna-centro'>
+            pasoExactoPago == 3
+              ? <div className='contenedor__completo contenedor__columna-centro'>
                 <div>
-                  <FotoAlumno 
+                  <FotoAlumno
                     titulo='Foto del Comprobante del Pago'
                     className='foto-cuadrada'
                     valor={comprobantePagoMensualidadAlumno}
@@ -351,19 +351,19 @@ function CrearPago(props) {
                   />
                 </div>
                 <div className='container-botones contenedor__centro-separacion'>
-                  <button 
+                  <button
                     className='boton__blanco'
                     onClick={() => setPasoExactoPago(2)}
                   >
                     <AiOutlineArrowLeft />
                     Anterior
                   </button>
-                  <button 
-                    className='boton__blanco' 
+                  <button
+                    className='boton__blanco'
                     onClick={() => {
-                        if(fotoApoyoComprobantePagoMensualidad !== false) setPasoExactoPago(4)
-                        else toast.error('Debe subir el Comprobante del Pago')
-                      }
+                      if (fotoApoyoComprobantePagoMensualidad !== false) setPasoExactoPago(4)
+                      else toast.error('Debe subir el Comprobante del Pago')
+                    }
                     }
                   >
                     Siguiente
@@ -371,48 +371,48 @@ function CrearPago(props) {
                   </button>
                 </div>
               </div>
-            : <></>
+              : <></>
           }
           {
-            pasoExactoPago == 4 
-            ? <div className='contenedor__completo contenedor__columna-centro'>
+            pasoExactoPago == 4
+              ? <div className='contenedor__completo contenedor__columna-centro'>
                 <div>
-                  <Indicadores 
+                  <Indicadores
                     titulo='Nombre del Alumno'
                     respuesta={`${nombre} ${apellido}`}
                     claseExtra='indicadores__chicos'
                   />
-                  <Indicadores 
+                  <Indicadores
                     titulo='Idioma de Pago'
                     respuesta={`${idiomaPagoAlumno}`}
                     claseExtra='indicadores__chicos'
                   />
-                  <Indicadores 
+                  <Indicadores
                     titulo='Fecha en que se realizó el pago'
                     respuesta={`${new Date(dayjs(fechaDiaPago).$d).toLocaleDateString()}`}
                     claseExtra='indicadores__chicos'
                   />
-                  <Indicadores 
+                  <Indicadores
                     titulo='Fecha que empieza la mensualidad'
                     respuesta={calcularInicioMensualidad("string", fechaPagoMenActualAlumno, (numeroMesPagoMenActualAlumno + 1), añoPagoMenActualAlumno)}
                     claseExtra='indicadores__chicos'
                   />
-                  <Indicadores 
+                  <Indicadores
                     titulo='Fecha que termina la mensualidad'
                     respuesta={calcularFinMensualidad("string", fechaPagoMenActualAlumno, (numeroMesPagoMenActualAlumno + 1), añoPagoMenActualAlumno)}
                     claseExtra='indicadores__chicos'
                   />
                 </div>
                 <div className='container-botones contenedor__centro-separacion'>
-                  <button 
+                  <button
                     className='boton__blanco'
                     onClick={() => setPasoExactoPago(3)}
                   >
                     <AiOutlineArrowLeft />
                     Anterior
                   </button>
-                  <button 
-                    className='boton__blanco' 
+                  <button
+                    className='boton__blanco'
                     onClick={() => agregarPago()}
                   >
                     Finalizar
@@ -420,7 +420,7 @@ function CrearPago(props) {
                   </button>
                 </div>
               </div>
-            : <></>
+              : <></>
           }
         </div>
       </div>

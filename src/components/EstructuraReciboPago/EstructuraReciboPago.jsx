@@ -23,7 +23,8 @@ function EstructuraReciboPago(props) {
     modalidad, 
     cantidadPagadaNumero, 
     cantidadPagadaEscrita,
-    fechaRecibo
+    fechaRecibo,
+    concepto
   } = props
 
   Font.register(
@@ -109,7 +110,8 @@ function EstructuraReciboPago(props) {
     },
     texto__contenido: {
       lineHeight: '1.5px',
-      fontSize: '11px'
+      fontSize: '11px',
+      textAlign: 'justify',
     },
     underline: {
       textDecoration: 'underline'
@@ -202,7 +204,7 @@ function EstructuraReciboPago(props) {
                   Quien suscribe el presente documento: <Text style={styles.underline}>Lic. Martha I. Rosas G.</Text> manifiesta haber recibido a entera
                   satisfacción la cantidad de: <Text style={styles.underline}>${cantidadPagadaNumero}</Text> ( <Text  style={styles.underline}>{cantidadPagadaEscrita} pesos M.N.</Text> ) misma
                   que me fue entregada por parte de: <Text style={styles.underline__bold}>{personaPago}</Text> por concepto de: 
-                  <Text style={styles.underline}> Inversión mensual.  {listaAlumnosPago.length} {listaAlumnosPago.length === 1 ? 'estudiante' : 'estudiantes'}. <Text>{listaAlumnosPago.length === 1 ? 'Nombre' : 'Nombres'}: {listaAlumnosPago.join(', ')}. </Text>
+                  <Text style={styles.underline}> {concepto}.  {listaAlumnosPago.length} {listaAlumnosPago.length === 1 ? 'estudiante' : 'estudiantes'}. <Text>{listaAlumnosPago.length === 1 ? 'Nombre' : 'Nombres'}: {listaAlumnosPago.join(', ')}. </Text>
                   Clases de Lengua {lengua}. Modalidad: <Text style={styles.underline__bold}>{modalidad}</Text>. Sin adeudo a la fecha.</Text>
                 </Text>
               </View>

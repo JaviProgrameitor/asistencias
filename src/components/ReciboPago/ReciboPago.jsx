@@ -13,7 +13,8 @@ function ReciboPago(props) {
     modalidad, 
     cantidadPagadaNumero, 
     cantidadPagadaEscrita,
-    fechaRecibo
+    fechaRecibo,
+    concepto
   } = props
 
   return (
@@ -28,6 +29,7 @@ function ReciboPago(props) {
           cantidadPagadaNumero={cantidadPagadaNumero}
           cantidadPagadaEscrita={cantidadPagadaEscrita}
           fechaRecibo={fechaRecibo}
+          concepto={concepto}
         />
       </PDFViewer>
     </div>

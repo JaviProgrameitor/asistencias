@@ -26,26 +26,26 @@ import { Toaster, toast } from 'sonner'
 function EditarAlumno(props) {
   const { idiomasImpartidos } = props
 
-  const { 
-    idAlumno, 
+  const {
+    idAlumno,
     asistenciasEntrada,
     justificantes,
-    pagosMensualidades, 
+    pagosMensualidades,
     actualizarDatosAlumno
   } = props
-  const { 
+  const {
     foto,
     actaNacimiento,
     ine,
     curp,
-    comprobantePagoInicial, 
+    comprobantePagoInicial,
     idFoto,
     idActaNacimiento,
     idIne,
     idCurp,
     idComprobantePagoInicial,
-    nombre, 
-    apellido, 
+    nombre,
+    apellido,
     numeroTelefono,
     codigoPostal,
     pais,
@@ -54,15 +54,15 @@ function EditarAlumno(props) {
     colonia,
     calle,
     numeroExterior,
-    claveEstudiante, 
-    idiomaAprendizaje, 
-    modalidadEstudio, 
-    fechaPago, 
-    id, 
+    claveEstudiante,
+    idiomaAprendizaje,
+    modalidadEstudio,
+    fechaPago,
+    id,
     fechaNacimiento,
-    correo, 
-    nivelAcademico, 
-    nivelIdioma, 
+    correo,
+    nivelAcademico,
+    nivelIdioma,
     fechaIngreso,
     nombreTutor = '',
     apellidoTutor = '',
@@ -70,53 +70,53 @@ function EditarAlumno(props) {
     numeroTelefonoTutor = ''
   } = props.datos
 
-  const [ fotoPerfilAlumno, setFotoPerfilAlumno ] = useState(foto)
-  const [ nombreAlumno, setNombreAlumno ] = useState(nombre)
-  const [ apellidoAlumno, setApellidoAlumno ] = useState(apellido)
-  const [ fechaNacimientoAlumno, setFechaNacimientoAlumno ] = useState(fechaNacimiento)
-  const [ edadAlumno, setEdadAlumno ] = useState('')
-  const [ correoAlumno, setCorreoAlumno ] = useState(correo)
-  const [ numeroTelefonoAlumno, setNumeroTelefonoAlumno ] = useState(numeroTelefono)
-  const [ nivelAcademicoAlumno, setNivelAcademicoAlumno ] = useState(nivelAcademico)
-  const [ codigoPostalAlumno, setCodigoPostalAlumno ] = useState(codigoPostal)
-  const [ paisAlumno, setPaisAlumno ] = useState(pais)
-  const [ estadoAlumno, setEstadoAlumno ] = useState(estado)
-  const [ municipioAlumno, setMunicipioAlumno ] = useState(municipio)
-  const [ coloniaAlumno, setColoniaAlumno ] = useState(colonia)
-  const [ calleAlumno, setCalleAlumno ] = useState(calle)
-  const [ numeroExteriorAlumno, setNumeroExteriorAlumno ] = useState(numeroExterior)
-  const [ fotoActaNacimiento, setFotoActaNacimiento ] = useState(actaNacimiento)
-  const [ fotoIne, setFotoIne ] = useState(ine)
-  const [ fotoCurp, setFotoCurp ] = useState(curp)
-  const [ fotoComprobantePagoInicial, setFotoComprobantePagoInicial ] = useState(comprobantePagoInicial)
+  const [fotoPerfilAlumno, setFotoPerfilAlumno] = useState(foto)
+  const [nombreAlumno, setNombreAlumno] = useState(nombre)
+  const [apellidoAlumno, setApellidoAlumno] = useState(apellido)
+  const [fechaNacimientoAlumno, setFechaNacimientoAlumno] = useState(fechaNacimiento)
+  const [edadAlumno, setEdadAlumno] = useState('')
+  const [correoAlumno, setCorreoAlumno] = useState(correo)
+  const [numeroTelefonoAlumno, setNumeroTelefonoAlumno] = useState(numeroTelefono)
+  const [nivelAcademicoAlumno, setNivelAcademicoAlumno] = useState(nivelAcademico)
+  const [codigoPostalAlumno, setCodigoPostalAlumno] = useState(codigoPostal)
+  const [paisAlumno, setPaisAlumno] = useState(pais)
+  const [estadoAlumno, setEstadoAlumno] = useState(estado)
+  const [municipioAlumno, setMunicipioAlumno] = useState(municipio)
+  const [coloniaAlumno, setColoniaAlumno] = useState(colonia)
+  const [calleAlumno, setCalleAlumno] = useState(calle)
+  const [numeroExteriorAlumno, setNumeroExteriorAlumno] = useState(numeroExterior)
+  const [fotoActaNacimiento, setFotoActaNacimiento] = useState(actaNacimiento)
+  const [fotoIne, setFotoIne] = useState(ine)
+  const [fotoCurp, setFotoCurp] = useState(curp)
+  const [fotoComprobantePagoInicial, setFotoComprobantePagoInicial] = useState(comprobantePagoInicial)
 
-  const [ nombreTutorAlumno, setNombreTutorAlumno ] = useState(nombreTutor)
-  const [ apellidoTutorAlumno, setApellidoTutorAlumno ] = useState(apellidoTutor)
-  const [ numeroTelefonoTutorAlumno, setNumeroTelefonoTutorAlumno ] = useState(numeroTelefonoTutor)
-  const [ correoTutorAlumno, setCorreoTutorAlumno ] = useState(correoTutor)
+  const [nombreTutorAlumno, setNombreTutorAlumno] = useState(nombreTutor)
+  const [apellidoTutorAlumno, setApellidoTutorAlumno] = useState(apellidoTutor)
+  const [numeroTelefonoTutorAlumno, setNumeroTelefonoTutorAlumno] = useState(numeroTelefonoTutor)
+  const [correoTutorAlumno, setCorreoTutorAlumno] = useState(correoTutor)
 
-  const [ claveEstudianteAlumno, setClaveEstudianteAlumno ] = useState(claveEstudiante)
-  const [ idiomaAprendizajeAlumno, setIdiomaAprendizajeAlumno ] = useState(idiomaAprendizaje)
-  const [ nivelIdiomaAlumno, setNivelIdiomaAlumno ] = useState(nivelIdioma)
-  const [ modalidadEstudioAlumno, setModalidadEstudioAlumno ] = useState(modalidadEstudio)
-  const [ fechaIngresoAlumno, setFechaIngresoAlumno ] = useState(fechaIngreso)
-  const [ fechaPagoAlumno, setFechaPagoAlumno ] = useState(fechaPago)
+  const [claveEstudianteAlumno, setClaveEstudianteAlumno] = useState(claveEstudiante)
+  const [idiomaAprendizajeAlumno, setIdiomaAprendizajeAlumno] = useState(idiomaAprendizaje)
+  const [nivelIdiomaAlumno, setNivelIdiomaAlumno] = useState(nivelIdioma)
+  const [modalidadEstudioAlumno, setModalidadEstudioAlumno] = useState(modalidadEstudio)
+  const [fechaIngresoAlumno, setFechaIngresoAlumno] = useState(fechaIngreso)
+  const [fechaPagoAlumno, setFechaPagoAlumno] = useState(fechaPago)
 
-  const [ idFotoAlumno, setIdFotoAlumno ] = useState(idFoto)
-  const [ idFotoActaNacimiento, setIdFotoActaNacimiento ] = useState(idActaNacimiento)
-  const [ idFotoIne, setIdFotoIne ] = useState(idIne)
-  const [ idFotoCurp, setIdFotoCurp ] = useState(idCurp)
-  const [ idFotoComprobantePagoInicial, setIdFotoComprobantePagoInicial ] = useState(idComprobantePagoInicial)
+  const [idFotoAlumno, setIdFotoAlumno] = useState(idFoto)
+  const [idFotoActaNacimiento, setIdFotoActaNacimiento] = useState(idActaNacimiento)
+  const [idFotoIne, setIdFotoIne] = useState(idIne)
+  const [idFotoCurp, setIdFotoCurp] = useState(idCurp)
+  const [idFotoComprobantePagoInicial, setIdFotoComprobantePagoInicial] = useState(idComprobantePagoInicial)
 
-  const [ fotoApoyo, setFotoApoyo ] = useState(false)
-  const [ fotoApoyoActaNacimiento, setFotoApoyoActaNacimiento ] = useState(false)
-  const [ fotoApoyoIne, setFotoApoyoIne ] = useState(false)
-  const [ fotoApoyoCurp, setFotoApoyoCurp ] = useState(false)
-  const [ fotoApoyoComprobantePagoInicial, setFotoApoyoComprobantePagoInicial ] = useState(false)
+  const [fotoApoyo, setFotoApoyo] = useState(false)
+  const [fotoApoyoActaNacimiento, setFotoApoyoActaNacimiento] = useState(false)
+  const [fotoApoyoIne, setFotoApoyoIne] = useState(false)
+  const [fotoApoyoCurp, setFotoApoyoCurp] = useState(false)
+  const [fotoApoyoComprobantePagoInicial, setFotoApoyoComprobantePagoInicial] = useState(false)
 
   const navigate = useNavigate()
-  
-  const [ activarLoader, setActivarLoader ] = useState(false)
+
+  const [activarLoader, setActivarLoader] = useState(false)
 
   function agregarIdioma() {
     setIdiomaAprendizajeAlumno([...idiomaAprendizajeAlumno, ''])
@@ -130,7 +130,7 @@ function EditarAlumno(props) {
     const idiomaEliminar = idiomaAprendizajeAlumno.splice(index, 1)
     const nivelIdiomaEliminar = nivelIdiomaAlumno.splice(index, 1)
     const modalidadEliminar = modalidadEstudioAlumno.splice(index, 1)
-    const fechaIngresoEliminar = fechaIngresoAlumno.splice(index,1)
+    const fechaIngresoEliminar = fechaIngresoAlumno.splice(index, 1)
     const fechaPagoEliminar = fechaPagoAlumno.splice(index, 1)
 
     const nuevosIdiomas = idiomaAprendizajeAlumno.filter((idioma) => idioma !== idiomaEliminar)
@@ -145,7 +145,7 @@ function EditarAlumno(props) {
     setFechaIngresoAlumno(nuevosFechasIngreso)
     setFechaPagoAlumno(nuevosFechaPago)
   }
-  
+
   function actualizarDatos(valor, index, variable, funcion) {
     let nuevosValores = variable.map((valores) => {
       return valores
@@ -156,11 +156,11 @@ function EditarAlumno(props) {
   }
 
   function validarFechaNacimiento(fecha) {
-    if(fecha !== '') {
+    if (fecha !== '') {
       const fechaNacimiento = parse(fecha)
       const fechaActual = new Date()
 
-      if(isBefore(fechaNacimiento, fechaActual) ) setFechaNacimientoAlumno(fecha)
+      if (isBefore(fechaNacimiento, fechaActual)) setFechaNacimientoAlumno(fecha)
       else {
         setFechaNacimientoAlumno('')
         toast.error('Fecha invalida')
@@ -171,15 +171,15 @@ function EditarAlumno(props) {
   }
 
   async function remplazarImagen(foto, fotoApoyo) {
-    if(foto && fotoApoyo) {
+    if (foto && fotoApoyo) {
       const storageRef = `documentos/${idFotoActaNacimiento}`
       await deleteStorage(storageRef)
       await createStorage(storageRef, fotoActaNacimiento)
 
       actaNacimiento = await getURLStorage(storageRef)
     }
-    else if(fotoApoyoActaNacimiento) {
-      
+    else if (fotoApoyoActaNacimiento) {
+
     }
   }
 
@@ -190,164 +190,168 @@ function EditarAlumno(props) {
 
     try {
 
-    let foto;
-    const idFoto = idFotoAlumno
+      let foto;
+      const idFoto = idFotoAlumno
 
-    let actaNacimiento;
-    const idActaNacimiento = idFotoActaNacimiento
+      let actaNacimiento;
+      const idActaNacimiento = idFotoActaNacimiento
 
-    let ine;
-    const idIne = idFotoActaNacimiento
+      let ine;
+      const idIne = idFotoActaNacimiento
 
-    let curp;
-    const idCurp = idFotoActaNacimiento
+      let curp;
+      const idCurp = idFotoActaNacimiento
 
-    let comprobantePagoInicial;
-    const idComprobantePagoInicial = idFotoComprobantePagoInicial
+      let comprobantePagoInicial;
+      const idComprobantePagoInicial = idFotoComprobantePagoInicial
 
-    //Todo: Foto perfil alumno
-    if(fotoApoyo) {
-      const storageRef = `alumnos/${idFotoAlumno}`
-      await deleteStorage(storageRef)
-      await createStorage(storageRef, fotoPerfilAlumno)
-  
-      foto = await getURLStorage(storageRef)
-    }
+      //Todo: Foto perfil alumno
+      if (fotoApoyo) {
+        const storageRef = `alumnos/${idFotoAlumno}`
+        try {
+          await deleteStorage(storageRef)
+        } catch (error) {
+          console.log('No se pudo eliminar la imagen anterior o no existia')
+        }
+        await createStorage(storageRef, fotoPerfilAlumno)
 
-    else if(fotoApoyo === false) {
-      foto = fotoPerfilAlumno
-    }
+        foto = await getURLStorage(storageRef)
+      }
 
-    //Todo: Foto de la acta de nacimiento
-    if(fotoApoyoActaNacimiento) {
-      const storageRef = `documentos/${idFotoActaNacimiento}`
-      await deleteStorage(storageRef)
-      await createStorage(storageRef, fotoActaNacimiento)
+      else if (fotoApoyo === false) {
+        foto = fotoPerfilAlumno
+      }
 
-      actaNacimiento = await getURLStorage(storageRef)
-    }
+      //Todo: Foto de la acta de nacimiento
+      if (fotoApoyoActaNacimiento) {
+        const storageRef = `documentos/${idFotoActaNacimiento}`
+        await deleteStorage(storageRef)
+        await createStorage(storageRef, fotoActaNacimiento)
 
-    else if(fotoApoyoActaNacimiento === false) {
-      actaNacimiento = fotoActaNacimiento
-    }
+        actaNacimiento = await getURLStorage(storageRef)
+      }
 
-    //Todo: Foto de el ine
-    if(fotoApoyoIne) {
-      const storageRef = `documentos/${idFotoIne}`
-      await deleteStorage(storageRef)
-      await createStorage(storageRef, fotoIne)
+      else if (fotoApoyoActaNacimiento === false) {
+        actaNacimiento = fotoActaNacimiento
+      }
 
-      ine = await getURLStorage(storageRef)
-    }
+      //Todo: Foto de el ine
+      if (fotoApoyoIne) {
+        const storageRef = `documentos/${idFotoIne}`
+        await deleteStorage(storageRef)
+        await createStorage(storageRef, fotoIne)
 
-    else if(fotoApoyoIne === false) {
-      ine = fotoIne
-    }
+        ine = await getURLStorage(storageRef)
+      }
 
-    //Todo: Foto de la curp
-    if(fotoApoyoCurp) {
-      const storageRef = `documentos/${idFotoCurp}`
-      await deleteStorage(storageRef)
-      await createStorage(storageRef, fotoCurp)
+      else if (fotoApoyoIne === false) {
+        ine = fotoIne
+      }
 
-      curp = await getURLStorage(storageRef)
-    }
+      //Todo: Foto de la curp
+      if (fotoApoyoCurp) {
+        const storageRef = `documentos/${idFotoCurp}`
+        await deleteStorage(storageRef)
+        await createStorage(storageRef, fotoCurp)
 
-    else if(fotoApoyoCurp === false) {
-      curp = fotoCurp
-    }
+        curp = await getURLStorage(storageRef)
+      }
 
-    //Todo: Foto de el comprobante de pago inicial
-    if(fotoApoyoComprobantePagoInicial) {
-      const storageRef = `documentos/${idFotoComprobantePagoInicial}`
-      await deleteStorage(storageRef)
-      await createStorage(storageRef, fotoComprobantePagoInicial)
+      else if (fotoApoyoCurp === false) {
+        curp = fotoCurp
+      }
 
-      comprobantePagoInicial = await getURLStorage(storageRef)
-    }
+      //Todo: Foto de el comprobante de pago inicial
+      if (fotoApoyoComprobantePagoInicial) {
+        const storageRef = `documentos/${idFotoComprobantePagoInicial}`
+        await deleteStorage(storageRef)
+        await createStorage(storageRef, fotoComprobantePagoInicial)
 
-    else if(fotoApoyoComprobantePagoInicial === false) {
-      comprobantePagoInicial = fotoComprobantePagoInicial
-    }
+        comprobantePagoInicial = await getURLStorage(storageRef)
+      }
 
-    const nombre = nombreAlumno
-    const apellido = apellidoAlumno
-    const fechaNacimiento = fechaNacimientoAlumno
-    const correo = correoAlumno
-    const numeroTelefono = numeroTelefonoAlumno
-    const nivelAcademico = nivelAcademicoAlumno
-    const codigoPostal = codigoPostalAlumno
-    const pais = paisAlumno
-    const estado = estadoAlumno
-    const municipio = municipioAlumno
-    const colonia = coloniaAlumno
-    const calle = calleAlumno
-    const numeroExterior = numeroExteriorAlumno
-    
-    const claveEstudiante = claveEstudianteAlumno
-    const idiomaAprendizaje = idiomaAprendizajeAlumno
-    const nivelIdioma = nivelIdiomaAlumno
-    const modalidadEstudio = modalidadEstudioAlumno
-    const fechaIngreso = fechaIngresoAlumno
-    const fechaPago = fechaPagoAlumno
+      else if (fotoApoyoComprobantePagoInicial === false) {
+        comprobantePagoInicial = fotoComprobantePagoInicial
+      }
 
-    const datos = {
-      foto,
-      idFoto,
-      actaNacimiento,
-      idActaNacimiento,
-      ine,
-      idIne,
-      curp,
-      idCurp,
-      comprobantePagoInicial,
-      idComprobantePagoInicial,
-      nombre, 
-      apellido, 
-      fechaNacimiento,
-      correo,
-      numeroTelefono, 
-      nivelAcademico,
-      codigoPostal,
-      pais,
-      estado,
-      municipio,
-      colonia,
-      calle,
-      numeroExterior, 
-      claveEstudiante,
-      idiomaAprendizaje,
-      nivelIdioma,
-      modalidadEstudio,
-      fechaIngreso,
-      fechaPago
-    }
+      const nombre = nombreAlumno
+      const apellido = apellidoAlumno
+      const fechaNacimiento = fechaNacimientoAlumno
+      const correo = correoAlumno
+      const numeroTelefono = numeroTelefonoAlumno
+      const nivelAcademico = nivelAcademicoAlumno
+      const codigoPostal = codigoPostalAlumno
+      const pais = paisAlumno
+      const estado = estadoAlumno
+      const municipio = municipioAlumno
+      const colonia = coloniaAlumno
+      const calle = calleAlumno
+      const numeroExterior = numeroExteriorAlumno
 
-    const datosAuth = {
-      displayName: `${nombre} ${apellido}`,
-      email: correo
-    }
+      const claveEstudiante = claveEstudianteAlumno
+      const idiomaAprendizaje = idiomaAprendizajeAlumno
+      const nivelIdioma = nivelIdiomaAlumno
+      const modalidadEstudio = modalidadEstudioAlumno
+      const fechaIngreso = fechaIngresoAlumno
+      const fechaPago = fechaPagoAlumno
 
-    updateDatabase(alumnosURL, id, {datosAuth, datos})
-    .then(() => {
-      actualizarDatosAlumno(false)
-      setActivarLoader(false)
-      toast.success('El Alumno ha sido editado con exito')
-    })
-    .catch(err => console.log(err))
+      const datos = {
+        foto,
+        idFoto,
+        actaNacimiento,
+        idActaNacimiento,
+        ine,
+        idIne,
+        curp,
+        idCurp,
+        comprobantePagoInicial,
+        idComprobantePagoInicial,
+        nombre,
+        apellido,
+        fechaNacimiento,
+        correo,
+        numeroTelefono,
+        nivelAcademico,
+        codigoPostal,
+        pais,
+        estado,
+        municipio,
+        colonia,
+        calle,
+        numeroExterior,
+        claveEstudiante,
+        idiomaAprendizaje,
+        nivelIdioma,
+        modalidadEstudio,
+        fechaIngreso,
+        fechaPago
+      }
 
-    setTimeout(() => {
-      navigate('/sistema-asistencias/panel-control/alumnos')
-    }, 2000);
+      const datosAuth = {
+        displayName: `${nombre} ${apellido}`,
+        email: correo
+      }
 
-  } catch(error) {
+      updateDatabase(alumnosURL, id, { datosAuth, datos })
+        .then(() => {
+          actualizarDatosAlumno(false)
+          setActivarLoader(false)
+          toast.success('El Alumno ha sido editado con exito')
+        })
+        .catch(err => console.log(err))
+
+      setTimeout(() => {
+        navigate('/sistema-asistencias/panel-control/alumnos')
+      }, 2000);
+
+    } catch (error) {
       console.log(error)
       setActivarLoader(false)
     }
   }
 
   useEffect(() => {
-    if(fechaNacimientoAlumno !== '') {
+    if (fechaNacimientoAlumno !== '') {
       const fechaNacimiento = parse(fechaNacimientoAlumno)
       const fechaActual = new Date()
 
@@ -360,7 +364,7 @@ function EditarAlumno(props) {
   return (
     <div>
       <div className="container-agregar-alumno">
-        <Toaster 
+        <Toaster
           position="top-center"
           expand={false}
           richColors
@@ -374,7 +378,7 @@ function EditarAlumno(props) {
           <form className='formulario' onSubmit={editarAlumnos}>
             <h3 className='formulario__titulo'>Editar Alumno</h3>
             <h4 className='formulario__subtitulo'>Información Personal</h4>
-            <FotoAlumno 
+            <FotoAlumno
               titulo='Foto Perfil Alumno'
               valor={fotoPerfilAlumno}
               cambiarValor={setFotoPerfilAlumno}
@@ -383,68 +387,68 @@ function EditarAlumno(props) {
               setFoto={setFotoApoyo}
               classInput='imagen__foto-perfil-alumno'
             />
-            <Campo 
-              titulo='Nombre' 
-              placeholder='Ingresa los nombres del alumno' 
-              cambiarValor={setNombreAlumno} 
+            <Campo
+              titulo='Nombre'
+              placeholder='Ingresa los nombres del alumno'
+              cambiarValor={setNombreAlumno}
               valor={nombreAlumno}
               required
             />
-            <Campo 
-              titulo='Apellido' 
-              placeholder='Ingresa los apellidos del alumno' 
-              cambiarValor={setApellidoAlumno} 
+            <Campo
+              titulo='Apellido'
+              placeholder='Ingresa los apellidos del alumno'
+              cambiarValor={setApellidoAlumno}
               valor={apellidoAlumno}
               required
             />
-            <CampoFecha 
-              titulo='Selecciona la Fecha de Nacimiento' 
-              cambiarValor={validarFechaNacimiento} 
-              valor={fechaNacimientoAlumno} 
+            <CampoFecha
+              titulo='Selecciona la Fecha de Nacimiento'
+              cambiarValor={validarFechaNacimiento}
+              valor={fechaNacimientoAlumno}
             />
-            <CampoLectura 
+            <CampoLectura
               titulo='Edad'
               valor={edadAlumno}
               placeholder='Edad del alumno'
             />
-            <CampoEmail 
-              titulo='Correo Electrónico' 
-              placeholder='Ingresa el correo electrónico del alumno' 
-              cambiarValor={setCorreoAlumno} 
-              valor={correoAlumno} 
+            <CampoEmail
+              titulo='Correo Electrónico'
+              placeholder='Ingresa el correo electrónico del alumno'
+              cambiarValor={setCorreoAlumno}
+              valor={correoAlumno}
             />
-            <Campo 
-              titulo='Número de Telefono' 
-              placeholder='Ingresa el número de telefono del alumno' 
-              cambiarValor={setNumeroTelefonoAlumno} 
-              valor={numeroTelefonoAlumno} 
+            <Campo
+              titulo='Número de Telefono'
+              placeholder='Ingresa el número de telefono del alumno'
+              cambiarValor={setNumeroTelefonoAlumno}
+              valor={numeroTelefonoAlumno}
             />
-            <ListaOpciones 
+            <ListaOpciones
               titulo='Nivel Academico'
               placeholder='Selecciona el nivel academico del alumno'
               valor={nivelAcademicoAlumno}
               cambiarValor={setNivelAcademicoAlumno}
               opciones={opcionesNivelesAcademicos}
             />
-            <Campo 
+            <Campo
               titulo='Codigo Postal'
               placeholder='Ingresa el codigo postal del alumno'
               cambiarValor={setCodigoPostalAlumno}
               valor={codigoPostalAlumno}
             />
-            <Campo 
+            <Campo
               titulo='País'
               placeholder='Ingresa el país de donde vive el alumno'
               cambiarValor={setPaisAlumno}
               valor={paisAlumno}
             />
-            <Campo 
+            <Campo
               titulo='Estado'
               placeholder='Ingresa el estado de donde vive el alumno'
               cambiarValor={setEstadoAlumno}
               valor={estadoAlumno}
             />
-            <Campo 
+            <Campo
               titulo='Municipio/Alcaldía'
               placeholder='Ingresa el municipio de donde vive el alumno'
               cambiarValor={setMunicipioAlumno}
@@ -468,7 +472,7 @@ function EditarAlumno(props) {
               valor={numeroExteriorAlumno}
               cambiarValor={setNumeroExteriorAlumno}
             />
-            <FotoAlumno 
+            <FotoAlumno
               titulo='Acta de Nacimiento'
               className='foto-cuadrada'
               valor={fotoActaNacimiento}
@@ -478,7 +482,7 @@ function EditarAlumno(props) {
               setFoto={setFotoApoyoActaNacimiento}
               classInput='imagen__acta-nacimiento'
             />
-            <FotoAlumno 
+            <FotoAlumno
               titulo='Instituto Nacional Electoral (INE)'
               className='foto-cuadrada'
               valor={fotoIne}
@@ -488,7 +492,7 @@ function EditarAlumno(props) {
               setFoto={setFotoApoyoIne}
               classInput='imagen__ine'
             />
-            <FotoAlumno 
+            <FotoAlumno
               titulo='Curp'
               className='foto-cuadrada'
               valor={fotoCurp}
@@ -498,7 +502,7 @@ function EditarAlumno(props) {
               setFoto={setFotoApoyoCurp}
               classInput='imagen__curp'
             />
-            <FotoAlumno 
+            <FotoAlumno
               titulo='Comprobante del Pago Inicial'
               className='foto-cuadrada'
               valor={fotoComprobantePagoInicial}
@@ -512,29 +516,29 @@ function EditarAlumno(props) {
               edadAlumno !== '' && edadAlumno < 18 && (
                 <>
                   <h4 className='formulario__subtitulo'>Información del Padre o Tutor</h4>
-                  <Campo 
-                    titulo='Nombre(s)' 
-                    placeholder='Ingresa el nombre del padre o tutor del alumno' 
-                    cambiarValor={setNombreTutorAlumno} 
-                    valor={nombreTutorAlumno} 
+                  <Campo
+                    titulo='Nombre(s)'
+                    placeholder='Ingresa el nombre del padre o tutor del alumno'
+                    cambiarValor={setNombreTutorAlumno}
+                    valor={nombreTutorAlumno}
                   />
-                  <Campo 
-                    titulo='Apellidos' 
-                    placeholder='Ingresa los apellidos del padre o tutor del alumno' 
-                    cambiarValor={setApellidoTutorAlumno} 
-                    valor={apellidoTutorAlumno} 
+                  <Campo
+                    titulo='Apellidos'
+                    placeholder='Ingresa los apellidos del padre o tutor del alumno'
+                    cambiarValor={setApellidoTutorAlumno}
+                    valor={apellidoTutorAlumno}
                   />
-                  <Campo 
-                    titulo='Número de Teléfono' 
-                    placeholder='Ingresa el número de teléfono del padre o tutor del alumno' 
-                    cambiarValor={setNumeroTelefonoTutorAlumno} 
-                    valor={numeroTelefonoTutorAlumno} 
+                  <Campo
+                    titulo='Número de Teléfono'
+                    placeholder='Ingresa el número de teléfono del padre o tutor del alumno'
+                    cambiarValor={setNumeroTelefonoTutorAlumno}
+                    valor={numeroTelefonoTutorAlumno}
                   />
-                  <CampoEmail 
-                    titulo='Correo Electrónico' 
-                    placeholder='Ingresa el correo electrónico del padre o tutor del alumno' 
-                    cambiarValor={setCorreoTutorAlumno} 
-                    valor={correoTutorAlumno} 
+                  <CampoEmail
+                    titulo='Correo Electrónico'
+                    placeholder='Ingresa el correo electrónico del padre o tutor del alumno'
+                    cambiarValor={setCorreoTutorAlumno}
+                    valor={correoTutorAlumno}
                   />
                 </>
               )
@@ -555,15 +559,15 @@ function EditarAlumno(props) {
               idiomaAprendizajeAlumno.map((idioma, index) => {
                 return (
                   <div className='caja__idioma-agregado' key={index}>
-                    <div 
-                      className='contenedor__todo-principio-centrado gap-0 pointer max-content' 
+                    <div
+                      className='contenedor__todo-principio-centrado gap-0 pointer max-content'
                       onClick={() => eliminarIdioma(index)}
                     >
                       <TiDelete className='idioma__icon-delete' />
                       Eliminar Formulario
                     </div>
                     <h5 className='titulos-4'>Preguntas Sobre El Idioma</h5>
-                    <ListaOpciones 
+                    <ListaOpciones
                       titulo='Idioma de Aprendizaje'
                       placeholder='Ingresa el idioma de aprendizaje'
                       valor={idiomaAprendizajeAlumno[index]}
@@ -574,7 +578,7 @@ function EditarAlumno(props) {
                       funcion={setIdiomaAprendizajeAlumno}
                       required
                     />
-                    <ListaOpciones 
+                    <ListaOpciones
                       titulo='Nivel MCERL'
                       placeholder='Ingresa el nivel de MCERL'
                       valor={nivelIdiomaAlumno[index]}
@@ -585,7 +589,7 @@ function EditarAlumno(props) {
                       funcion={setNivelIdiomaAlumno}
                       required
                     />
-                    <ListaOpciones 
+                    <ListaOpciones
                       titulo='Modalidad de Estudio'
                       placeholder='Ingresa la modalidad de estudio'
                       valor={modalidadEstudioAlumno[index]}
@@ -596,7 +600,7 @@ function EditarAlumno(props) {
                       funcion={setModalidadEstudioAlumno}
                       required
                     />
-                    <CampoFecha 
+                    <CampoFecha
                       titulo='Fecha de Ingreso'
                       valor={fechaIngresoAlumno[index]}
                       cambiarValor={actualizarDatos}
@@ -605,7 +609,7 @@ function EditarAlumno(props) {
                       funcion={setFechaIngresoAlumno}
                       required
                     />
-                    <ListaOpciones 
+                    <ListaOpciones
                       titulo='Fecha de Pago'
                       placeholder='Ingresa la fecha de pago'
                       valor={fechaPagoAlumno[index]}

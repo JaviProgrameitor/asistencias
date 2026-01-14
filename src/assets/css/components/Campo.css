@@ -11,7 +11,7 @@
   margin-bottom: 8px;
 }
 
-.campo input {
+.campo input, .campo select {
   box-sizing: border-box;
   width: 100%;
   background-color: #fff;

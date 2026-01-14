@@ -8,6 +8,7 @@ import { AiFillDelete } from 'react-icons/ai'
 import { IoPersonAddSharp } from "react-icons/io5";
 import Indicadores from '../components/Indicadores/Indicadores'
 import IndicadoresMultiples from '../components/IndicadoresMultiples/IndicadoresMultiples';
+import BarraBusquedaTexto from '../components/BarraBusquedaTexto/BarraBusquedaTexto';
 
 import FilasAlumnosEliminados from "../components/FilasAlumnosEliminados/FilasAlumnosEliminados"
 
@@ -24,14 +25,15 @@ import { Toaster, toast } from 'sonner'
 function TablaAlumnosEliminados(props) {
   const { alumnosEliminados, idAlumno, setIdAlumno, alumnoSeleccionado, puestoAdmin } = props
 
-  const [ estadoModal, setEstadoModal ] = useState(false)
-  const [ accionAlumno, setAccionAlumno ] = useState(0)
-  const [ activarLoader, setActivarLoader ] = useState(false)
+  const [estadoModal, setEstadoModal] = useState(false)
+  const [accionAlumno, setAccionAlumno] = useState(0)
+  const [activarLoader, setActivarLoader] = useState(false)
+  const [palabraBusqueda, setPalabraBusqueda] = useState('')
 
   const url = useResolvedPath("").pathname
 
   function actualizarDatos(id) {
-    if(id) {
+    if (id) {
       setIdAlumno(id)
     }
 
@@ -70,11 +72,11 @@ function TablaAlumnosEliminados(props) {
       idIne: alumno.idIne,
       idCurp: alumno.idCurp,
       idComprobantePagoInicial: alumno.idComprobantePagoInicial,
-      nombre: alumno.nombre, 
-      apellido: alumno.apellido, 
-      fechaNacimiento: alumno.fechaNacimiento, 
-      correo: alumno.correo, 
-      numeroTelefono: alumno.numeroTelefono, 
+      nombre: alumno.nombre,
+      apellido: alumno.apellido,
+      fechaNacimiento: alumno.fechaNacimiento,
+      correo: alumno.correo,
+      numeroTelefono: alumno.numeroTelefono,
       nivelAcademico: alumno.nivelAcademico,
       codigoPostal: alumno.codigoPostal,
       pais: alumno.pais,
@@ -99,7 +101,7 @@ function TablaAlumnosEliminados(props) {
     }
 
     await deleteDatabase(`${alumnosEliminadosURL}/parcial`, alumno.id)
-    await createDatabase(`${alumnosURL}/reinscribir`, {datosAuth, datos})
+    await createDatabase(`${alumnosURL}/reinscribir`, { datosAuth, datos })
     toast.success('El Alumno(a) en seguimiento ha sido reinscrito correctamente')
     setIdAlumno(null)
     setActivarLoader(false)
@@ -113,51 +115,57 @@ function TablaAlumnosEliminados(props) {
           <FaArrowCircleLeft className='flecha-regresar icon-40' />
         </Link>
       </div>
+      <BarraBusquedaTexto
+        titulo='Buscar Alumno'
+        placeholder='Por nombre, apellido o clave de estudiante'
+        valor={palabraBusqueda}
+        cambiarValor={setPalabraBusqueda}
+      />
       <h2 className='titulos-2'>Tabla de Alumnos En Seguimiento</h2>
       {
         idAlumno !== null && (
           <div className="justify-end">
-            <TooltipComplete 
+            <TooltipComplete
               titulo='Perfil'
               body={
                 <Link to={`${url}/perfil/${idAlumno}`}>
-                  <FcContacts 
-                    className='alumno-completo icon-alumno' 
+                  <FcContacts
+                    className='alumno-completo icon-alumno'
                   />
                 </Link>
               }
             />
-            <TooltipComplete 
+            <TooltipComplete
               titulo='Reinscribir'
               body={
                 <span>
-                  <IoPersonAddSharp 
+                  <IoPersonAddSharp
                     className="alumno-readd icon-alumno"
                     onClick={() => {
-                      if(puestoAdmin === 'Director(a)') {
+                      if (puestoAdmin === 'Director(a)') {
                         setAccionAlumno(0)
                         setEstadoModal(true)
                       }
                       else toast.error('No tienes acceso a esta función.')
-                      
+
                     }}
                   />
                 </span>
               }
             />
-            <TooltipComplete 
+            <TooltipComplete
               titulo='Eliminar'
               body={
                 <span>
-                  <AiFillDelete 
+                  <AiFillDelete
                     className='alumno-delete icon-alumno'
                     onClick={() => {
-                      if(puestoAdmin === 'Director(a)') {
+                      if (puestoAdmin === 'Director(a)') {
                         setAccionAlumno(1)
                         setEstadoModal(true)
                       }
                       else toast.error('No tienes acceso a esta función.')
-                      
+
                     }}
                   />
                 </span>
@@ -179,15 +187,15 @@ function TablaAlumnosEliminados(props) {
           </thead>
           <tbody className='tabla-cuerpo'>
             {
-              alumnosEliminados.map((alumno, index) => 
-                <FilasAlumnosEliminados 
+              alumnosEliminados.map((alumno, index) =>
+                <FilasAlumnosEliminados
                   datos={alumno}
                   key={index}
                   idAlumno={idAlumno}
                   actualizarDatos={actualizarDatos}
                 />
               )
-            } 
+            }
           </tbody>
         </table>
       </div>
@@ -205,75 +213,75 @@ function TablaAlumnosEliminados(props) {
                 </p>
                 <div className='contenedor__columna-centro'>
                   <div>
-                    <Indicadores 
+                    <Indicadores
                       titulo='Nombre'
                       respuesta={alumnoSeleccionado.nombre}
                     />
-                    <Indicadores 
+                    <Indicadores
                       titulo='Apellido'
                       respuesta={alumnoSeleccionado.apellido}
                     />
-                    <Indicadores 
+                    <Indicadores
                       titulo='Fecha de Nacimiento'
                       respuesta={alumnoSeleccionado.fechaNacimiento}
                     />
-                    <Indicadores 
+                    <Indicadores
                       titulo='Correo Electrónico'
                       respuesta={alumnoSeleccionado.correo}
                     />
-                    <Indicadores 
+                    <Indicadores
                       titulo='Número de Teléfono'
                       respuesta={alumnoSeleccionado.numeroTelefono}
                     />
-                    <Indicadores 
+                    <Indicadores
                       titulo='Nivel Académico'
                       respuesta={alumnoSeleccionado.nivelAcademico}
                     />
-                    <Indicadores 
-                      titulo={'Clave del Estudiante'} 
-                      respuesta={alumnoSeleccionado.claveEstudiante} 
+                    <Indicadores
+                      titulo={'Clave del Estudiante'}
+                      respuesta={alumnoSeleccionado.claveEstudiante}
                     />
-                    <IndicadoresMultiples 
-                      titulo={'Idiomas de Aprendizaje'} 
-                      respuesta={alumnoSeleccionado.idiomaAprendizaje} 
+                    <IndicadoresMultiples
+                      titulo={'Idiomas de Aprendizaje'}
+                      respuesta={alumnoSeleccionado.idiomaAprendizaje}
                     />
-                    <IndicadoresMultiples 
-                      titulo={'Nivel MCERLC'} 
-                      respuesta={alumnoSeleccionado.nivelIdioma} 
+                    <IndicadoresMultiples
+                      titulo={'Nivel MCERLC'}
+                      respuesta={alumnoSeleccionado.nivelIdioma}
                     />
-                    <IndicadoresMultiples 
-                      titulo={'Modalidad de Estudio'} 
-                      respuesta={alumnoSeleccionado.modalidadEstudio} 
+                    <IndicadoresMultiples
+                      titulo={'Modalidad de Estudio'}
+                      respuesta={alumnoSeleccionado.modalidadEstudio}
                     />
-                    <IndicadoresMultiples 
-                      titulo={'Fecha de Ingreso'} 
-                      respuesta={alumnoSeleccionado.fechaIngreso} 
+                    <IndicadoresMultiples
+                      titulo={'Fecha de Ingreso'}
+                      respuesta={alumnoSeleccionado.fechaIngreso}
                     />
-                    <IndicadoresMultiples 
-                      titulo={'Fecha de Pago'} 
-                      respuesta={alumnoSeleccionado.fechaPago} 
+                    <IndicadoresMultiples
+                      titulo={'Fecha de Pago'}
+                      respuesta={alumnoSeleccionado.fechaPago}
                     />
                   </div>
                 </div>
                 <div className='contenedor__centro-separacion'>
-                  <button 
-                    className='boton__verde-oscuro' 
+                  <button
+                    className='boton__verde-oscuro'
                     onClick={() => setEstadoModal(false)}
                   >
                     Cancelar
                   </button>
-                  <button 
-                    className='boton__blanco' 
+                  <button
+                    className='boton__blanco'
                     onClick={() => {
                       setEstadoModal(false)
-                      accionAlumno == 0 
+                      accionAlumno == 0
                         ? reinscribirAlumno(alumnoSeleccionado)
                         : eliminarAlumnos(alumnoSeleccionado)
                     }}
                   >
                     {
-                      accionAlumno == 0 
-                        ? 'Reinscribir' 
+                      accionAlumno == 0
+                        ? 'Reinscribir'
                         : 'Eliminar'
                     }
                   </button>
