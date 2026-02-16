@@ -2,7 +2,7 @@
 import { Link, useResolvedPath } from "react-router-dom"
 import { FaArrowCircleLeft } from 'react-icons/fa'
 import { FcContacts, FcCurrencyExchange } from "react-icons/fc";
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import TooltipComplete from "../components/TooltipComplete/TooltipComplete";
 import { AiFillDelete } from 'react-icons/ai'
 import { IoPersonAddSharp } from "react-icons/io5";
@@ -29,6 +29,7 @@ function TablaAlumnosEliminados(props) {
   const [accionAlumno, setAccionAlumno] = useState(0)
   const [activarLoader, setActivarLoader] = useState(false)
   const [palabraBusqueda, setPalabraBusqueda] = useState('')
+  const [filtrarAlumnos, setFiltrarAlumnos] = useState(alumnosEliminados)
 
   const url = useResolvedPath("").pathname
 
@@ -107,6 +108,45 @@ function TablaAlumnosEliminados(props) {
     setActivarLoader(false)
   }
 
+  const filtered = useMemo(() => {
+    let list = [...alumnosEliminados]
+
+    if (palabraBusqueda.trim() !== '') {
+      list = list.filter((alumno) =>
+        alumno.nombre.toLowerCase().includes(palabraBusqueda.toLowerCase()) ||
+        alumno.apellido.toLowerCase().includes(palabraBusqueda.toLowerCase()) ||
+        alumno.claveEstudiante.toLowerCase().includes(palabraBusqueda.toLowerCase())
+      )
+    }
+
+    return list
+  }, [palabraBusqueda])
+
+  //Todo: Función para buscar ALUMNOS por medio de nombres o apellidos
+  async function busqueda(valor) {
+    if(!valor) {
+      setFiltrarAlumnos(alumnosEliminados)
+      return
+    }
+
+    let aux = []
+    for(let i = 0; i < alumnosEliminados.length; i++) {
+      try {
+        if(alumnosEliminados[i].nombre.toLowerCase().includes(valor.toLowerCase()) || 
+          alumnosEliminados[i].apellido.toLowerCase().includes(valor.toLowerCase()) ||
+          alumnosEliminados[i].claveEstudiante.toLowerCase().includes(valor.toLowerCase())
+        ) {
+          aux.push(alumnosEliminados[i])
+        }
+      } catch {}
+    }
+    setFiltrarAlumnos(aux)
+  }
+
+  useEffect(() => {
+    busqueda(palabraBusqueda)
+  }, [palabraBusqueda])
+
   return (
     <div>
       <Toaster position="top-center" richColors />
@@ -115,13 +155,13 @@ function TablaAlumnosEliminados(props) {
           <FaArrowCircleLeft className='flecha-regresar icon-40' />
         </Link>
       </div>
+      <h2 className='titulos-2'>Tabla de Alumnos En Seguimiento</h2>
       <BarraBusquedaTexto
         titulo='Buscar Alumno'
         placeholder='Por nombre, apellido o clave de estudiante'
         valor={palabraBusqueda}
         cambiarValor={setPalabraBusqueda}
       />
-      <h2 className='titulos-2'>Tabla de Alumnos En Seguimiento</h2>
       {
         idAlumno !== null && (
           <div className="justify-end">
@@ -187,7 +227,7 @@ function TablaAlumnosEliminados(props) {
           </thead>
           <tbody className='tabla-cuerpo'>
             {
-              alumnosEliminados.map((alumno, index) =>
+              filtrarAlumnos.map((alumno, index) =>
                 <FilasAlumnosEliminados
                   datos={alumno}
                   key={index}
