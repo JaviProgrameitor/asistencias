@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from "react-router-dom"
 import { FaArrowCircleLeft } from 'react-icons/fa'
 
-import Html5QrcodePlugin from '../components/ScannerReader/ScannerReader';
+// import Html5QrcodePlugin from '../components/ScannerReader/ScannerReader';
 
 import { Toaster, toast } from 'sonner'
 
@@ -139,12 +139,12 @@ function ScannerEnLinea(props) {
                   <h2 className='titulos-2 titulo-qr-en-linea'>Escanea el Codigo QR</h2>
                   <div className='caja-qr-en-linea'>
                     <div className='qr-en-linea'>
-                      <Html5QrcodePlugin
+                      {/* <Html5QrcodePlugin
                         fps={10}
                         qrbox={250}
                         disableFlip={false}
                         qrCodeSuccessCallback={EscanearAlumno}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </>
